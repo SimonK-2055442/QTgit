@@ -9,6 +9,7 @@ SOURCES += \
     bordcelview.cpp \
     bordview.cpp \
     chaturajiboot.cpp \
+    chaturajibordview.cpp \
     chaturajikoning.cpp \
     chaturajiolifant.cpp \
     chaturajipaard.cpp \
@@ -30,6 +31,7 @@ HEADERS += \
     bordcelview.h \
     bordview.h \
     chaturajiboot.h \
+    chaturajibordview.h \
     chaturajikoning.h \
     chaturajiolifant.h \
     chaturajipaard.h \

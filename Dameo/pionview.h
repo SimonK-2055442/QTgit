@@ -6,7 +6,7 @@
 class PionView : public QGraphicsPixmapItem
 {
 public:
-    PionView(QString kleur, QGraphicsItem *parent = nullptr);
+    PionView(QString type, QGraphicsItem *parent = nullptr);
 };
 
 #endif // PIONVIEW_H

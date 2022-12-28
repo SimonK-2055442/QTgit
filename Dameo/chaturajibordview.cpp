@@ -1,7 +1,7 @@
-#include "bordview.h"
+#include "chaturajibordview.h"
 #include "pionview.h"
 
-BordView::BordView(int grootteBord, DameoSpel spel, QObject *parent) : QGraphicsScene{parent}, m_spel{spel} {
+ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel spel, QObject *parent) : QGraphicsScene{parent}, m_spel{spel} {
     //m_spel = spel;
     //setSceneRect(0, 0, 1200, 800);
     setBackgroundBrush(QBrush(Qt::gray));
@@ -23,7 +23,7 @@ BordView::BordView(int grootteBord, DameoSpel spel, QObject *parent) : QGraphics
         } else {
             PionView *wittePion = new PionView{"DameoWit", speelbord[spel.getBord().getPionVanLijst(i)->getYCoordinaat()][spel.getBord().getPionVanLijst(i)->getXCoordinaat()]};
             wittePion->setParentItem(speelbord[spel.getBord().getPionVanLijst(i)->getYCoordinaat()][spel.getBord().getPionVanLijst(i)->getXCoordinaat()]);
-            wittePion->setPos(4,4);
+            wittePion->setPos(17,4);
         }
     }
 }
@@ -70,3 +70,4 @@ void BordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         lastClicked = nullptr;
     }
 }
+

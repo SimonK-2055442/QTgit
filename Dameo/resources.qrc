@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/pion_wit.png</file>
+        <file>images/pion_zwart.png</file>
+        <file>images/qt_logo.png</file>
+    </qresource>
+</RCC>

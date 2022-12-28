@@ -5,10 +5,14 @@
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-    QPushButton* p = new QPushButton(this);
-    p->setGeometry(300,0,200,50);
-    p->setText("Chaturaji");
-    QObject::connect(p, SIGNAL (clicked()), this, SLOT (buttonpressed()));
+    QPushButton* dameo = new QPushButton(this);
+    QPushButton* chaturaji = new QPushButton(this);
+    dameo->setGeometry(300,300,200,50);
+    chaturaji->setGeometry(800,300,200,50);
+    dameo->setText("Dameo");
+    chaturaji->setText("Chaturaji");
+    QObject::connect(dameo, SIGNAL (clicked()), this, SLOT (DameoButtonPressed()));
+    QObject::connect(chaturaji, SIGNAL (clicked()), this, SLOT (ChaturajiButtonPressed()));
     // om het spel te testen:
     // dit uit commentaar halen en regel 22 en 23 in commentaar zetten
     /*Bord speelbord;
@@ -29,11 +33,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     //setCentralWidget(view);
 }
 
-void MainWindow::buttonpressed(){
+void MainWindow::DameoButtonPressed(){
     Bord speelbord;
     speelbord.initialiseerBord(Bord::KeuzeSpel::dameo);
     DameoSpel spel(speelbord);
     BordView* sceneBord = new BordView(8, spel);
     view = new QGraphicsView{sceneBord};
     setCentralWidget(view);
+}
+
+void MainWindow::ChaturajiButtonPressed(){
+    //Bord speelbord;
+    //speelbord.initialiseerBord(Bord::KeuzeSpel::chaturaji);
+    //ChaturajiSpel(speelbord);
+    ///BordView* sceneBord = new BordView(8, spel);
+    //view = new QGraphicsView{sceneBord};
+    //setCentralWidget(view);
 }

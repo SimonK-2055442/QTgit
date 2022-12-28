@@ -11,7 +11,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
 private slots:
-    void buttonpressed();
+    void DameoButtonPressed();
+    void ChaturajiButtonPressed();
 private:
     BordView *sceneBord{};
     QGraphicsView *view{};

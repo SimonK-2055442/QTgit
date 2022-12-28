@@ -21,6 +21,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     // dit uit commentaar halen en regel 10 tem 14 in commentaar zetten
     //Welcome* opstartScherm = new Welcome();
     //view = new QGraphicsView{opstartScherm};
-    //test voor github
+    //test voor github nummer 2
     setCentralWidget(view);
 }

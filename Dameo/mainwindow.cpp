@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "ChaturajiSpel.h"
 #include "dameospel.h"
 #include "welcome.h"
 #include <QGraphicsView>
@@ -37,16 +38,16 @@ void MainWindow::DameoButtonPressed(){
     Bord speelbord;
     speelbord.initialiseerBord(Bord::KeuzeSpel::dameo);
     DameoSpel spel(speelbord);
-    BordView* sceneBord = new BordView(8, spel);
-    view = new QGraphicsView{sceneBord};
+    dameoBord = new BordView(8, spel);
+    view = new QGraphicsView{dameoBord};
     setCentralWidget(view);
 }
 
 void MainWindow::ChaturajiButtonPressed(){
-    //Bord speelbord;
-    //speelbord.initialiseerBord(Bord::KeuzeSpel::chaturaji);
-    //ChaturajiSpel(speelbord);
-    ///BordView* sceneBord = new BordView(8, spel);
-    //view = new QGraphicsView{sceneBord};
-    //setCentralWidget(view);
+    Bord speelbord;
+    speelbord.initialiseerBord(Bord::KeuzeSpel::chaturaji);
+    ChaturajiSpel spel(speelbord);
+    chaturajiBord = new ChaturajiBordView(8, spel);
+    view = new QGraphicsView{chaturajiBord};
+    setCentralWidget(view);
 }

@@ -283,3 +283,6 @@ void ChaturajiSpel::maakNieuwePion(char type, char xCoord, char yCoord, char tea
     m_spelbord.voegPionToe(false, type, xCoordPion, yCoordPion, teamPion);
 }
 
+Bord ChaturajiSpel::getSpelbord(){
+    return m_spelbord;
+}

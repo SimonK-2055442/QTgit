@@ -23,7 +23,7 @@ BordView::BordView(int grootteBord, DameoSpel spel, QObject *parent) : QGraphics
         } else {
             PionView *wittePion = new PionView{"DameoWit", speelbord[spel.getBord().getPionVanLijst(i)->getYCoordinaat()][spel.getBord().getPionVanLijst(i)->getXCoordinaat()]};
             wittePion->setParentItem(speelbord[spel.getBord().getPionVanLijst(i)->getYCoordinaat()][spel.getBord().getPionVanLijst(i)->getXCoordinaat()]);
-            wittePion->setPos(4,4);
+            wittePion->setPos(17,4);
         }
     }
 }

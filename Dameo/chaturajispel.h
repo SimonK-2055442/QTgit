@@ -25,6 +25,7 @@ public:
     void eindeSpel();
     void maakNieuwePion(char type, char xCoord, char Ycoord, char team);
     void setSpelbord(Bord bord);
+    Bord getSpelbord();
     vector<string> vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt);
 private:
     Bord m_spelbord;

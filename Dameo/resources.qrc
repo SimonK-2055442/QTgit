@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>images/pion_wit.png</file>
         <file>images/pion_zwart.png</file>
-	<file>images/aa.png</file>
 	<file>images/zwartPion.png</file>
 	<file>images/zwartKoning.png</file>
 	<file>images/zwartPaard.png</file>

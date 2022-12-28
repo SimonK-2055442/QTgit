@@ -2,11 +2,11 @@
 
 //Auteur: Simon Knuts en Yara Mijnendonckx
 
-/*#include "ChaturajiPion.h"
+#include "ChaturajiPion.h"
 #include "ChaturajiKoning.h"
 #include "ChaturajiOlifant.h"
 #include "ChaturajiPaard.h"
-#include "ChaturajiBoot.h"*/
+#include "ChaturajiBoot.h"
 #include "bordcelview.h"
 
 void Bord::laatZien() const {
@@ -72,7 +72,7 @@ void Bord::verwijderPointers(){
 }
 
 void Bord::initialiseerBord(KeuzeSpel spel) {
-    /*if (spel == KeuzeSpel::chaturaji) {
+    if (spel == KeuzeSpel::chaturaji) {
         pionnen.push_back(new ChaturajiPion{ 0,1,Pion::Team::geel,'p',"boot" });
         pionnen.push_back(new ChaturajiPion{ 1,1,Pion::Team::geel,'p',"paard" });
         pionnen.push_back(new ChaturajiPion{ 2,1,Pion::Team::geel,'p',"olifant" });
@@ -110,7 +110,7 @@ void Bord::initialiseerBord(KeuzeSpel spel) {
         pionnen.push_back(new ChaturajiBoot{ 7,7,Pion::Team::groen,'b' });
         pionnen.push_back(new ChaturajiBoot{ 7,0,Pion::Team::rood,'b' });
     }
-    else if (spel == KeuzeSpel::dameo) {*/
+    else if (spel == KeuzeSpel::dameo) {
         for (int i{ 0 }; i < grootteBord; i++)
             pionnen.push_back(new DameoPion{ 0,i,Pion::Team::blauw,'b' });
         for (int i{ 1 }; i < grootteBord-1; i++)
@@ -124,7 +124,7 @@ void Bord::initialiseerBord(KeuzeSpel spel) {
             pionnen.push_back(new DameoPion{ 6,i,Pion::Team::geel,'g' });
         for (int i{ 2 }; i < grootteBord-2; i++)
             pionnen.push_back(new DameoPion{ 5,i,Pion::Team::geel,'g' });
-    //}
+    }
 }
 
 bool Bord::isZetInHetBord(Zet zet) const {
@@ -143,7 +143,7 @@ bool Bord::isZetInHetBord(Zet zet) const {
 }
 
 //wanneer een pion de overkant van het bord bereikt zal deze promoveren en moet deze dus vervangen worden door een ander stuk
-/*void Bord::vervangElement(Zet zet) {
+void Bord::vervangElement(Zet zet) {
     for (int i = 0; i < pionnen.size(); i++) {
         if (pionnen[i]->getXCoordinaat() == zet.getStartXCoordinaat() && pionnen[i]->getYCoordinaat() == zet.getStartYCoordinaat() && !pionnen[i]->isVerslaan()) {
             if (dynamic_cast<ChaturajiPion*>(pionnen[i])->getPromoverenNaar() == "koning") {
@@ -172,10 +172,10 @@ bool Bord::isZetInHetBord(Zet zet) const {
             }
         }
     }
-}*/
+}
 
 void Bord::voegPionToe(bool dameo, char type, int xCoord, int yCoord, Pion::Team team) {
-    /*if (dameo == false) {
+    if (dameo == false) {
         if (type == 'p') {
             pionnen.push_back(new ChaturajiPion{ yCoord, xCoord, team, type, "koning" });
         }
@@ -192,8 +192,8 @@ void Bord::voegPionToe(bool dameo, char type, int xCoord, int yCoord, Pion::Team
             pionnen.push_back(new ChaturajiOlifant{ yCoord, xCoord, team, type });
         }
     }
-    else {*/
+    else {
         pionnen.push_back(new DameoPion{ yCoord, xCoord, team, type});
-    //}
+    }
 }
 

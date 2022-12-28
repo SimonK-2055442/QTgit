@@ -8,8 +8,15 @@ SOURCES += \
     bord.cpp \
     bordcelview.cpp \
     bordview.cpp \
+    chaturajiboot.cpp \
+    chaturajikoning.cpp \
+    chaturajiolifant.cpp \
+    chaturajipaard.cpp \
+    chaturajipion.cpp \
+    chaturajispel.cpp \
     dameopion.cpp \
     dameospel.cpp \
+    dobbelstenen.cpp \
     main.cpp \
     mainwindow.cpp \
     pion.cpp \
@@ -22,8 +29,15 @@ HEADERS += \
     bord.h \
     bordcelview.h \
     bordview.h \
+    chaturajiboot.h \
+    chaturajikoning.h \
+    chaturajiolifant.h \
+    chaturajipaard.h \
+    chaturajipion.h \
+    chaturajispel.h \
     dameopion.h \
     dameospel.h \
+    dobbelstenen.h \
     mainwindow.h \
     pion.h \
     pionview.h \

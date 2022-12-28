@@ -6,7 +6,7 @@
 #include <QDebug>
 //#include "bordview.h"
 
-using namespace std;
+//using namespace std;
 
 DameoSpel::DameoSpel(Bord spelbord) : m_spelbord{spelbord}{
     m_speler = DameoPion::Team::blauw;
@@ -273,11 +273,8 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
 
             //deze functie moet een signal emitten met daarin de verslagen pion zodat deze in de view opgevangen kan worden en zo de pion verwijderd kan worden.
             if (zet.kijkOfPionnenVerslaanZijn(m_spelbord, m_speler, false) == true) {
-                qDebug() << "test";
-                //emit m_bord->verwijderPionVanBord(1, 1); //als er geen probleem was met de circular dependencies,
-                // dan zou dit volgens mij moeten werken
+                emit pionVerslaan();
             }
-
             zet.maakZet(m_spelbord, m_speler);
 
             if (m_speler == DameoPion::Team::geel) {

@@ -1,6 +1,7 @@
 #ifndef BORDCELVIEW_H
 #define BORDCELVIEW_H
 
+#include <QBrush>
 #include <QGraphicsRectItem>
 
 class BordCelView : public QGraphicsRectItem

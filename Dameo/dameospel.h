@@ -6,8 +6,11 @@
 
 #include "bord.h"
 #include "zet.h"
+#include <QObject>
 
-class DameoSpel {
+class DameoSpel : public QObject
+{
+    Q_OBJECT
 public:
     DameoSpel(Bord spelbord);
     int vertaal(string teVertalen) const;
@@ -22,6 +25,9 @@ public:
     std::vector<int> eersteKlik(int rij,int kolom);
     bool tweedeKlik(int rij,int kolom);
     void clearMogelijkeZetten();
+
+signals:
+    void pionVerslaan();
 
 private:
     //BordView *m_bord;

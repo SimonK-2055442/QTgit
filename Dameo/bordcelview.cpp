@@ -1,6 +1,4 @@
 #include "bordcelview.h"
-#include <QBrush>
-//#include <QGraphicsSceneMouseEvent>
 
 BordCelView::BordCelView(int rij, int kolom) : QGraphicsRectItem{0, 0, 95, 95}
 {

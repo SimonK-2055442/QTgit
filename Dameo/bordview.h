@@ -3,23 +3,23 @@
 #pragma once
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
-//#include "bord.h"
 #include "bordcelview.h"
 #include "dameospel.h"
-//#include "pionview.h"
+#include "pionview.h"
 
 class BordView : public QGraphicsScene
 {
+    Q_OBJECT
 public:
-    BordView(int grootteBord, DameoSpel spel, QObject *parent = nullptr);
+    BordView(int grootteBord, DameoSpel *spel, QObject *parent = nullptr);
     BordCelView* speelbord[8][8];
 
 public slots:
-    void verwijderPionVanBord(int rij, int kolom);
+    void verwijderPionVanBord();
 
 private:
     BordCelView *lastClicked{nullptr};
-    DameoSpel m_spel;
+    DameoSpel *m_spel;
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     std::vector<int> mogelijkeZetten{};
 };

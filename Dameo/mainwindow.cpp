@@ -35,18 +35,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 void MainWindow::DameoButtonPressed(){
-    Bord speelbord;
-    speelbord.initialiseerBord(Bord::KeuzeSpel::dameo);
-    DameoSpel spel(speelbord);
+    Bord spelbord;
+    spelbord.initialiseerBord(Bord::KeuzeSpel::dameo);
+    DameoSpel *spel = new DameoSpel(spelbord);
     dameoBord = new BordView(8, spel);
     view = new QGraphicsView{dameoBord};
     setCentralWidget(view);
 }
 
 void MainWindow::ChaturajiButtonPressed(){
-    Bord speelbord;
-    speelbord.initialiseerBord(Bord::KeuzeSpel::chaturaji);
-    ChaturajiSpel spel(speelbord);
+    Bord spelbord;
+    spelbord.initialiseerBord(Bord::KeuzeSpel::chaturaji);
+    ChaturajiSpel *spel = new ChaturajiSpel(spelbord);
     chaturajiBord = new ChaturajiBordView(8, spel);
     view = new QGraphicsView{chaturajiBord};
     setCentralWidget(view);

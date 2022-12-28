@@ -8,7 +8,7 @@
 class ChaturajiBordView : public QGraphicsScene
 {
 public:
-    ChaturajiBordView(int grootteBord, ChaturajiSpel spel, QObject *parent = nullptr);
+    ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObject *parent = nullptr);
     BordCelView* speelbord[8][8];
     //virtual ~ChaturajiBordView() {};
 
@@ -17,7 +17,7 @@ public:
 
 private:
     BordCelView *lastClicked{nullptr};
-    ChaturajiSpel m_spel;
+    ChaturajiSpel *m_spel;
     //void mousePressEvent(QGraphicsSceneMouseEvent *event);
     std::vector<int> mogelijkeZetten{};
 };

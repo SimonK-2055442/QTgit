@@ -1,8 +1,8 @@
 #include "bordview.h"
-#include "pionview.h"
+#include "pion.h"
 
-BordView::BordView(int grootteBord, DameoSpel spel, QObject *parent) : QGraphicsScene{parent}, m_spel{spel} {
-    //m_spel = spel;
+BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphicsScene{parent} {
+    m_spel = spel;
     //setSceneRect(0, 0, 1200, 800);
     setBackgroundBrush(QBrush(Qt::gray));
 
@@ -16,20 +16,22 @@ BordView::BordView(int grootteBord, DameoSpel spel, QObject *parent) : QGraphics
 
     // voeg pionnen toe
     for (int i = 0; i < 36; i++) {
-        if (spel.getBord().getPionVanLijst(i)->getTeam()==Pion::Team::blauw) {
-            PionView *zwartePion = new PionView{"DameoZwart", speelbord[spel.getBord().getPionVanLijst(i)->getYCoordinaat()][spel.getBord().getPionVanLijst(i)->getXCoordinaat()]};
-            zwartePion->setParentItem(speelbord[spel.getBord().getPionVanLijst(i)->getYCoordinaat()][spel.getBord().getPionVanLijst(i)->getXCoordinaat()]);
+        if (spel->getBord().getPionVanLijst(i)->getTeam()==Pion::Team::blauw) {
+            PionView *zwartePion = new PionView{"DameoZwart", speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
+            zwartePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
             zwartePion->setPos(17,4);
         } else {
-            PionView *wittePion = new PionView{"DameoWit", speelbord[spel.getBord().getPionVanLijst(i)->getYCoordinaat()][spel.getBord().getPionVanLijst(i)->getXCoordinaat()]};
-            wittePion->setParentItem(speelbord[spel.getBord().getPionVanLijst(i)->getYCoordinaat()][spel.getBord().getPionVanLijst(i)->getXCoordinaat()]);
+            PionView *wittePion = new PionView{"DameoWit", speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
+            wittePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
             wittePion->setPos(17,4);
         }
     }
+
+    connect(m_spel, &DameoSpel::pionVerslaan, this, &BordView::verwijderPionVanBord);
 }
 
-void BordView::verwijderPionVanBord(int rij, int kolom) {
-    speelbord[rij][kolom]->setBrush(Qt::yellow);
+void BordView::verwijderPionVanBord() {
+    speelbord[2][2]->setBrush(Qt::yellow);
 }
 
 //moet nog verbeterd worden met signals of slots maar zie nie hoe met returnvalues want ge hebt 3 mogelijkheden:
@@ -43,7 +45,7 @@ void BordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         int rij = event->scenePos().y()/96;
         if (lastClicked == nullptr) {
             mogelijkeZetten.clear();
-            mogelijkeZetten = m_spel.eersteKlik(rij, kolom);
+            mogelijkeZetten = m_spel->eersteKlik(rij, kolom);
             for (int i = 0; i < mogelijkeZetten.size(); i += 2) {
                 speelbord[mogelijkeZetten.at(i)][mogelijkeZetten.at(i+1)]->setBrush(Qt::red);
             }
@@ -52,12 +54,12 @@ void BordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
             }
 
         } else {
-            if (m_spel.tweedeKlik(rij,kolom)){
+            if (m_spel->tweedeKlik(rij,kolom)){
                lastClicked->childItems()[0]->setParentItem(speelbord[rij][kolom]);
                for (int i = 0; i < mogelijkeZetten.size(); i += 2){
                    speelbord[mogelijkeZetten.at(i)][mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
                }
-               m_spel.clearMogelijkeZetten();
+               m_spel->clearMogelijkeZetten();
                lastClicked = nullptr;
             }
         }

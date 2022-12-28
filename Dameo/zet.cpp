@@ -50,8 +50,7 @@ void Zet::maakZet(Bord bord, Pion::Team speler) const {
     teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
 }
 
-//functie bekijkt of er in de vakjes waarover er gesprongen is, tijdens de zet, een vijandige pion staat en verwijdert deze
-bool Zet::kijkOfPionnenVerslaanZijn(Bord bord, DameoPion::Team speler, bool alleenChecken) const {
+bool Zet::isErEenPionVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) const {
     int begin;
     int einde;
     if (m_startXCoordinaat == m_eindXCoordinaat) {
@@ -89,6 +88,52 @@ bool Zet::kijkOfPionnenVerslaanZijn(Bord bord, DameoPion::Team speler, bool alle
         }
     }
     return false;
+}
+
+//functie bekijkt of er in de vakjes waarover er gesprongen is, tijdens de zet, een vijandige pion staat en verwijdert deze
+QPair<int, int> Zet::welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) {
+    int begin;
+    int einde;
+    QPair<int, int> coordinaatPionVerslaan{-1, -1};
+    if (m_startXCoordinaat == m_eindXCoordinaat) {
+        if (m_startYCoordinaat < m_eindYCoordinaat) {
+            begin = m_startYCoordinaat;
+            einde = m_eindYCoordinaat;
+        } else {
+            begin = m_eindYCoordinaat;
+            einde = m_startYCoordinaat;
+        }
+        for (int i = begin; i < einde; i++) {
+            if (bord.zoekPionOpCoordinaat(i, m_startXCoordinaat) != nullptr && bord.zoekPionOpCoordinaat(i, m_startXCoordinaat)->getTeam() != speler) {
+                if (alleenChecken == false) {
+                    bord.zoekPionOpCoordinaat(i, m_startXCoordinaat)->verslaPion();
+                }
+                coordinaatPionVerslaan.first = i;
+                coordinaatPionVerslaan.second = m_startXCoordinaat;
+                return coordinaatPionVerslaan;
+            }
+        }
+    }
+    if (m_startYCoordinaat == m_eindYCoordinaat) {
+        if (m_startXCoordinaat < m_eindXCoordinaat) {
+            begin = m_startXCoordinaat;
+            einde = m_eindXCoordinaat;
+        } else {
+            begin = m_eindXCoordinaat;
+            einde = m_startXCoordinaat;
+        }
+        for (int i = begin; i < einde; i++) {
+            if (bord.zoekPionOpCoordinaat(m_startYCoordinaat, i) != nullptr && bord.zoekPionOpCoordinaat(m_startYCoordinaat, i)->getTeam() != speler) {
+                if (alleenChecken == false) {
+                    bord.zoekPionOpCoordinaat(m_startYCoordinaat, i)->verslaPion();
+                }
+                coordinaatPionVerslaan.first = m_startYCoordinaat;
+                coordinaatPionVerslaan.second = i;
+                return coordinaatPionVerslaan;
+            }
+        }
+    }
+    return coordinaatPionVerslaan;
 }
 
 // in het geval van Chaturaji wordt een pion verslaan als op de eindpositie een vijandige pion staat, deze pion wordt ook verwijderd

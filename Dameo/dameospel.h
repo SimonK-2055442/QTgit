@@ -24,6 +24,7 @@ public:
     Bord getBord();
     std::vector<int> eersteKlik(int rij,int kolom);
     bool tweedeKlik(int rij,int kolom);
+    QPair<int, int> pionDieVerwijderdMoetWorden();
     void clearMogelijkeZetten();
 
 signals:

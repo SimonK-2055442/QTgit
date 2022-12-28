@@ -69,7 +69,7 @@ void DameoSpel::startSpel(int spelkeuze) {
                     zet.setEindYCoordinaat(vertaal(eindPositie.substr(1, 1)));
                 }
             }
-            if (zet.kijkOfPionnenVerslaanZijn(m_spelbord, m_speler, false))
+            if (zet.isErEenPionVerslaan(m_spelbord, m_speler, false))
                 magNogEenZet = true;
             else
                 magNogEenZet = false;
@@ -83,7 +83,7 @@ void DameoSpel::startSpel(int spelkeuze) {
                     cout << "Naar welke positie wil je het stuk verplaatsen?" << endl;
                     cin >> eindPositie;
                     Zet extraZet{ zet.getEindXCoordinaat(), zet.getEindYCoordinaat(), vertaal(eindPositie.substr(0, 1)), vertaal(eindPositie.substr(1, 1)) };
-                    if (p->mogelijkeZet(m_spelbord, extraZet, m_speler) && extraZet.kijkOfPionnenVerslaanZijn(m_spelbord, m_speler, false)) {
+                    if (p->mogelijkeZet(m_spelbord, extraZet, m_speler) && extraZet.isErEenPionVerslaan(m_spelbord, m_speler, false)) {
                         extraZet.maakZet(m_spelbord, m_speler);
                         m_spelbord.laatZien();
                         zet.setEindXCoordinaat(extraZet.getEindXCoordinaat());
@@ -138,7 +138,7 @@ void DameoSpel::vindEnMaakZet() const {
                 zet.setEindYCoordinaat(y);
                 if (gevonden == false) {
                     if (p->mogelijkeZet(m_spelbord, zet, DameoPion::Team::geel)) {
-                        zet.kijkOfPionnenVerslaanZijn(m_spelbord, DameoPion::Team::geel, false);
+                        zet.welkePionIsVerslaan(m_spelbord, DameoPion::Team::geel, false);
                         zet.maakZet(m_spelbord, DameoPion::Team::geel);
                         gevonden = true;
                     }
@@ -161,7 +161,7 @@ void DameoSpel::vindAlleZettenVoorPion(Bord spelbord,DameoPion::Team speler, Dam
                 if (p->getXCoordinaat() != i || p->getYCoordinaat() != j) {
                     Zet zet{ p->getXCoordinaat(), p->getYCoordinaat(), i,j };
                     if (p->mogelijkeZet(spelbord, zet, speler) == true) {
-                        if (moetPakken == true && zet.kijkOfPionnenVerslaanZijn(spelbord, speler, true) || moetPakken == false) {
+                        if ((moetPakken == true && zet.isErEenPionVerslaan(spelbord, speler, true)) || moetPakken == false) {
                             string mogelijkeZet = vertalen[i] + to_string(j + 1);
                             cout << mogelijkeZet + " ";
                             mogelijkeZetten.push_back(j);
@@ -272,9 +272,10 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
             Zet zet{std::get<1>(coordinatenEersteKlik), std::get<0>(coordinatenEersteKlik), kolom, rij};
 
             //deze functie moet een signal emitten met daarin de verslagen pion zodat deze in de view opgevangen kan worden en zo de pion verwijderd kan worden.
-            if (zet.kijkOfPionnenVerslaanZijn(m_spelbord, m_speler, false) == true) {
+            if (zet.isErEenPionVerslaan(m_spelbord, m_speler, false)) {
                 emit pionVerslaan();
             }
+
             zet.maakZet(m_spelbord, m_speler);
 
             if (m_speler == DameoPion::Team::geel) {
@@ -286,6 +287,12 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
         }
     }
     return false;
+}
+
+QPair<int, int> DameoSpel::pionDieVerwijderdMoetWorden() {
+    QPair<int, int> pionDieVerslaanIs;
+    //pionDieVerslaanIs = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
+    return pionDieVerslaanIs;
 }
 
 void DameoSpel::clearMogelijkeZetten(){

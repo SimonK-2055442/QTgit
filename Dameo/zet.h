@@ -5,6 +5,7 @@
 
 #include "bord.h"
 #include "dameopion.h"
+#include <QPair>
 
 class Zet {
 public:
@@ -18,7 +19,8 @@ public:
     void setEindXCoordinaat(int eindXCoordinaat);
     void setEindYCoordinaat(int eindYCoordinaat);
     void maakZet(Bord speelbord, Pion::Team speler) const;
-    bool kijkOfPionnenVerslaanZijn(Bord bord, Pion::Team speler, bool alleenChecken) const;
+    bool isErEenPionVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) const;
+    QPair<int, int> welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alleenChecken);
     int kijkOfPionnenVerslaanZijnChaturaji(Bord bord, Pion::Team speler) const;
 
 private:

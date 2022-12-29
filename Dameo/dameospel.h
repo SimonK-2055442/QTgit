@@ -28,7 +28,7 @@ public:
     void clearMogelijkeZetten();
 
 signals:
-    void pionVerslaan();
+    void pionVerslaan(int rij, int kolom);
 
 private:
     //BordView *m_bord;

@@ -30,12 +30,9 @@ BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphic
     connect(m_spel, &DameoSpel::pionVerslaan, this, &BordView::verwijderPionVanBord);
 }
 
-void BordView::verwijderPionVanBord() {
-    //m_spel. //zet.kijkofpionnenverslaanzijn naar bord opvangen en zo naar hier
-    QPair<int, int> pion {m_spel->pionDieVerwijderdMoetWorden()};
-    int rij {pion.first};
-    int kolom {pion.second};
-    speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);   // dangling pointer nog oplossen
+void BordView::verwijderPionVanBord(int rij, int kolom) {
+    qDebug() << "rij" << rij << "kolom" << kolom;
+    speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);   // moet nog naar de view naast het spelbord
 }
 
 //moet nog verbeterd worden met signals of slots maar zie nie hoe met returnvalues want ge hebt 3 mogelijkheden:

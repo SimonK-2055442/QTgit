@@ -271,9 +271,9 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
 
             Zet zet{std::get<1>(coordinatenEersteKlik), std::get<0>(coordinatenEersteKlik), kolom, rij};
 
-            //deze functie moet een signal emitten met daarin de verslagen pion zodat deze in de view opgevangen kan worden en zo de pion verwijderd kan worden.
-            if (zet.isErEenPionVerslaan(m_spelbord, m_speler, false)) {
-                emit pionVerslaan();
+            if (zet.isErEenPionVerslaan(m_spelbord, m_speler, true)) {
+                QPair<int, int> pion = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
+                emit pionVerslaan(pion.first, pion.second);
             }
 
             zet.maakZet(m_spelbord, m_speler);

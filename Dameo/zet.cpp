@@ -50,6 +50,7 @@ void Zet::maakZet(Bord bord, Pion::Team speler) const {
     teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
 }
 
+//functie bekijkt of er in de vakjes waarover er gesprongen is, tijdens de zet, een vijandige pion staat en verwijdert deze
 bool Zet::isErEenPionVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) const {
     int begin;
     int einde;
@@ -90,7 +91,6 @@ bool Zet::isErEenPionVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) 
     return false;
 }
 
-//functie bekijkt of er in de vakjes waarover er gesprongen is, tijdens de zet, een vijandige pion staat en verwijdert deze
 QPair<int, int> Zet::welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) {
     int begin;
     int einde;

@@ -15,7 +15,7 @@ public:
     BordCelView* speelbord[8][8];
 
 public slots:
-    void verwijderPionVanBord();
+    void verwijderPionVanBord(int rij, int kolom);
 
 private:
     BordCelView *lastClicked{nullptr};

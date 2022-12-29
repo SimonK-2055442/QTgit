@@ -26,12 +26,15 @@ public:
     bool tweedeKlik(int rij,int kolom);
     QPair<int, int> pionDieVerwijderdMoetWorden();
     void clearMogelijkeZetten();
+    void veranderBeurt();
 
 signals:
     void pionVerslaan(int rij, int kolom);
+    void pionPromoveren(int rij, int kolom);
 
 private:
     //BordView *m_bord;
+    DameoPion* m_pionDieNogEenZetMag{nullptr};
     std::vector<int> m_mogelijkeZetten;
     std::tuple<int, int> coordinatenEersteKlik;
     Bord m_spelbord;

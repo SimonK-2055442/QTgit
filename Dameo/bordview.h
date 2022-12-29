@@ -16,6 +16,7 @@ public:
 
 public slots:
     void verwijderPionVanBord(int rij, int kolom);
+    void promoveerPion(int rij, int kolom);
 
 private:
     BordCelView *lastClicked{nullptr};

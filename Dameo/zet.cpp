@@ -40,14 +40,17 @@ void Zet::setEindYCoordinaat(int yCoordinaat) {
     m_eindYCoordinaat = yCoordinaat;
 }
 
-void Zet::maakZet(Bord bord, Pion::Team speler) const {
+Pion* Zet::maakZet(Bord bord, Pion::Team speler) const {
     //elke zet kijken (in het geval van een dameoPion) of er een pion gepromoveerd moet worden
     Pion* teVerzettenPion = bord.zoekPionOpCoordinaat(m_startYCoordinaat, m_startXCoordinaat);
     if (dynamic_cast<DameoPion*>(teVerzettenPion) != nullptr) {
-        if (m_eindYCoordinaat == 0 || m_eindYCoordinaat == 7)
+        if (m_eindYCoordinaat == 0 || m_eindYCoordinaat == 7){
             dynamic_cast<DameoPion*>(teVerzettenPion)->maakKoning();
+            return teVerzettenPion;
+        }
     }
     teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
+    return nullptr;
 }
 
 //functie bekijkt of er in de vakjes waarover er gesprongen is, tijdens de zet, een vijandige pion staat en verwijdert deze

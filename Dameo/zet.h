@@ -18,7 +18,7 @@ public:
     void setStartYCoordinaat(int startYCoordinaat);
     void setEindXCoordinaat(int eindXCoordinaat);
     void setEindYCoordinaat(int eindYCoordinaat);
-    void maakZet(Bord speelbord, Pion::Team speler) const;
+    Pion* maakZet(Bord speelbord, Pion::Team speler) const;
     bool isErEenPionVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) const;
     QPair<int, int> welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alleenChecken);
     int kijkOfPionnenVerslaanZijnChaturaji(Bord bord, Pion::Team speler) const;

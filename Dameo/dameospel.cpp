@@ -257,10 +257,16 @@ std::vector<int> DameoSpel::eersteKlik(int rij,int kolom) {
     if(m_spelbord.zoekPionOpCoordinaat(rij,kolom) == nullptr || rij < 0 || rij > 7 || kolom < 0 || kolom > 7 || m_spelbord.zoekPionOpCoordinaat(rij,kolom)->getTeam() != m_speler) {
         m_mogelijkeZetten.clear();
         return m_mogelijkeZetten;
-    } else {
+    }
+    else {
         coordinatenEersteKlik = make_tuple(rij , kolom);
         DameoPion* pion = dynamic_cast<DameoPion*>(m_spelbord.zoekPionOpCoordinaat(rij, kolom));
-        vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), pion, false);
+        if (m_pionDieNogEenZetMag != nullptr){
+            vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), pion, true);
+        }
+        else{
+            vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), pion, false);
+        }
         return m_mogelijkeZetten;
     }
 }
@@ -273,15 +279,22 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
 
             if (zet.isErEenPionVerslaan(m_spelbord, m_speler, true)) {
                 QPair<int, int> pion = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
+                m_pionDieNogEenZetMag = dynamic_cast<DameoPion*>(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)));
                 emit pionVerslaan(pion.first, pion.second);
+                if (zet.maakZet(m_spelbord, m_speler) != nullptr){
+                    emit pionPromoveren(rij, kolom);
+                }
             }
-
-            zet.maakZet(m_spelbord, m_speler);
-
-            if (m_speler == DameoPion::Team::geel) {
-                m_speler = DameoPion::Team::blauw;
-            } else {
-                m_speler = DameoPion::Team::geel;
+            else{
+                m_pionDieNogEenZetMag = nullptr;
+                if (zet.maakZet(m_spelbord, m_speler) != nullptr){
+                    emit pionPromoveren(rij, kolom);
+                }
+            }
+            vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), m_pionDieNogEenZetMag, true);
+            if (m_mogelijkeZetten.size() == 0){
+                m_pionDieNogEenZetMag = nullptr;
+                veranderBeurt();
             }
             return true;
         }
@@ -297,4 +310,12 @@ QPair<int, int> DameoSpel::pionDieVerwijderdMoetWorden() {
 
 void DameoSpel::clearMogelijkeZetten(){
     m_mogelijkeZetten.clear();
+}
+
+void DameoSpel::veranderBeurt(){
+    if (m_speler == DameoPion::Team::geel) {
+        m_speler = DameoPion::Team::blauw;
+    } else {
+        m_speler = DameoPion::Team::geel;
+    }
 }

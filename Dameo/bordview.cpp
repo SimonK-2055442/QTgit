@@ -28,11 +28,19 @@ BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphic
     }
 
     connect(m_spel, &DameoSpel::pionVerslaan, this, &BordView::verwijderPionVanBord);
+    connect(m_spel, &DameoSpel::pionPromoveren, this, &BordView::promoveerPion);
 }
 
 void BordView::verwijderPionVanBord(int rij, int kolom) {
     qDebug() << "rij" << rij << "kolom" << kolom;
     speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);   // moet nog naar de view naast het spelbord
+}
+
+void BordView::promoveerPion(int rij, int kolom) {
+    qDebug() << "rij" << rij << "kolom" << kolom;
+    //speelbord[rij-1][kolom]->childItems().removeFirst();
+    //PionView *koning = new PionView{"ZwartKoning", speelbord[rij-1][kolom]};
+    //koning->setParentItem(speelbord[rij-1][kolom]);   // moet nog naar de view naast het spelbord
 }
 
 //moet nog verbeterd worden met signals of slots maar zie nie hoe met returnvalues want ge hebt 3 mogelijkheden:

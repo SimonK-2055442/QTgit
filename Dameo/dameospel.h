@@ -30,7 +30,7 @@ public:
 
 signals:
     void pionVerslaan(int rij, int kolom);
-    void pionPromoveren(int rij, int kolom);
+    void pionPromoveren(int rij, int kolom, int parameterSpeler);
 
 private:
     //BordView *m_bord;

@@ -272,6 +272,12 @@ std::vector<int> DameoSpel::eersteKlik(int rij,int kolom) {
 }
 
 bool DameoSpel::tweedeKlik(int rij,int kolom) {
+    int parameterSpeler;
+    if (m_speler == Pion::Team::blauw)
+        parameterSpeler = -1;
+    else
+        parameterSpeler = 1;
+
     for (int i = 0; i < m_mogelijkeZetten.size(); i+= 2) {
         if (rij == m_mogelijkeZetten.at(i) && kolom == m_mogelijkeZetten.at(i+1)) {
 
@@ -281,16 +287,16 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
                 QPair<int, int> pion = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
                 m_pionDieNogEenZetMag = dynamic_cast<DameoPion*>(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)));
                 emit pionVerslaan(pion.first, pion.second);
-                if (zet.maakZet(m_spelbord, m_speler) != nullptr){
-                    emit pionPromoveren(rij, kolom);
+                if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
+                    emit pionPromoveren(rij, kolom, parameterSpeler);
                 }
-            }
-            else{
+            } else {
                 m_pionDieNogEenZetMag = nullptr;
-                if (zet.maakZet(m_spelbord, m_speler) != nullptr){
-                    emit pionPromoveren(rij, kolom);
+                if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
+                    emit pionPromoveren(rij, kolom, parameterSpeler);
                 }
             }
+
             vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), m_pionDieNogEenZetMag, true);
             if (m_mogelijkeZetten.size() == 0){
                 m_pionDieNogEenZetMag = nullptr;
@@ -300,12 +306,6 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
         }
     }
     return false;
-}
-
-QPair<int, int> DameoSpel::pionDieVerwijderdMoetWorden() {
-    QPair<int, int> pionDieVerslaanIs;
-    //pionDieVerslaanIs = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
-    return pionDieVerslaanIs;
 }
 
 void DameoSpel::clearMogelijkeZetten(){

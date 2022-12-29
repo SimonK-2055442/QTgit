@@ -16,7 +16,7 @@ BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphic
 
     // voeg pionnen toe
     for (int i = 0; i < 36; i++) {
-        if (spel->getBord().getPionVanLijst(i)->getTeam()==Pion::Team::blauw) {
+        if (spel->getBord().getPionVanLijst(i)->getTeam() == Pion::Team::blauw) {
             PionView *zwartePion = new PionView{"DameoZwart", speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
             zwartePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
             zwartePion->setPos(17,4);
@@ -32,15 +32,16 @@ BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphic
 }
 
 void BordView::verwijderPionVanBord(int rij, int kolom) {
-    qDebug() << "rij" << rij << "kolom" << kolom;
+    //qDebug() << "rij" << rij << "kolom" << kolom;
     speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);   // moet nog naar de view naast het spelbord
 }
 
-void BordView::promoveerPion(int rij, int kolom) {
+void BordView::promoveerPion(int rij, int kolom, int parameterSpeler) {
     qDebug() << "rij" << rij << "kolom" << kolom;
-    //speelbord[rij-1][kolom]->childItems().removeFirst();
-    //PionView *koning = new PionView{"ZwartKoning", speelbord[rij-1][kolom]};
-    //koning->setParentItem(speelbord[rij-1][kolom]);   // moet nog naar de view naast het spelbord
+    delete speelbord[rij+parameterSpeler][kolom]->childItems()[0];
+    //delete pion;
+    //PionView *koning = new PionView{"ZwartKoning"};
+    //koning->setParentItem(speelbord[rij][kolom]);   // moet nog naar de view naast het spelbord
 }
 
 //moet nog verbeterd worden met signals of slots maar zie nie hoe met returnvalues want ge hebt 3 mogelijkheden:

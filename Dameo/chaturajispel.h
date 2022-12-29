@@ -9,8 +9,10 @@
 #include "ChaturajiKoning.h"
 #include "Dobbelstenen.h"
 #include "Speler.h"
+#include <QObject>
 
-class ChaturajiSpel {
+class ChaturajiSpel: public QObject {
+    Q_OBJECT
 public:
     ChaturajiSpel(Bord spelbord);
     void startSpel(int spelKeuze);
@@ -26,10 +28,21 @@ public:
     void maakNieuwePion(char type, char xCoord, char Ycoord, char team);
     void setSpelbord(Bord bord);
     Bord getSpelbord();
-    vector<string> vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt);
+    void vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt);
+    std::vector<int> eersteKlik(int rij,int kolom);
+    bool tweedeKlik(int rij,int kolom);
+    void clearMogelijkeZetten();
+    void initialiseerRonde();
+
+signals:
+    void pionVerslaan(int rij, int kolom);
+
 private:
+    ChaturajiPion* m_pionDieNogEenZetMag{nullptr};
+    std::vector<int> m_mogelijkeZetten;
+    std::tuple<int, int> coordinatenEersteKlik;
     Bord m_spelbord;
-    int m_beurt{ 1 };
+    int m_beurt{ -1 };
     Dobbelstenen m_dobbelstenen;
     ChaturajiPion::Team m_speler;
     vector<Speler> m_spelerVector;

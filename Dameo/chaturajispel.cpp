@@ -102,8 +102,8 @@ void ChaturajiSpel::vindEnMaakZet(Speler* spelerAanBeurt) {
     }
 }
 
-vector<string> ChaturajiSpel::vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt){
-    vector<string> mogelijkeZetten;
+void ChaturajiSpel::vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt){
+    vector<int> mogelijkeZetten;
     string vertalen = "ABCDEFGH";
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -112,7 +112,9 @@ vector<string> ChaturajiSpel::vindAlleZettenVoorPion(Pion* p, Speler* spelerAanB
                 if (checkZet(zet, p, spelerAanBeurt->getSpelerAanBeurt(), 1, false) == true) {
                     string mogelijkeZet = vertalen[i] + to_string(j+1);
                     cout << mogelijkeZet + " ";
-                    mogelijkeZetten.push_back(mogelijkeZet);
+                    //mogelijkeZetten.push_back(mogelijkeZet);
+                    mogelijkeZetten.push_back(j);
+                    mogelijkeZetten.push_back(i);
                 }
                 //m_dobbelstenen.setEersteDobbelsteenGebruikt(false);
                 //m_dobbelstenen.setTweedeDobbelsteenGebruikt(false);
@@ -120,7 +122,7 @@ vector<string> ChaturajiSpel::vindAlleZettenVoorPion(Pion* p, Speler* spelerAanB
         }
     }
     cout << endl;
-    return mogelijkeZetten;
+    m_mogelijkeZetten = mogelijkeZetten;
 }
 
 bool ChaturajiSpel::isGedaan() const {
@@ -285,4 +287,61 @@ void ChaturajiSpel::maakNieuwePion(char type, char xCoord, char yCoord, char tea
 
 Bord ChaturajiSpel::getSpelbord(){
     return m_spelbord;
+}
+
+std::vector<int> ChaturajiSpel::eersteKlik(int rij,int kolom) {
+    if(m_spelbord.zoekPionOpCoordinaat(rij,kolom) == nullptr || rij < 0 || rij > 7 || kolom < 0 || kolom > 7 || m_spelbord.zoekPionOpCoordinaat(rij,kolom)->getTeam() != m_spelerVector[m_beurt].getSpelerAanBeurt() || !stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(rij,kolom), false)) {
+        if(m_spelbord.zoekPionOpCoordinaat(rij,kolom) == nullptr || rij < 0 || rij > 7 || kolom < 0 || kolom > 7 || m_spelbord.zoekPionOpCoordinaat(rij,kolom)->getTeam() != m_spelerVector[m_beurt].getSpelerAanBeurt() || !stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(rij,kolom), false)) {
+            m_mogelijkeZetten.clear();
+            return m_mogelijkeZetten;
+        }
+        m_mogelijkeZetten.clear();
+        return m_mogelijkeZetten;
+    }
+    else {
+        coordinatenEersteKlik = make_tuple(rij , kolom);
+        Pion* pion = m_spelbord.zoekPionOpCoordinaat(rij, kolom);
+        vindAlleZettenVoorPion(pion, &m_spelerVector[m_beurt]);
+        return m_mogelijkeZetten;
+    }
+}
+
+bool ChaturajiSpel::tweedeKlik(int rij,int kolom) {
+    for (int i = 0; i < m_mogelijkeZetten.size(); i+= 2) {
+        if (rij == m_mogelijkeZetten.at(i) && kolom == m_mogelijkeZetten.at(i+1)) {
+
+            Zet zet{std::get<1>(coordinatenEersteKlik), std::get<0>(coordinatenEersteKlik), kolom, rij};
+            stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)), true);
+            if (zet.kijkOfPionnenVerslaanZijnChaturaji(m_spelbord, m_speler)) {
+                //QPair<int, int> pion = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
+                //emit pionVerslaan(pion.first, pion.second);
+                zet.maakZet(m_spelbord, m_speler);
+            }
+            else{
+                zet.maakZet(m_spelbord, m_speler);
+            }
+            if (m_dobbelstenen.getEersteDobbelsteenGebruikt() && m_dobbelstenen.getTweedeDobbelsteenGebruikt()){
+                initialiseerRonde();
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+void ChaturajiSpel::initialiseerRonde(){
+    m_dobbelstenen.setEersteDobbelsteenGebruikt(false);
+    m_dobbelstenen.setTweedeDobbelsteenGebruikt(false);
+    m_dobbelstenen.rolDobbelstenen();
+    cout << m_dobbelstenen.getResultaatVanRol().first + " , " + m_dobbelstenen.getResultaatVanRol().second << endl;
+    if (m_beurt == 3){
+        m_beurt = 0;
+    }
+    else{
+        m_beurt++;
+    }
+}
+
+void ChaturajiSpel::clearMogelijkeZetten(){
+    m_mogelijkeZetten.clear();
 }

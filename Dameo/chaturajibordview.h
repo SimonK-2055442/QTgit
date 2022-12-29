@@ -7,18 +7,19 @@
 
 class ChaturajiBordView : public QGraphicsScene
 {
+    Q_OBJECT
 public:
     ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObject *parent = nullptr);
     BordCelView* speelbord[8][8];
     //virtual ~ChaturajiBordView() {};
 
-//public slots:
-    //void verwijderPionVanBord(int rij, int kolom);
+public slots:
+    void verwijderPionVanBord(int rij, int kolom);
 
 private:
     BordCelView *lastClicked{nullptr};
     ChaturajiSpel *m_spel;
-    //void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
     std::vector<int> mogelijkeZetten{};
 };
 

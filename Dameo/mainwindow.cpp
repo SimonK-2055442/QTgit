@@ -14,8 +14,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     chaturaji->setText("Chaturaji");
     QObject::connect(dameo, SIGNAL (clicked()), this, SLOT (DameoButtonPressed()));
     QObject::connect(chaturaji, SIGNAL (clicked()), this, SLOT (ChaturajiButtonPressed()));
-    //test
-    //test
     // om het spel te testen:
     // dit uit commentaar halen en regel 22 en 23 in commentaar zetten
     /*Bord speelbord;

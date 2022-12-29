@@ -14,6 +14,9 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
         }
     }
 
+    m_spel->initialiseerRonde();
+    connect(m_spel, &ChaturajiSpel::pionVerslaan, this, &ChaturajiBordView::verwijderPionVanBord);
+
     // voeg pionnen toe
     for (int i = 0; i < 32; i++){
         if (spel->getSpelbord().getPionVanLijst(i)->getTeam()==Pion::Team::blauw) {
@@ -128,22 +131,22 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
 }
 
 
-/*void ChaturajiBordView::verwijderPionVanBord(int rij, int kolom) {
+void ChaturajiBordView::verwijderPionVanBord(int rij, int kolom) {
     speelbord[rij][kolom]->setBrush(Qt::yellow);
-}*/
+}
 
 //moet nog verbeterd worden met signals of slots maar zie nie hoe met returnvalues want ge hebt 3 mogelijkheden:
 //1) op leeg vakje geklikt of pion van tegenstander -> rode kleur bij mogelijkezetten van vorige geklikte pion weg doen
 //2) op geldige pion geklikt voor het eerst -> rode vakjes laten zien
 //3) op geldige vakje geklikt voor bestemming -> pion verhuizen
 //hoe weten welke da ge moet doen zonder logica op return value toe te passen? met signals en slots dan?
-/*void ChaturajiBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+void ChaturajiBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if(event->button() == Qt::LeftButton) {
         int kolom = event->scenePos().x()/96;
         int rij = event->scenePos().y()/96;
         if (lastClicked == nullptr) {
             mogelijkeZetten.clear();
-            mogelijkeZetten = m_spel.eersteKlik(rij, kolom);
+            mogelijkeZetten = m_spel->eersteKlik(rij, kolom);
             for (int i = 0; i < mogelijkeZetten.size(); i += 2) {
                 speelbord[mogelijkeZetten.at(i)][mogelijkeZetten.at(i+1)]->setBrush(Qt::red);
             }
@@ -152,12 +155,12 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
             }
 
         } else {
-            if (m_spel.tweedeKlik(rij,kolom)){
+            if (m_spel->tweedeKlik(rij,kolom)){
                lastClicked->childItems()[0]->setParentItem(speelbord[rij][kolom]);
                for (int i = 0; i < mogelijkeZetten.size(); i += 2){
                    speelbord[mogelijkeZetten.at(i)][mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
                }
-               m_spel.clearMogelijkeZetten();
+               m_spel->clearMogelijkeZetten();
                lastClicked = nullptr;
             }
         }
@@ -169,5 +172,5 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
         }
         lastClicked = nullptr;
     }
-}*/
+}
 

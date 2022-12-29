@@ -290,13 +290,13 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
                 if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
                     emit pionPromoveren(rij, kolom, parameterSpeler);
                 }
-            } else {
+            }
+            else {
                 m_pionDieNogEenZetMag = nullptr;
                 if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
                     emit pionPromoveren(rij, kolom, parameterSpeler);
                 }
             }
-
             vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), m_pionDieNogEenZetMag, true);
             if (m_mogelijkeZetten.size() == 0){
                 m_pionDieNogEenZetMag = nullptr;

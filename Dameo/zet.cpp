@@ -46,10 +46,16 @@ Pion* Zet::maakZet(Bord bord, Pion::Team speler) const {
     if (dynamic_cast<DameoPion*>(teVerzettenPion) != nullptr) {
         if (m_eindYCoordinaat == 0 || m_eindYCoordinaat == 7){
             dynamic_cast<DameoPion*>(teVerzettenPion)->maakKoning();
+            teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
             return teVerzettenPion;
         }
+        else{
+            teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
+        }
     }
-    teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
+    else{
+        teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
+    }
     return nullptr;
 }
 

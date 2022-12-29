@@ -11,3 +11,11 @@ BordCelView::BordCelView() : QGraphicsRectItem{0, 0, 95, 95}
 {
 
 }
+
+void BordCelView::setChild(PionView* child){
+    m_child = child;
+}
+
+PionView* BordCelView::getChild(){
+    return m_child;
+}

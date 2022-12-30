@@ -1,5 +1,6 @@
 #include "chaturajibordview.h"
 #include "pionview.h"
+#include "qpushbutton.h"
 #include <QLabel>
 
 ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObject *parent) : QGraphicsScene{parent} {
@@ -127,14 +128,18 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
         }
     }
 
+    QPushButton* volgendeBeurtKnop = new QPushButton("Stop met beurt");
     m_geroldeDobbelsteen1 = new QLabel();
     m_geroldeDobbelsteen2 = new QLabel();
+    volgendeBeurtKnop->setGeometry(860,400,100,100);
     m_geroldeDobbelsteen1->setGeometry(800,200,100,100);
     m_geroldeDobbelsteen2->setGeometry(920,200,100,100);
+    addWidget(volgendeBeurtKnop);
     addWidget(m_geroldeDobbelsteen1);
     addWidget(m_geroldeDobbelsteen2);
     connect(m_spel, &ChaturajiSpel::pionVerslaan, this, &ChaturajiBordView::verwijderPionVanBord);
     connect(m_spel, &ChaturajiSpel::veranderDobbelsteen, this, &ChaturajiBordView::veranderDobbelstenen);
+    connect(volgendeBeurtKnop, &QPushButton::pressed, m_spel, &ChaturajiSpel::initialiseerRonde);
     m_spel->initialiseerRonde();
 }
 

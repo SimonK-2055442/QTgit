@@ -168,10 +168,10 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
             QPair<int, int> pion = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
             m_pionDieNogEenZetMag = dynamic_cast<DameoPion*>(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)));
 
-            if (pion.first != NULL && pion.second != NULL) {
+            if (pion.first != -1 && pion.second != -1) {
                 emit pionVerslaan(pion.first, pion.second);
                 if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
-                    emit pionPromoveren(rij, kolom, parameterSpeler);
+                    emit pionPromoveren(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik), parameterSpeler);
                 }
                 if (isGedaan() == 1) {
                     emit spelGedaan("wit");
@@ -181,9 +181,9 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
                 }
             }
             else {
-                    if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
-                        emit pionPromoveren(rij, kolom, parameterSpeler);
-                    }
+                if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
+                    emit pionPromoveren(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik), parameterSpeler);
+                }
                 m_pionDieNogEenZetMag = nullptr;
             }
             vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), m_pionDieNogEenZetMag, true);

@@ -61,7 +61,7 @@ Pion* Zet::maakZet(Bord bord, Pion::Team speler) const {
 QPair<int, int> Zet::welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) {
     int begin;
     int einde;
-    QPair<int, int> coordinaatPionVerslaan{NULL, NULL};
+    QPair<int, int> coordinaatPionVerslaan{-1, -1};
     if (m_startXCoordinaat == m_eindXCoordinaat) {
         if (m_startYCoordinaat < m_eindYCoordinaat) {
             begin = m_startYCoordinaat;

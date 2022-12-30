@@ -14,6 +14,8 @@ public:
     BordCelView* speelbord[8][8];
     //virtual ~ChaturajiBordView() {};
 
+
+
 public slots:
     void verwijderPionVanBord(int rij, int kolom);
     void veranderDobbelstenen(string eerste, string tweede);

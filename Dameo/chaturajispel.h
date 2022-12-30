@@ -29,6 +29,8 @@ public:
     std::vector<int> eersteKlik(int rij,int kolom);
     bool tweedeKlik(int rij,int kolom);
     void clearMogelijkeZetten();
+
+public slots:
     void initialiseerRonde();
 
 signals:

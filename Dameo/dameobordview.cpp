@@ -1,10 +1,10 @@
-#include "bordview.h"
+#include "dameobordview.h"
 #include "pion.h"
-#include "qpushbutton.h"
-#include "QLineEdit"
-#include "QLabel"
+#include <QPushButton>
+#include <QLineEdit>
+#include <QLabel>
 
-BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphicsScene{parent} {
+DameoBordView::DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphicsScene{parent} {
     m_spel = spel;
     setBackgroundBrush(QBrush(Qt::gray));
 
@@ -19,22 +19,22 @@ BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphic
     // voeg pionnen toe
     for (int i = 0; i < 36; i++) {
         if (spel->getBord().getPionVanLijst(i)->getTeam() == Pion::Team::blauw) {
-            PionView *zwartePion = new PionView{"DameoZwart", speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
+            PionView *zwartePion = new PionView{PionView::dameoZwart, speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
             zwartePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
             zwartePion->setPos(17,4);
         } else {
-            PionView *wittePion = new PionView{"DameoWit", speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
+            PionView *wittePion = new PionView{PionView::dameoWit, speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
             wittePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
             wittePion->setPos(17,4);
         }
     }
 
-    QPushButton* saveKnop = new QPushButton("save spel");
+    QPushButton* saveKnop = new QPushButton("Sla dit spel op");
     m_saveName = new QLineEdit();
-    QLabel *saveText = new QLabel("opslaan onder welke naam?");
-    QPushButton* loadKnop = new QPushButton("load spel");
+    QLabel *saveText = new QLabel("Opslaan onder welke naam?");
+    QPushButton* loadKnop = new QPushButton("Laad een spel");
     m_loadName = new QLineEdit();
-    QLabel *loadText = new QLabel("naam van het spel dat je wilt laden?");
+    QLabel *loadText = new QLabel("Geef de naam van het spel");
     saveText->setAlignment(Qt::AlignCenter);
     loadText->setAlignment(Qt::AlignCenter);
     addWidget(saveKnop);
@@ -51,42 +51,42 @@ BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphic
     saveKnop->setGeometry(800,200,200,60);
 
 
-    connect(m_spel, &DameoSpel::pionVerslaan, this, &BordView::verwijderPionVanBord);
-    connect(m_spel, &DameoSpel::pionPromoveren, this, &BordView::promoveerPion);
-    connect(m_spel, &DameoSpel::spelGedaan, this, &BordView::toonWinnaar);
-    connect(saveKnop, &QPushButton::pressed, this, &BordView::eventSaveKnop);
-    connect(loadKnop, &QPushButton::pressed, this, &BordView::eventLoadKnop);
+    connect(m_spel, &DameoSpel::pionVerslaan, this, &DameoBordView::verwijderPionVanBord);
+    connect(m_spel, &DameoSpel::pionPromoveren, this, &DameoBordView::promoveerPion);
+    connect(m_spel, &DameoSpel::spelGedaan, this, &DameoBordView::toonWinnaar);
+    connect(saveKnop, &QPushButton::pressed, this, &DameoBordView::eventSaveKnop);
+    connect(loadKnop, &QPushButton::pressed, this, &DameoBordView::eventLoadKnop);
 }
 
-void BordView::verwijderPionVanBord(int rij, int kolom) {
+void DameoBordView::verwijderPionVanBord(int rij, int kolom) {
     removeItem(speelbord[rij][kolom]->childItems()[0]);
 }
 
-void BordView::promoveerPion(int rij, int kolom, int parameterSpeler) {
+void DameoBordView::promoveerPion(int rij, int kolom, int parameterSpeler) {
     removeItem(speelbord[rij+parameterSpeler][kolom]->childItems()[0]);
     if (parameterSpeler == -1) {
-        PionView *koning = new PionView{"DameoKZwart", speelbord[rij+parameterSpeler][kolom]};
+        PionView *koning = new PionView{PionView::dameoKZwart, speelbord[rij+parameterSpeler][kolom]};
         koning->setParentItem(speelbord[rij+parameterSpeler][kolom]);
     } else {
-        PionView *koning = new PionView{"DameoKWit", speelbord[rij+parameterSpeler][kolom]};
+        PionView *koning = new PionView{PionView::dameoKWit, speelbord[rij+parameterSpeler][kolom]};
         koning->setParentItem(speelbord[rij+parameterSpeler][kolom]);
     }
 }
 
-void BordView::toonWinnaar(QString winnaar) {
+void DameoBordView::toonWinnaar(QString winnaar) {
     qDebug() << "spel is gedaan met als winnaar" << winnaar;
 }
 
-void BordView::eventSaveKnop() {
+void DameoBordView::eventSaveKnop() {
     qDebug() << m_saveName->text();
     m_spel->saveSpel(m_saveName->text());
 }
 
-void BordView::eventLoadKnop() {
+void DameoBordView::eventLoadKnop() {
     qDebug() << "spel is gedaan met als winnaar";
 }
 
-void BordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+void DameoBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if(event->button() == Qt::LeftButton) {
         int kolom = event->scenePos().x()/96;
         int rij = event->scenePos().y()/96;

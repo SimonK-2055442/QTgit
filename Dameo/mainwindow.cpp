@@ -15,7 +15,7 @@ void MainWindow::DameoButtonPressed() {
     Bord spelbord;
     spelbord.initialiseerBord(Bord::KeuzeSpel::dameo);
     DameoSpel *spel = new DameoSpel(spelbord);
-    dameoBord = new BordView(8, spel);
+    dameoBord = new DameoBordView(8, spel);
     view = new QGraphicsView{dameoBord};
     setCentralWidget(view);
 

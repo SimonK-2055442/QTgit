@@ -7,7 +7,6 @@ CONFIG += c++17
 SOURCES += \
     bord.cpp \
     bordcelview.cpp \
-    bordview.cpp \
     chaturajiboot.cpp \
     chaturajibordview.cpp \
     chaturajikoning.cpp \
@@ -15,6 +14,7 @@ SOURCES += \
     chaturajipaard.cpp \
     chaturajipion.cpp \
     chaturajispel.cpp \
+    dameobordview.cpp \
     dameopion.cpp \
     dameospel.cpp \
     dobbelstenen.cpp \
@@ -28,7 +28,6 @@ SOURCES += \
 HEADERS += \
     bord.h \
     bordcelview.h \
-    bordview.h \
     chaturajiboot.h \
     chaturajibordview.h \
     chaturajikoning.h \
@@ -36,6 +35,7 @@ HEADERS += \
     chaturajipaard.h \
     chaturajipion.h \
     chaturajispel.h \
+    dameobordview.h \
     dameopion.h \
     dameospel.h \
     dobbelstenen.h \

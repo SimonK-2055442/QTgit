@@ -1,7 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "bordview.h"
+#include "dameobordview.h"
 #include "dameospel.h"
 #include "chaturajibordview.h"
 #include "chaturajispel.h"
@@ -20,7 +20,7 @@ private slots:
     void DameoButtonPressed();
     void ChaturajiButtonPressed();
 private:
-    BordView *dameoBord{};
+    DameoBordView *dameoBord{};
     ChaturajiBordView* chaturajiBord{};
     QGraphicsView *view{};
     void menuToevoegen();

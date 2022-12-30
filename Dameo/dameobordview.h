@@ -1,5 +1,5 @@
-#ifndef BORDVIEW_H
-#define BORDVIEW_H
+#ifndef DAMEOBORDVIEW_H
+#define DAMEOBORDVIEW_H
 #include "qlineedit.h"
 #pragma once
 #include <QGraphicsScene>
@@ -8,11 +8,11 @@
 #include "dameospel.h"
 #include "pionview.h"
 
-class BordView : public QGraphicsScene
+class DameoBordView : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    BordView(int grootteBord, DameoSpel *spel, QObject *parent = nullptr);
+    DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent = nullptr);
     BordCelView* speelbord[8][8];
 
 public slots:

@@ -31,19 +31,28 @@ BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphic
 
     connect(m_spel, &DameoSpel::pionVerslaan, this, &BordView::verwijderPionVanBord);
     connect(m_spel, &DameoSpel::pionPromoveren, this, &BordView::promoveerPion);
+    connect(m_spel, &DameoSpel::spelGedaan, this, &BordView::toonWinnaar);
 }
 
 void BordView::verwijderPionVanBord(int rij, int kolom) {
-    //qDebug() << "rij" << rij << "kolom" << kolom;
+    //verwijderen werkt nog niet altijd
     speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);   // moet nog naar de view naast het spelbord
 }
 
 void BordView::promoveerPion(int rij, int kolom, int parameterSpeler) {
-    qDebug() << "rij" << rij << "kolom" << kolom;
-    speelbord[rij-1][kolom]->childItems()[0]->setParentItem(nullptr);
-    PionView *koning = new PionView{"ZwartKoning", speelbord[rij][kolom]};
-    koning->setParentItem(speelbord[rij][kolom]);   // moet nog naar de view naast het spelbord
-    //lastClicked
+    //verwijderen werkt nog niet altijd
+    delete speelbord[rij+parameterSpeler][kolom]->childItems()[0];
+    if (parameterSpeler == -1) {
+        PionView *koning = new PionView{"DameoKZwart", speelbord[rij][kolom]};
+        koning->setParentItem(speelbord[rij][kolom]);
+    } else {
+        PionView *koning = new PionView{"DameoKWit", speelbord[rij][kolom]};
+        koning->setParentItem(speelbord[rij][kolom]);
+    }
+}
+
+void BordView::toonWinnaar(QString winnaar) {
+    qDebug() << "spel is gedaan met als winnaar" << winnaar;
 }
 
 //moet nog verbeterd worden met signals of slots maar zie nie hoe met returnvalues want ge hebt 3 mogelijkheden:

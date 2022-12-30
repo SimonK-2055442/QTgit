@@ -2,26 +2,27 @@
     <qresource prefix="/">
         <file>images/pion_wit.png</file>
         <file>images/pion_zwart.png</file>
-	<file>images/zwartPion.png</file>
-	<file>images/zwartKoning.png</file>
-	<file>images/zwartPaard.png</file>
-	<file>images/zwartBoot.png</file>
-	<file>images/zwartOlifant.png</file>
-	<file>images/groenPion.png</file>
-	<file>images/groenPaard.png</file>
-	<file>images/groenKoning.png</file>
-	<file>images/groenOlifant.png</file>
-	<file>images/groenBoot.png</file>
-	<file>images/roodPion.png</file>
-	<file>images/roodPaard.png</file>
-	<file>images/roodKoning.png</file>
-	<file>images/roodOlifant.png</file>
-	<file>images/roodBoot.png</file>
-	<file>images/geelPion.png</file>
-	<file>images/geelPaard.png</file>
-	<file>images/geelKoning.png</file>
-	<file>images/geelOlifant.png</file>
-	<file>images/geelBoot.png</file>
-        <file>images/qt_logo.png</file>
+        <file>images/zwartPion.png</file>
+        <file>images/zwartKoning.png</file>
+        <file>images/zwartPaard.png</file>
+        <file>images/zwartBoot.png</file>
+        <file>images/zwartOlifant.png</file>
+        <file>images/groenPion.png</file>
+        <file>images/groenPaard.png</file>
+        <file>images/groenKoning.png</file>
+        <file>images/groenOlifant.png</file>
+        <file>images/groenBoot.png</file>
+        <file>images/roodPion.png</file>
+        <file>images/roodPaard.png</file>
+        <file>images/roodKoning.png</file>
+        <file>images/roodOlifant.png</file>
+        <file>images/roodBoot.png</file>
+        <file>images/geelPion.png</file>
+        <file>images/geelPaard.png</file>
+        <file>images/geelKoning.png</file>
+        <file>images/geelOlifant.png</file>
+        <file>images/geelBoot.png</file>
+        <file>images/DameoKWit.png</file>
+        <file>images/DameoKZwart.png</file>
     </qresource>
 </RCC>

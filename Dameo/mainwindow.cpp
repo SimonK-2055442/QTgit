@@ -1,9 +1,4 @@
 #include "mainwindow.h"
-#include "ChaturajiSpel.h"
-#include "dameospel.h"
-#include "welcome.h"
-#include <QGraphicsView>
-
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QPushButton* dameo = new QPushButton(this);
@@ -34,20 +29,41 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     //setCentralWidget(view);
 }
 
-void MainWindow::DameoButtonPressed(){
+void MainWindow::DameoButtonPressed() {
     Bord spelbord;
     spelbord.initialiseerBord(Bord::KeuzeSpel::dameo);
     DameoSpel *spel = new DameoSpel(spelbord);
     dameoBord = new BordView(8, spel);
     view = new QGraphicsView{dameoBord};
     setCentralWidget(view);
+
+    menuToevoegen();
 }
 
-void MainWindow::ChaturajiButtonPressed(){
+void MainWindow::ChaturajiButtonPressed() {
     Bord spelbord;
     spelbord.initialiseerBord(Bord::KeuzeSpel::chaturaji);
     ChaturajiSpel *spel = new ChaturajiSpel(spelbord);
     chaturajiBord = new ChaturajiBordView(8, spel);
     view = new QGraphicsView{chaturajiBord};
     setCentralWidget(view);
+
+    menuToevoegen();
+}
+
+void MainWindow::menuToevoegen() {
+    QMenuBar *menu = new QMenuBar();
+    QMenu *gameMenu = new QMenu("Game");
+    QMenu *dameoMenu = new QMenu("Dameo");
+    QMenu *chaturajiMenu = new QMenu("Chaturaji");
+    menu->addMenu(gameMenu);
+    menu->addMenu(dameoMenu);
+    menu->addMenu(chaturajiMenu);
+
+    QAction *saveAction = new QAction("Save", this);
+    QAction *loadAction = new QAction("Load", this);
+    gameMenu->addAction(saveAction);
+    gameMenu->addAction(loadAction);
+
+    setMenuBar(menu);
 }

@@ -3,7 +3,6 @@
 #include <iostream>
 #include <fstream>
 #include "dameospel.h"
-#include <QDebug>
 //#include "bordview.h"
 
 //using namespace std;
@@ -69,10 +68,10 @@ void DameoSpel::startSpel(int spelkeuze) {
                     zet.setEindYCoordinaat(vertaal(eindPositie.substr(1, 1)));
                 }
             }
-            if (zet.isErEenPionVerslaan(m_spelbord, m_speler, false))
+            /*if (zet.getPionVerslaan(m_spelbord, m_speler, false))
                 magNogEenZet = true;
             else
-                magNogEenZet = false;
+                magNogEenZet = false;*/
             zet.maakZet(m_spelbord, m_speler);
             while (magNogEenZet == true) {
                 m_spelbord.laatZien();
@@ -83,7 +82,7 @@ void DameoSpel::startSpel(int spelkeuze) {
                     cout << "Naar welke positie wil je het stuk verplaatsen?" << endl;
                     cin >> eindPositie;
                     Zet extraZet{ zet.getEindXCoordinaat(), zet.getEindYCoordinaat(), vertaal(eindPositie.substr(0, 1)), vertaal(eindPositie.substr(1, 1)) };
-                    if (p->mogelijkeZet(m_spelbord, extraZet, m_speler) && extraZet.isErEenPionVerslaan(m_spelbord, m_speler, false)) {
+                    /*if (p->mogelijkeZet(m_spelbord, extraZet, m_speler) && extraZet.getPionVerslaan(m_spelbord, m_speler, false)) {
                         extraZet.maakZet(m_spelbord, m_speler);
                         m_spelbord.laatZien();
                         zet.setEindXCoordinaat(extraZet.getEindXCoordinaat());
@@ -92,7 +91,7 @@ void DameoSpel::startSpel(int spelkeuze) {
                     else {
                         magNogEenZet = false;
                         cout << "Dat was geen geldige extra zet!" << endl;
-                    }
+                    }*/
                 }
                 else
                     magNogEenZet = false;
@@ -161,7 +160,8 @@ void DameoSpel::vindAlleZettenVoorPion(Bord spelbord,DameoPion::Team speler, Dam
                 if (p->getXCoordinaat() != i || p->getYCoordinaat() != j) {
                     Zet zet{ p->getXCoordinaat(), p->getYCoordinaat(), i,j };
                     if (p->mogelijkeZet(spelbord, zet, speler) == true) {
-                        if ((moetPakken == true && zet.isErEenPionVerslaan(spelbord, speler, true)) || moetPakken == false) {
+                        QPair<int, int> pionVerslaan = zet.welkePionIsVerslaan(spelbord, speler, true);
+                        if ((moetPakken == true && pionVerslaan.first != NULL && pionVerslaan.second != NULL) || moetPakken == false) {
                             string mogelijkeZet = vertalen[i] + to_string(j + 1);
                             cout << mogelijkeZet + " ";
                             mogelijkeZetten.push_back(j);
@@ -282,20 +282,28 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
         if (rij == m_mogelijkeZetten.at(i) && kolom == m_mogelijkeZetten.at(i+1)) {
 
             Zet zet{std::get<1>(coordinatenEersteKlik), std::get<0>(coordinatenEersteKlik), kolom, rij};
+            QPair<int, int> pion = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
+            m_pionDieNogEenZetMag = dynamic_cast<DameoPion*>(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)));
 
-            if (zet.isErEenPionVerslaan(m_spelbord, m_speler, true)) {
-                QPair<int, int> pion = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
-                m_pionDieNogEenZetMag = dynamic_cast<DameoPion*>(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)));
+            if (pion.first != NULL && pion.second != NULL) {
                 emit pionVerslaan(pion.first, pion.second);
                 if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
-                    emit pionPromoveren(rij, kolom, parameterSpeler);
+                    //checken dat de pion nog niet gepromoveerd is
+                    //if (m_pionDieNogEenZetMag->isKoning() == false) {
+                        emit pionPromoveren(rij, kolom, parameterSpeler);
+                    //}
                 }
+
+                emit spelGedaan("hallo");
             }
             else {
+                //checken dat de pion nog niet gepromoveerd is
+                //if (m_pionDieNogEenZetMag->isKoning() == false) {
+                    if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
+                        emit pionPromoveren(rij, kolom, parameterSpeler);
+                    }
+                //}
                 m_pionDieNogEenZetMag = nullptr;
-                if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
-                    emit pionPromoveren(rij, kolom, parameterSpeler);
-                }
             }
             vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), m_pionDieNogEenZetMag, true);
             if (m_mogelijkeZetten.size() == 0){

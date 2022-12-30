@@ -49,7 +49,7 @@ void ChaturajiSpel::startSpel(int spelKeuze) {
                     p = m_spelbord.zoekPionOpCoordinaat(zet.getStartYCoordinaat(), zet.getStartXCoordinaat());
                 }
                 //saveSpel(i); enkel opslaan nadat een beurt gedaan is best
-                m_spelerVector[i].verhoogPuntenMet(zet.kijkOfPionnenVerslaanZijnChaturaji(m_spelbord, p->getTeam()));
+                //m_spelerVector[i].verhoogPuntenMet(zet.kijkOfPionnenVerslaanZijnChaturaji(m_spelbord, p->getTeam()));
                 zet.maakZet(m_spelbord, m_spelerVector[i].getSpelerAanBeurt());
             }
             m_dobbelstenen.setEersteDobbelsteenGebruikt(false);
@@ -87,7 +87,11 @@ void ChaturajiSpel::vindEnMaakZet(Speler* spelerAanBeurt) {
                     zet.setEindYCoordinaat(y);
                     if (gevonden == false) {
                         if (checkZet(zet, p, spelerAanBeurt->getSpelerAanBeurt(), 1, true)) {
-                            spelerAanBeurt->verhoogPuntenMet(zet.kijkOfPionnenVerslaanZijnChaturaji(m_spelbord, p->getTeam()));
+                            Pion* verslagenPion = zet.welkePionIsErVerslaanChaturaji(m_spelbord, p->getTeam());
+                            if (verslagenPion != nullptr){
+                                spelerAanBeurt->verhoogPuntenMet(verslagenPion->getWaarde());
+                            }
+                            //spelerAanBeurt->verhoogPuntenMet(zet.kijkOfPionnenVerslaanZijnChaturaji(m_spelbord, p->getTeam()));
                             zet.maakZet(m_spelbord, spelerAanBeurt->getSpelerAanBeurt());
                             gevonden = true;
                         }
@@ -312,9 +316,10 @@ bool ChaturajiSpel::tweedeKlik(int rij,int kolom) {
 
             Zet zet{std::get<1>(coordinatenEersteKlik), std::get<0>(coordinatenEersteKlik), kolom, rij};
             stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)), true);
-            if (zet.kijkOfPionnenVerslaanZijnChaturaji(m_spelbord, m_speler)) {
+            Pion* verslagenPion = zet.welkePionIsErVerslaanChaturaji(m_spelbord, m_speler);
+            if (verslagenPion != nullptr) {
                 //QPair<int, int> pion = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
-                //emit pionVerslaan(pion.first, pion.second);
+                emit pionVerslaan(verslagenPion->getYCoordinaat(), verslagenPion->getXCoordinaat());
                 zet.maakZet(m_spelbord, m_speler);
             }
             else{

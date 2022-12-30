@@ -13,6 +13,14 @@ PionView::PionView(QString type, QGraphicsItem *parent) : QGraphicsPixmapItem()
     else if (type == "DameoZwart"){
         setPixmap(QPixmap(":/images/pion_zwart.png"));
     }
+    else if (type == "DameoKWit"){
+        QPixmap pixmap(":/images/DameoKWit.png");
+        setPixmap(pixmap.scaled(90,90));
+    }
+    else if (type == "DameoKZwart"){
+        QPixmap pixmap(":/images/DameoKZwart.png");
+        setPixmap(pixmap.scaled(90,90));
+    }
     else if (type == "GroenPion"){
         QPixmap pixmap2(":/images/groenPion.png");
         setPixmap(pixmap2.scaled(95,95));

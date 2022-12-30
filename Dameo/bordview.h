@@ -17,6 +17,7 @@ public:
 public slots:
     void verwijderPionVanBord(int rij, int kolom);
     void promoveerPion(int rij, int kolom, int parameterSpeler);
+    void toonWinnaar(QString winnaar);
 
 private:
     BordCelView *lastClicked{nullptr};

@@ -3,6 +3,10 @@
 #include <iostream>
 #include <fstream>
 #include "dameospel.h"
+#include <QFile>
+#include <QTextStream>
+#include <QDir>
+#include <QDebug>
 //#include "bordview.h"
 
 //using namespace std;
@@ -22,16 +26,16 @@ int DameoSpel::vertaal(string teVertalen) const {
     return vertaaldeString;
 }
 
-void DameoSpel::startSpel(int spelkeuze) {
+/*void DameoSpel::startSpel(int spelkeuze) {
     string teVerzettenStuk, eindPositie;
     bool magNogEenZet{ false };
     char wilNogEenZet{ 'n' };
     m_spelbord.initialiseerBord(Bord::KeuzeSpel::dameo);
     while (isGedaan() == 0) {
-        /*if (m_spelbord.zoekPionOpCoordinaat(5, 0) != nullptr) {
+        if (m_spelbord.zoekPionOpCoordinaat(5, 0) != nullptr) {
             m_beurt = loadSpel();
             //m_spelbord.laatZien();
-        }*/
+        }
         if (m_beurt % 2 == 0)
             m_speler = DameoPion::Team::geel;
         else
@@ -68,10 +72,10 @@ void DameoSpel::startSpel(int spelkeuze) {
                     zet.setEindYCoordinaat(vertaal(eindPositie.substr(1, 1)));
                 }
             }
-            /*if (zet.getPionVerslaan(m_spelbord, m_speler, false))
+            if (zet.getPionVerslaan(m_spelbord, m_speler, false))
                 magNogEenZet = true;
             else
-                magNogEenZet = false;*/
+                magNogEenZet = false;
             zet.maakZet(m_spelbord, m_speler);
             while (magNogEenZet == true) {
                 m_spelbord.laatZien();
@@ -82,7 +86,7 @@ void DameoSpel::startSpel(int spelkeuze) {
                     cout << "Naar welke positie wil je het stuk verplaatsen?" << endl;
                     cin >> eindPositie;
                     Zet extraZet{ zet.getEindXCoordinaat(), zet.getEindYCoordinaat(), vertaal(eindPositie.substr(0, 1)), vertaal(eindPositie.substr(1, 1)) };
-                    /*if (p->mogelijkeZet(m_spelbord, extraZet, m_speler) && extraZet.getPionVerslaan(m_spelbord, m_speler, false)) {
+                    if (p->mogelijkeZet(m_spelbord, extraZet, m_speler) && extraZet.getPionVerslaan(m_spelbord, m_speler, false)) {
                         extraZet.maakZet(m_spelbord, m_speler);
                         m_spelbord.laatZien();
                         zet.setEindXCoordinaat(extraZet.getEindXCoordinaat());
@@ -91,7 +95,7 @@ void DameoSpel::startSpel(int spelkeuze) {
                     else {
                         magNogEenZet = false;
                         cout << "Dat was geen geldige extra zet!" << endl;
-                    }*/
+                    }
                 }
                 else
                     magNogEenZet = false;
@@ -102,7 +106,7 @@ void DameoSpel::startSpel(int spelkeuze) {
     }
     cout << "Proficiat speler " << isGedaan() << " u heeft het spel gewonnen!";
     m_spelbord.verwijderPointers();
-}
+}*/
 
 // als een speler geen pionnen meer heeft, is het spel gedaan
 int DameoSpel::isGedaan() const {
@@ -175,31 +179,6 @@ void DameoSpel::vindAlleZettenVoorPion(Bord spelbord,DameoPion::Team speler, Dam
     m_mogelijkeZetten = mogelijkeZetten;
 }
 
-void DameoSpel::saveSpel(int i) {
-    string naamOpgeslagenSpel;
-    string opgeslagenSpelstatus = to_string(i);
-    for (int i = 0; i < 36; i++) {
-        Pion* p = m_spelbord.getPionVanLijst(i);
-        opgeslagenSpelstatus.push_back(p->getTeken());
-        opgeslagenSpelstatus.append(to_string(p->getXCoordinaat()));
-        opgeslagenSpelstatus.append(to_string(p->getYCoordinaat()));
-        if (p->getTeam() == DameoPion::Team::blauw) {
-            opgeslagenSpelstatus.push_back('b');
-        }
-        else if (p->getTeam() == DameoPion::Team::geel) {
-            opgeslagenSpelstatus.push_back('y');
-        }
-    }
-    cout << "onder welke naam wil je dit spel opslaan?" << endl;
-    cin >> naamOpgeslagenSpel;
-    ofstream file(naamOpgeslagenSpel + ".txt");
-    file << opgeslagenSpelstatus << endl;
-    file.close();
-    ofstream outfile;
-    outfile.open("OpgeslagenSpellen.txt", std::ios_base::app);
-    outfile << naamOpgeslagenSpel + ".txt,";
-    outfile.close();
-}
 
 int DameoSpel::loadSpel() {
     string spellen;
@@ -326,4 +305,37 @@ void DameoSpel::veranderBeurt(){
     } else {
         m_speler = DameoPion::Team::geel;
     }
+}
+
+void DameoSpel::saveSpel(QString naam) {
+    string naamOpgeslagenSpel;
+    int beurt;
+    if (m_speler == DameoPion::Team::geel) {
+        beurt = 1;
+    } else {
+        beurt = 2;
+    }
+    string opgeslagenSpelstatus = to_string(beurt);
+    for (int i = 0; i < 36; i++) {
+        Pion* p = m_spelbord.getPionVanLijst(i);
+        opgeslagenSpelstatus.push_back(p->getTeken());
+        opgeslagenSpelstatus.append(to_string(p->getXCoordinaat()));
+        opgeslagenSpelstatus.append(to_string(p->getYCoordinaat()));
+        if (p->getTeam() == DameoPion::Team::blauw) {
+            opgeslagenSpelstatus.push_back('b');
+        }
+        else if (p->getTeam() == DameoPion::Team::geel) {
+            opgeslagenSpelstatus.push_back('y');
+        }
+    }
+    qDebug() << QDir::currentPath();
+    QString filename = naam + ".txt";
+    QFile file( filename );
+    if ( file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream stream( &file );
+        QString Qsave = QString::fromStdString(opgeslagenSpelstatus);
+        stream << Qsave;
+    }
+    file.close();
 }

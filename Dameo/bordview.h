@@ -1,5 +1,6 @@
 #ifndef BORDVIEW_H
 #define BORDVIEW_H
+#include "qlineedit.h"
 #pragma once
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
@@ -18,8 +19,12 @@ public slots:
     void verwijderPionVanBord(int rij, int kolom);
     void promoveerPion(int rij, int kolom, int parameterSpeler);
     void toonWinnaar(QString winnaar);
+    void eventSaveKnop();
+    void eventLoadKnop();
 
 private:
+    QLineEdit *m_saveName;
+    QLineEdit *m_loadName;
     BordCelView *lastClicked{nullptr};
     DameoSpel *m_spel;
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

@@ -18,6 +18,7 @@ public:
     void setTweedeDobbelsteenGebruikt(bool status);
     enum class ResultaatDobbelsteen { KoningOfPion, Boot, Paard, Olifant};
     pair<string, string> getResultaatVanRol() const;
+    int m_test{1};
 private:
     pair<Dobbelstenen::ResultaatDobbelsteen, Dobbelstenen::ResultaatDobbelsteen> getResultaatVanRolEnum() const;
     pair<Dobbelstenen::ResultaatDobbelsteen, Dobbelstenen::ResultaatDobbelsteen> m_resultaatVanRol;

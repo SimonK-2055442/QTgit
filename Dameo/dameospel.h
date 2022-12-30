@@ -8,6 +8,7 @@
 #include "zet.h"
 #include <QObject>
 
+
 class DameoSpel : public QObject
 {
     Q_OBJECT
@@ -19,7 +20,7 @@ public:
     void vindEnMaakZet() const;
     void vindAlleZettenVoorPion(Bord spelbord, DameoPion::Team team, DameoPion* p, bool moetPakken);
     int loadSpel();
-    void saveSpel(int i);
+    void saveSpel(QString naam);
     void maakNieuwePion(char type, char xCoord, char Ycoord, char team);
     Bord getBord();
     std::vector<int> eersteKlik(int rij,int kolom);

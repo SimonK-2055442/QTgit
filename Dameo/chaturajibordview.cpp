@@ -132,7 +132,7 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
 
 
 void ChaturajiBordView::verwijderPionVanBord(int rij, int kolom) {
-    speelbord[rij][kolom]->setBrush(Qt::yellow);
+    removeItem(speelbord[rij][kolom]->childItems()[0]);
 }
 
 //moet nog verbeterd worden met signals of slots maar zie nie hoe met returnvalues want ge hebt 3 mogelijkheden:

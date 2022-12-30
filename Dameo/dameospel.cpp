@@ -126,7 +126,7 @@ void DameoSpel::maakNieuwePion(char type, char xCoord, char yCoord, char team) {
     else if (team == 'y') {
         teamPion = Pion::Team::geel;
     }
-    else if (team == 'b') {
+    else {
         teamPion = Pion::Team::blauw;
     }
     m_spelbord.voegPionToe(true, type, xCoordPion, yCoordPion, teamPion);
@@ -173,7 +173,12 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
                 if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
                     emit pionPromoveren(rij, kolom, parameterSpeler);
                 }
-                //emit spelGedaan("hallo");
+                if (isGedaan() == 1) {
+                    emit spelGedaan("wit");
+                }
+                if (isGedaan() == 2) {
+                    emit spelGedaan("zwart");
+                }
             }
             else {
                     if (zet.maakZet(m_spelbord, m_speler) != nullptr) {

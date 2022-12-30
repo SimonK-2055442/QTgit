@@ -74,7 +74,7 @@ void DameoBordView::promoveerPion(int rij, int kolom, int parameterSpeler) {
 }
 
 void DameoBordView::toonWinnaar(QString winnaar) {
-    qDebug() << "spel is gedaan met als winnaar" << winnaar;
+    qDebug() << "Spel is gedaan met als winnaar" << winnaar;
 }
 
 void DameoBordView::eventSaveKnop() {
@@ -83,7 +83,7 @@ void DameoBordView::eventSaveKnop() {
 }
 
 void DameoBordView::eventLoadKnop() {
-    qDebug() << "spel is gedaan met als winnaar";
+    qDebug() << "inladen";
 }
 
 void DameoBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {

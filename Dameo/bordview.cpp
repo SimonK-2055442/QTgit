@@ -6,7 +6,6 @@
 
 BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphicsScene{parent} {
     m_spel = spel;
-    //setSceneRect(0, 0, 1200, 800);
     setBackgroundBrush(QBrush(Qt::gray));
 
     // maak het bord
@@ -22,12 +21,10 @@ BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphic
         if (spel->getBord().getPionVanLijst(i)->getTeam() == Pion::Team::blauw) {
             PionView *zwartePion = new PionView{"DameoZwart", speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
             zwartePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
-            //speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]->setChild(zwartePion);
             zwartePion->setPos(17,4);
         } else {
             PionView *wittePion = new PionView{"DameoWit", speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
             wittePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
-            //speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]->setChild(wittePion);
             wittePion->setPos(17,4);
         }
     }
@@ -63,14 +60,10 @@ BordView::BordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphic
 
 void BordView::verwijderPionVanBord(int rij, int kolom) {
     removeItem(speelbord[rij][kolom]->childItems()[0]);
-    //verwijderen werkt nog niet altijd
-    //delete speelbord[rij][kolom]->childItems()[0];
-    //speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);   // moet nog naar de view naast het spelbord
 }
 
 void BordView::promoveerPion(int rij, int kolom, int parameterSpeler) {
-    //verwijderen werkt nog niet altijd
-    delete speelbord[rij+parameterSpeler][kolom]->childItems()[0];
+    removeItem(speelbord[rij+parameterSpeler][kolom]->childItems()[0]);
     if (parameterSpeler == -1) {
         PionView *koning = new PionView{"DameoKZwart", speelbord[rij+parameterSpeler][kolom]};
         koning->setParentItem(speelbord[rij+parameterSpeler][kolom]);
@@ -93,13 +86,6 @@ void BordView::eventLoadKnop() {
     qDebug() << "spel is gedaan met als winnaar";
 }
 
-
-
-//moet nog verbeterd worden met signals of slots maar zie nie hoe met returnvalues want ge hebt 3 mogelijkheden:
-//1) op leeg vakje geklikt of pion van tegenstander -> rode kleur bij mogelijkezetten van vorige geklikte pion weg doen
-//2) op geldige pion geklikt voor het eerst -> rode vakjes laten zien
-//3) op geldige vakje geklikt voor bestemming -> pion verhuizen
-//hoe weten welke da ge moet doen zonder logica op return value toe te passen? met signals en slots dan?
 void BordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if(event->button() == Qt::LeftButton) {
         int kolom = event->scenePos().x()/96;
@@ -116,10 +102,8 @@ void BordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
         } else {
             if (m_spel->tweedeKlik(rij,kolom)){
-               //if (rij != 7 && rij != 0){
                    lastClicked->childItems()[0]->setParentItem(speelbord[rij][kolom]);
                    lastClicked->childItems().clear();
-               //}
                for (int i = 0; i < mogelijkeZetten.size(); i += 2){
                    speelbord[mogelijkeZetten.at(i)][mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
                }

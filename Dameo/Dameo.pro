@@ -23,7 +23,6 @@ SOURCES += \
     pion.cpp \
     pionview.cpp \
     speler.cpp \
-    welcome.cpp \
     zet.cpp
 
 HEADERS += \
@@ -44,7 +43,6 @@ HEADERS += \
     pion.h \
     pionview.h \
     speler.h \
-    welcome.h \
     zet.h
 
 # Default rules for deployment.

@@ -8,12 +8,9 @@
 #include <iostream>
 #include <string>
 #include "zet.h"
-//#include "dameopion.h"
-//#include "bordview.h"
 #include "qgraphicssceneevent.h"
 #include "pion.h"
 
-//class BordView;
 class BordCelView;
 using namespace std;
 
@@ -29,14 +26,9 @@ public:
     void vervangElement(Zet zet);
     void voegPionToe(bool dameo, char type, int xCoord, int yCoord, Pion::Team team);
 
-public slots:
-    //void linkerMuisKlik(QGraphicsSceneMouseEvent *event);
-    //void rechterMuisKlik();
-
 private:
     vector<Pion*> pionnen;
     int grootteBord = 8;
-    //BordCelView *lastClicked{nullptr};
 };
 
 #endif // BORD_H

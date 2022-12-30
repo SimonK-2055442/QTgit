@@ -1,5 +1,6 @@
 #include "chaturajibordview.h"
 #include "pionview.h"
+#include "qlabel.h"
 
 ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObject *parent) : QGraphicsScene{parent} {
     m_spel = spel;
@@ -13,9 +14,6 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
             addItem(speelbord[i][j]);
         }
     }
-
-    m_spel->initialiseerRonde();
-    connect(m_spel, &ChaturajiSpel::pionVerslaan, this, &ChaturajiBordView::verwijderPionVanBord);
 
     // voeg pionnen toe
     for (int i = 0; i < 32; i++){
@@ -128,6 +126,16 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
             }
         }
     }
+
+    m_geroldeDobbelsteen1 = new QLabel();
+    m_geroldeDobbelsteen2 = new QLabel();
+    m_geroldeDobbelsteen1->setGeometry(800,200,100,100);
+    m_geroldeDobbelsteen2->setGeometry(920,200,100,100);
+    addWidget(m_geroldeDobbelsteen1);
+    addWidget(m_geroldeDobbelsteen2);
+    connect(m_spel, &ChaturajiSpel::pionVerslaan, this, &ChaturajiBordView::verwijderPionVanBord);
+    connect(m_spel, &ChaturajiSpel::veranderDobbelsteen, this, &ChaturajiBordView::veranderDobbelstenen);
+    m_spel->initialiseerRonde();
 }
 
 
@@ -135,11 +143,33 @@ void ChaturajiBordView::verwijderPionVanBord(int rij, int kolom) {
     removeItem(speelbord[rij][kolom]->childItems()[0]);
 }
 
-//moet nog verbeterd worden met signals of slots maar zie nie hoe met returnvalues want ge hebt 3 mogelijkheden:
-//1) op leeg vakje geklikt of pion van tegenstander -> rode kleur bij mogelijkezetten van vorige geklikte pion weg doen
-//2) op geldige pion geklikt voor het eerst -> rode vakjes laten zien
-//3) op geldige vakje geklikt voor bestemming -> pion verhuizen
-//hoe weten welke da ge moet doen zonder logica op return value toe te passen? met signals en slots dan?
+void ChaturajiBordView::veranderDobbelstenen(string eerste, string tweede){
+    if (eerste == "KoningOfPion"){
+        m_geroldeDobbelsteen1->setPixmap(QPixmap(":/images/zwartKoning.png").scaled(100,100));
+    }
+    if (eerste == "Boot"){
+        m_geroldeDobbelsteen1->setPixmap(QPixmap(":/images/zwartBoot.png").scaled(100,100));
+    }
+    if (eerste == "Paard"){
+        m_geroldeDobbelsteen1->setPixmap(QPixmap(":/images/zwartPaard.png").scaled(100,100));
+    }
+    if (eerste == "Olifant"){
+        m_geroldeDobbelsteen1->setPixmap(QPixmap(":/images/zwartOlifant.png").scaled(100,100));
+    }
+    if (tweede == "KoningOfPion"){
+        m_geroldeDobbelsteen2->setPixmap(QPixmap(":/images/zwartKoning.png").scaled(100,100));
+    }
+    if (tweede == "Boot"){
+        m_geroldeDobbelsteen2->setPixmap(QPixmap(":/images/zwartBoot.png").scaled(100,100));
+    }
+    if (tweede == "Paard"){
+        m_geroldeDobbelsteen2->setPixmap(QPixmap(":/images/zwartPaard.png").scaled(100,100));
+    }
+    if (tweede == "Olifant"){
+        m_geroldeDobbelsteen2->setPixmap(QPixmap(":/images/zwartOlifant.png").scaled(100,100));
+    }
+}
+
 void ChaturajiBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if(event->button() == Qt::LeftButton) {
         int kolom = event->scenePos().x()/96;

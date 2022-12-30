@@ -20,60 +20,6 @@ ChaturajiSpel::ChaturajiSpel(Bord spelbord) : m_spelbord{ spelbord } {
     m_dobbelstenen = dobbelstenen;
 };
 
-void ChaturajiSpel::startSpel(int spelKeuze) {
-    m_spelbord.initialiseerBord(Bord::KeuzeSpel::chaturaji);
-    for (int i = 0; i < m_spelerVector.size(); i++) {
-        if (isGedaan() == false) {
-            m_dobbelstenen.rolDobbelstenen();
-            /*if (m_spelbord.zoekPionOpCoordinaat(5, 5) != nullptr) {
-                i = loadSpel() + 1;
-                if (i == 4) {
-                    i = 3;
-                }
-            }*///spel laden wanneer user dit wilt
-            for (int j = 0; j < 2; j++) {
-                if (spelKeuze == 1 && i > 0) {
-                    vindEnMaakZet(&m_spelerVector[i]);
-                    vindEnMaakZet(&m_spelerVector[i]);
-                    break;
-                }
-                m_spelbord.laatZien();
-                cout << m_spelerVector[i].getSpelerAanBeurtString() << ": je mag " << m_dobbelstenen.getResultaatVanRol().first << " en " << m_dobbelstenen.getResultaatVanRol().second << " verzetten" << endl;
-                if (m_spelerVector[i].wiltBeurtStoppen())
-                    break;
-                Zet zet = vraagZet(&m_spelerVector[i]);
-                Pion* p = m_spelbord.zoekPionOpCoordinaat(zet.getStartYCoordinaat(), zet.getStartXCoordinaat());
-                while (p == nullptr || !checkZet(zet, p, m_spelerVector[i].getSpelerAanBeurt(), spelKeuze, true)) {
-                    cout << "Gelieve een geldige zet op te geven!" << endl;
-                    zet = vraagZet(&m_spelerVector[i]);
-                    p = m_spelbord.zoekPionOpCoordinaat(zet.getStartYCoordinaat(), zet.getStartXCoordinaat());
-                }
-                //saveSpel(i); enkel opslaan nadat een beurt gedaan is best
-                //m_spelerVector[i].verhoogPuntenMet(zet.kijkOfPionnenVerslaanZijnChaturaji(m_spelbord, p->getTeam()));
-                zet.maakZet(m_spelbord, m_spelerVector[i].getSpelerAanBeurt());
-            }
-            m_dobbelstenen.setEersteDobbelsteenGebruikt(false);
-            m_dobbelstenen.setTweedeDobbelsteenGebruikt(false);
-            if (i == 3)
-                i = -1;
-        }
-        else {
-            eindeSpel();
-            return;
-        }
-    }
-}
-
-int ChaturajiSpel::vertaal(string teVertalen) const {
-    int vertaaldeString;
-    try {
-        vertaaldeString = stoi(teVertalen) - 1;
-    }
-    catch (...) {
-        vertaaldeString = (teVertalen[0] - 'A');
-    }
-    return vertaaldeString;
-}
 
 void ChaturajiSpel::vindEnMaakZet(Speler* spelerAanBeurt) {
     bool gevonden{ false };
@@ -106,73 +52,6 @@ void ChaturajiSpel::vindEnMaakZet(Speler* spelerAanBeurt) {
     }
 }
 
-void ChaturajiSpel::vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt){
-    vector<int> mogelijkeZetten;
-    string vertalen = "ABCDEFGH";
-    for (int i = 0; i < 8; i++) {
-        for (int j = 0; j < 8; j++) {
-            if (p->getXCoordinaat() != i || p->getYCoordinaat() != j) {
-                Zet zet{ p->getXCoordinaat(), p->getYCoordinaat(), i,j };
-                if (checkZet(zet, p, spelerAanBeurt->getSpelerAanBeurt(), 1, false) == true) {
-                    string mogelijkeZet = vertalen[i] + to_string(j+1);
-                    cout << mogelijkeZet + " ";
-                    //mogelijkeZetten.push_back(mogelijkeZet);
-                    mogelijkeZetten.push_back(j);
-                    mogelijkeZetten.push_back(i);
-                }
-                //m_dobbelstenen.setEersteDobbelsteenGebruikt(false);
-                //m_dobbelstenen.setTweedeDobbelsteenGebruikt(false);
-            }
-        }
-    }
-    cout << endl;
-    m_mogelijkeZetten = mogelijkeZetten;
-}
-
-bool ChaturajiSpel::isGedaan() const {
-    int aantalKoningenVerslaan{ 0 };
-    for (int i = 0; i < 32; i++)
-        if (dynamic_cast<ChaturajiKoning*>(m_spelbord.getPionVanLijst(i)) != nullptr && m_spelbord.getPionVanLijst(i)->isVerslaan())
-            aantalKoningenVerslaan += 1;
-    if (aantalKoningenVerslaan >= 3)
-        return true;
-    return false;
-}
-
-Zet ChaturajiSpel::vraagZet(Speler* spelerAanBeurt) {
-    string teVerzettenStuk, eindPositie;
-    string kleurAanBeurt = spelerAanBeurt->getSpelerAanBeurtString();
-    cout << kleurAanBeurt << ": welk stuk wil je verzetten? " << endl;
-    cin >> teVerzettenStuk;
-    Pion* p = m_spelbord.zoekPionOpCoordinaat(vertaal(teVerzettenStuk.substr(1, 1)), vertaal(teVerzettenStuk.substr(0, 1)));
-    if (p != nullptr) {
-        vindAlleZettenVoorPion(p, spelerAanBeurt);
-    }
-    cout << kleurAanBeurt << ": naar welke positie wil je dit stuk verplaatsen?" << endl;
-    cin >> eindPositie;
-    Zet zet{ vertaal(teVerzettenStuk.substr(0, 1)), vertaal(teVerzettenStuk.substr(1, 1))  , vertaal(eindPositie.substr(0, 1)), vertaal(eindPositie.substr(1, 1)) };
-    return zet;
-}
-
-//checkt of het geselecteerde stuk wel gegooid was met de dobbelstenen
-bool ChaturajiSpel::stukMagVerplaatstWorden(Pion* p, bool echt) {
-    if (!m_dobbelstenen.getEersteDobbelsteenGebruikt() && (p->print() == m_dobbelstenen.getResultaatVanRol().first || p->print() == "Koning" && m_dobbelstenen.getResultaatVanRol().first == "KoningOfPion" || p->print() == "Pion" && m_dobbelstenen.getResultaatVanRol().first == "KoningOfPion")) {
-        if (echt == true) {
-            m_dobbelstenen.setEersteDobbelsteenGebruikt(true);
-        }
-        return true;
-    }
-    else if (!m_dobbelstenen.getTweedeDobbelsteenGebruikt() && (p->print() == m_dobbelstenen.getResultaatVanRol().second || p->print() == "Koning" && m_dobbelstenen.getResultaatVanRol().second == "KoningOfPion" || p->print() == "Pion" && m_dobbelstenen.getResultaatVanRol().second == "KoningOfPion")) {
-        if (echt == true) {
-            m_dobbelstenen.setTweedeDobbelsteenGebruikt(true);
-        }
-        return true;
-    }
-    else
-        return false;
-}
-
-//checkt of het een correcte zet is
 bool ChaturajiSpel::checkZet(Zet zet, Pion* p, Pion::Team teamSpeler, int spelKeuze, bool echt) {
     if (!m_spelbord.isZetInHetBord(zet)) {
         if (spelKeuze == 2)
@@ -191,6 +70,50 @@ bool ChaturajiSpel::checkZet(Zet zet, Pion* p, Pion::Team teamSpeler, int spelKe
     }
     else
         return true;
+}
+
+void ChaturajiSpel::vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt){
+    vector<int> mogelijkeZetten;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (p->getXCoordinaat() != i || p->getYCoordinaat() != j) {
+                Zet zet{ p->getXCoordinaat(), p->getYCoordinaat(), i,j };
+                if (checkZet(zet, p, spelerAanBeurt->getSpelerAanBeurt(), 1, false) == true) {
+                    mogelijkeZetten.push_back(j);
+                    mogelijkeZetten.push_back(i);
+                }
+            }
+        }
+    }
+    m_mogelijkeZetten = mogelijkeZetten;
+}
+
+bool ChaturajiSpel::isGedaan() const {
+    int aantalKoningenVerslaan{ 0 };
+    for (int i = 0; i < 32; i++)
+        if (dynamic_cast<ChaturajiKoning*>(m_spelbord.getPionVanLijst(i)) != nullptr && m_spelbord.getPionVanLijst(i)->isVerslaan())
+            aantalKoningenVerslaan += 1;
+    if (aantalKoningenVerslaan >= 3)
+        return true;
+    return false;
+}
+
+//checkt of het geselecteerde stuk wel gegooid was met de dobbelstenen
+bool ChaturajiSpel::stukMagVerplaatstWorden(Pion* p, bool echt) {
+    if (!m_dobbelstenen.getEersteDobbelsteenGebruikt() && (p->print() == m_dobbelstenen.getResultaatVanRol().first || p->print() == "Koning" && m_dobbelstenen.getResultaatVanRol().first == "KoningOfPion" || p->print() == "Pion" && m_dobbelstenen.getResultaatVanRol().first == "KoningOfPion")) {
+        if (echt == true) {
+            m_dobbelstenen.setEersteDobbelsteenGebruikt(true);
+        }
+        return true;
+    }
+    else if (!m_dobbelstenen.getTweedeDobbelsteenGebruikt() && (p->print() == m_dobbelstenen.getResultaatVanRol().second || p->print() == "Koning" && m_dobbelstenen.getResultaatVanRol().second == "KoningOfPion" || p->print() == "Pion" && m_dobbelstenen.getResultaatVanRol().second == "KoningOfPion")) {
+        if (echt == true) {
+            m_dobbelstenen.setTweedeDobbelsteenGebruikt(true);
+        }
+        return true;
+    }
+    else
+        return false;
 }
 
 //geeft klassement weer wanneer spel gedaan is
@@ -315,14 +238,19 @@ bool ChaturajiSpel::tweedeKlik(int rij,int kolom) {
         if (rij == m_mogelijkeZetten.at(i) && kolom == m_mogelijkeZetten.at(i+1)) {
 
             Zet zet{std::get<1>(coordinatenEersteKlik), std::get<0>(coordinatenEersteKlik), kolom, rij};
-            stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)), true);
+            //stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)), true);
             Pion* verslagenPion = zet.welkePionIsErVerslaanChaturaji(m_spelbord, m_speler);
+            if (m_speler != m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik))->getTeam()){
+                cout << "fouuut" << endl;
+            }
             if (verslagenPion != nullptr) {
                 //QPair<int, int> pion = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
                 emit pionVerslaan(verslagenPion->getYCoordinaat(), verslagenPion->getXCoordinaat());
+                stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)), true);
                 zet.maakZet(m_spelbord, m_speler);
             }
             else{
+                stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)), true);
                 zet.maakZet(m_spelbord, m_speler);
             }
             if (m_dobbelstenen.getEersteDobbelsteenGebruikt() && m_dobbelstenen.getTweedeDobbelsteenGebruikt()){
@@ -345,6 +273,8 @@ void ChaturajiSpel::initialiseerRonde(){
     else{
         m_beurt++;
     }
+    m_speler = m_spelerVector[m_beurt].getSpelerAanBeurt();
+    emit veranderDobbelsteen(m_dobbelstenen.getResultaatVanRol().first, m_dobbelstenen.getResultaatVanRol().second);
 }
 
 void ChaturajiSpel::clearMogelijkeZetten(){

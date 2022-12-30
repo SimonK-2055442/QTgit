@@ -15,13 +15,10 @@ class ChaturajiSpel: public QObject {
     Q_OBJECT
 public:
     ChaturajiSpel(Bord spelbord);
-    void startSpel(int spelKeuze);
-    int vertaal(string teVertalen) const;
     void vindEnMaakZet(Speler* speler);
     bool isGedaan() const;
-    Zet vraagZet(Speler* spelerAanBeurt);
-    bool stukMagVerplaatstWorden(Pion* p, bool echt);
     bool checkZet(Zet zet, Pion* p, Pion::Team teamSpeler, int spelKeuze, bool echt);
+    bool stukMagVerplaatstWorden(Pion* p, bool echt);
     void saveSpel(int i);
     int loadSpel();
     void eindeSpel();
@@ -36,6 +33,7 @@ public:
 
 signals:
     void pionVerslaan(int rij, int kolom);
+    void veranderDobbelsteen(string eerste, string tweede);
 
 private:
     ChaturajiPion* m_pionDieNogEenZetMag{nullptr};

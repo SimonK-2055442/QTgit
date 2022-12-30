@@ -14,8 +14,6 @@ class DameoSpel : public QObject
     Q_OBJECT
 public:
     DameoSpel(Bord spelbord);
-    int vertaal(string teVertalen) const;
-    void startSpel(int spelKeuze);
     int isGedaan() const;
     void vindEnMaakZet() const;
     void vindAlleZettenVoorPion(Bord spelbord, DameoPion::Team team, DameoPion* p, bool moetPakken);
@@ -35,7 +33,6 @@ signals:
     void spelGedaan(QString winnaar);
 
 private:
-    //BordView *m_bord;
     DameoPion* m_pionDieNogEenZetMag{nullptr};
     std::vector<int> m_mogelijkeZetten;
     std::tuple<int, int> coordinatenEersteKlik;

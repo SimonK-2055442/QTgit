@@ -107,6 +107,7 @@ QPair<int, int> Zet::welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alle
 Pion* Zet::welkePionIsErVerslaanChaturaji(Bord bord, Pion::Team speler) const {
     Pion* pionOpEindeVanZet = bord.zoekPionOpCoordinaat(m_eindYCoordinaat, m_eindXCoordinaat);
     if (pionOpEindeVanZet != nullptr && pionOpEindeVanZet->getTeam() != speler) {
+        cout << "pion genomen" <<endl;
         int waarde = pionOpEindeVanZet->getWaarde();
         pionOpEindeVanZet->verslaPion();
         return pionOpEindeVanZet;

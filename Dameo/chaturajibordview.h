@@ -4,6 +4,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include "bordcelview.h"
 #include "chaturajispel.h"
+#include "qlabel.h"
 
 class ChaturajiBordView : public QGraphicsScene
 {
@@ -15,8 +16,11 @@ public:
 
 public slots:
     void verwijderPionVanBord(int rij, int kolom);
+    void veranderDobbelstenen(string eerste, string tweede);
 
 private:
+    QLabel* m_geroldeDobbelsteen1;
+    QLabel* m_geroldeDobbelsteen2;
     BordCelView *lastClicked{nullptr};
     ChaturajiSpel *m_spel;
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

@@ -10,6 +10,7 @@
 #include "Dobbelstenen.h"
 #include "Speler.h"
 #include <QObject>
+#include <QString>
 
 class ChaturajiSpel: public QObject {
     Q_OBJECT
@@ -19,8 +20,8 @@ public:
     bool isGedaan() const;
     bool checkZet(Zet zet, Pion* p, Pion::Team teamSpeler, int spelKeuze, bool echt);
     bool stukMagVerplaatstWorden(Pion* p, bool echt);
-    void saveSpel(int i);
-    int loadSpel();
+    void saveSpel(QString naam);
+    int loadSpel(QString naam);
     void eindeSpel();
     void maakNieuwePion(char type, char xCoord, char Ycoord, char team);
     void setSpelbord(Bord bord);
@@ -34,6 +35,7 @@ public slots:
     void initialiseerRonde();
 
 signals:
+    void loadGame();
     void pionVerslaan(int rij, int kolom);
     void veranderDobbelsteen(string eerste, string tweede);
 

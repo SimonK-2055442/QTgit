@@ -3,7 +3,10 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <QDir>
+#include <QFile>
 #include "ChaturajiSpel.h"
+#include "qdebug.h"
 
 using namespace std;
 
@@ -132,64 +135,72 @@ void ChaturajiSpel::eindeSpel() {
     m_spelbord.verwijderPointers();
 }
 
-void ChaturajiSpel::saveSpel(int i) {
+void ChaturajiSpel::saveSpel(QString naam) {
     string naamOpgeslagenSpel;
-    string opgeslagenSpelstatus = to_string(i);
+    int beurt;
+    if (m_speler == Pion::Team::blauw) {
+        beurt = 1;
+    }
+    else if (m_speler == Pion::Team::groen) {
+        beurt = 2;
+    }
+    else if (m_speler == Pion::Team::rood) {
+        beurt = 3;
+    }
+    else{
+        beurt = 4;
+    }
+
+    string opgeslagenSpelstatus = to_string(beurt);
     for (int i = 0; i < 32; i++) {
         Pion* p = m_spelbord.getPionVanLijst(i);
-        opgeslagenSpelstatus.push_back(p->getTeken());
-        opgeslagenSpelstatus.append(to_string(p->getXCoordinaat()));
-        opgeslagenSpelstatus.append(to_string(p->getYCoordinaat()));
-        if (p->getTeam() == Pion::Team::blauw) {
-            opgeslagenSpelstatus.push_back('b');
-        }
-        else if (p->getTeam() == Pion::Team::groen) {
-            opgeslagenSpelstatus.push_back('g');
-        }
-        else if (p->getTeam() == Pion::Team::rood) {
-            opgeslagenSpelstatus.push_back('r');
-        }
-        else if (p->getTeam() == Pion::Team::geel) {
-            opgeslagenSpelstatus.push_back('y');
+        if (!p->isVerslaan()){
+            opgeslagenSpelstatus.push_back(p->getTeken());
+            opgeslagenSpelstatus.append(to_string(p->getXCoordinaat()));
+            opgeslagenSpelstatus.append(to_string(p->getYCoordinaat()));
+            if (p->getTeam() == DameoPion::Team::blauw) {
+                opgeslagenSpelstatus.push_back('b');
+            }
+            else if (p->getTeam() == DameoPion::Team::groen) {
+                opgeslagenSpelstatus.push_back('g');
+            }
+            else if (p->getTeam() == DameoPion::Team::rood) {
+                opgeslagenSpelstatus.push_back('r');
+            }
+            else{
+               opgeslagenSpelstatus.push_back('y');
+            }
         }
     }
-    cout << "onder welke naam wil je dit spel opslaan?" << endl;
-    cin >> naamOpgeslagenSpel;
-    ofstream file(naamOpgeslagenSpel+".txt");
-    file << opgeslagenSpelstatus << endl;
+    qDebug() << QDir::currentPath();
+    QString filename = naam + ".txt";
+    QFile file( filename );
+    if ( file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream stream( &file );
+        QString Qsave = QString::fromStdString(opgeslagenSpelstatus);
+        stream << Qsave;
+    }
     file.close();
-    ofstream outfile;
-    outfile.open("OpgeslagenSpellen.txt", std::ios_base::app);
-    outfile << naamOpgeslagenSpel + ".txt,";
-    outfile.close();
 }
 
-int ChaturajiSpel::loadSpel() {
-    string spellen;
-    string keuze;
-    ifstream savedGames("OpgeslagenSpellen.txt");
-    if (savedGames.is_open()) {
-        savedGames >> spellen;
-    }
-    cout << "dit zijn je opgeslagen spellen " + spellen << endl;
-    cout << "welk spel wil je openen ?" << endl;
-    cin >> keuze;
-    ifstream file(keuze);
-    while (!file) {
-        cout << "dit is geen opgeslagen spel" << endl;
-        cout << "welk spel wil je openen ?" << endl;
-        cin >> keuze;
-        file.open(keuze);
-    }
-    string saveStatus;
-    if (file.is_open()) {
-        file >> saveStatus;
-    }
+
+int ChaturajiSpel::loadSpel(QString naam) {
+    QFile file(naam + ".txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return -1;
+
+    QTextStream stream(&file);
+    QString contents = stream.readAll();
+    std::string saveStatus = contents.toStdString();
+    file.close();
     m_spelbord.verwijderPointers();
-    for (int i = 1; i < saveStatus.length(); i+=4) {
-        maakNieuwePion(saveStatus[i], saveStatus[i + 1], saveStatus[i + 2], saveStatus[i+3]);
+    for (int i = 1; i < saveStatus.length(); i += 4) {
+        maakNieuwePion(saveStatus[i], saveStatus[i + 1], saveStatus[i + 2], saveStatus[i + 3]);
     }
-    return saveStatus[0] - '0';
+    m_beurt = saveStatus[0] - '0';
+    emit loadGame();
+    return 0;
 }
 
 void ChaturajiSpel::maakNieuwePion(char type, char xCoord, char yCoord, char team) {

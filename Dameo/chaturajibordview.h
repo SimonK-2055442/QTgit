@@ -5,6 +5,7 @@
 #include "bordcelview.h"
 #include "chaturajispel.h"
 #include "qlabel.h"
+#include "qlineedit.h"
 
 class ChaturajiBordView : public QGraphicsScene
 {
@@ -12,6 +13,7 @@ class ChaturajiBordView : public QGraphicsScene
 public:
     ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObject *parent = nullptr);
     BordCelView* speelbord[8][8];
+    void zetPionnen();
     //virtual ~ChaturajiBordView() {};
 
 
@@ -19,8 +21,14 @@ public:
 public slots:
     void verwijderPionVanBord(int rij, int kolom);
     void veranderDobbelstenen(string eerste, string tweede);
+    void eventSaveKnop();
+    void eventLoadKnop();
+    void reloadBord();
 
 private:
+    int m_grootteBord;
+    QLineEdit *m_saveName;
+    QLineEdit *m_loadName;
     QLabel* m_geroldeDobbelsteen1;
     QLabel* m_geroldeDobbelsteen2;
     BordCelView *lastClicked{nullptr};

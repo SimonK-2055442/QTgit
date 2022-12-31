@@ -193,7 +193,11 @@ void Bord::voegPionToe(bool dameo, char type, int xCoord, int yCoord, Pion::Team
         }
     }
     else {
-        pionnen.push_back(new DameoPion{ yCoord, xCoord, team, type});
+        DameoPion* p = new DameoPion{ yCoord, xCoord, team, type};
+        if (type == 'B' || type == 'G'){
+            p->maakKoning();
+        }
+        pionnen.push_back(p);
     }
 }
 

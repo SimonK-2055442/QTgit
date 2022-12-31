@@ -84,35 +84,8 @@ void DameoSpel::vindAlleZettenVoorPion(Bord spelbord,DameoPion::Team speler, Dam
 }
 
 
-int DameoSpel::loadSpel() {
-    string spellen;
-    string keuze;
-    ifstream savedGames("OpgeslagenSpellen.txt");
-    if (savedGames.is_open()) {
-        savedGames >> spellen;
-    }
-    cout << "dit zijn je opgeslagen spellen " + spellen << endl;
-    cout << "welk spel wil je openen ?" << endl;
-    cin >> keuze;
-    ifstream file(keuze);
-    while (!file) {
-        cout << "dit is geen opgeslagen spel" << endl;
-        cout << "welk spel wil je openen ?" << endl;
-        cin >> keuze;
-        file.open(keuze);
-    }
-    string saveStatus;
-    if (file.is_open()) {
-        file >> saveStatus;
-    }
-    m_spelbord.verwijderPointers();
-    for (int i = 1; i < saveStatus.length(); i += 4) {
-        maakNieuwePion(saveStatus[i], saveStatus[i + 1], saveStatus[i + 2], saveStatus[i + 3]);
-    }
-    return saveStatus[0] - '0';
-}
 
-void DameoSpel::maakNieuwePion(char type, char xCoord, char yCoord, char team) {
+void DameoSpel::maakNieuwePion(char teken, char xCoord, char yCoord, char team) {
     Pion::Team teamPion;
     int xCoordPion, yCoordPion;
     xCoordPion = xCoord - '0';
@@ -129,7 +102,7 @@ void DameoSpel::maakNieuwePion(char type, char xCoord, char yCoord, char team) {
     else {
         teamPion = Pion::Team::blauw;
     }
-    m_spelbord.voegPionToe(true, type, xCoordPion, yCoordPion, teamPion);
+    m_spelbord.voegPionToe(true, teken, xCoordPion, yCoordPion, teamPion);
 }
 
 Bord DameoSpel::getBord() {
@@ -174,10 +147,10 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
                     emit pionPromoveren(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik), parameterSpeler);
                 }
                 if (isGedaan() == 1) {
-                    emit spelGedaan("wit");
+                    emit spelGedaan("zwart");
                 }
                 if (isGedaan() == 2) {
-                    emit spelGedaan("zwart");
+                    emit spelGedaan("wit");
                 }
             }
             else {
@@ -220,14 +193,16 @@ void DameoSpel::saveSpel(QString naam) {
     string opgeslagenSpelstatus = to_string(beurt);
     for (int i = 0; i < 36; i++) {
         Pion* p = m_spelbord.getPionVanLijst(i);
-        opgeslagenSpelstatus.push_back(p->getTeken());
-        opgeslagenSpelstatus.append(to_string(p->getXCoordinaat()));
-        opgeslagenSpelstatus.append(to_string(p->getYCoordinaat()));
-        if (p->getTeam() == DameoPion::Team::blauw) {
-            opgeslagenSpelstatus.push_back('b');
-        }
-        else if (p->getTeam() == DameoPion::Team::geel) {
-            opgeslagenSpelstatus.push_back('y');
+        if (!p->isVerslaan()){
+            opgeslagenSpelstatus.push_back(p->getTeken());
+            opgeslagenSpelstatus.append(to_string(p->getXCoordinaat()));
+            opgeslagenSpelstatus.append(to_string(p->getYCoordinaat()));
+            if (p->getTeam() == DameoPion::Team::blauw) {
+                opgeslagenSpelstatus.push_back('b');
+            }
+            else if (p->getTeam() == DameoPion::Team::geel) {
+                opgeslagenSpelstatus.push_back('y');
+            }
         }
     }
     qDebug() << QDir::currentPath();
@@ -240,4 +215,28 @@ void DameoSpel::saveSpel(QString naam) {
         stream << Qsave;
     }
     file.close();
+}
+
+
+int DameoSpel::loadSpel(QString naam) {
+    QFile file(naam + ".txt");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return -1;
+
+    QTextStream stream(&file);
+    QString contents = stream.readAll();
+    std::string saveStatus = contents.toStdString();
+    file.close();
+    m_spelbord.verwijderPointers();
+    for (int i = 1; i < saveStatus.length(); i += 4) {
+        maakNieuwePion(saveStatus[i], saveStatus[i + 1], saveStatus[i + 2], saveStatus[i + 3]);
+    }
+    if (saveStatus[0] - '0' == 1){
+        m_speler = DameoPion::Team::geel;
+    }
+    else{
+        m_speler = DameoPion::Team::blauw;
+    }
+    emit loadGame();
+    return 0;
 }

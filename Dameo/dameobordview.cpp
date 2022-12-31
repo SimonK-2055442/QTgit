@@ -3,14 +3,17 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QLabel>
+#include <QDialog>
+#include <QVBoxLayout>
 
 DameoBordView::DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphicsScene{parent} {
     m_spel = spel;
+    m_grootteBord = grootteBord;
     setBackgroundBrush(QBrush(Qt::gray));
 
     // maak het bord
-    for (int i = 0; i < grootteBord; ++i) {
-        for (int j = 0; j < grootteBord; ++j) {
+    for (int i = 0; i < m_grootteBord; ++i) {
+        for (int j = 0; j < m_grootteBord; ++j) {
             speelbord[i][j] = new BordCelView{i, j};
             addItem(speelbord[i][j]);
         }
@@ -54,12 +57,54 @@ DameoBordView::DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent) 
     connect(m_spel, &DameoSpel::pionVerslaan, this, &DameoBordView::verwijderPionVanBord);
     connect(m_spel, &DameoSpel::pionPromoveren, this, &DameoBordView::promoveerPion);
     connect(m_spel, &DameoSpel::spelGedaan, this, &DameoBordView::toonWinnaar);
+    connect(m_spel, &DameoSpel::loadGame, this, &DameoBordView::reloadBord);
     connect(saveKnop, &QPushButton::pressed, this, &DameoBordView::eventSaveKnop);
     connect(loadKnop, &QPushButton::pressed, this, &DameoBordView::eventLoadKnop);
 }
 
 void DameoBordView::verwijderPionVanBord(int rij, int kolom) {
     removeItem(speelbord[rij][kolom]->childItems()[0]);
+}
+
+void DameoBordView::reloadBord() {
+    for (int i = 0; i < m_grootteBord; i++){
+        for (int j = 0; j < m_grootteBord; j++){
+            if (!speelbord[i][j]->childItems().empty()){
+                removeItem(speelbord[i][j]->childItems()[0]);
+            }
+        }
+    }
+    for (int i = 0; i < m_grootteBord; i++){
+        for (int j = 0; j < m_grootteBord; j++){
+            DameoPion* p = dynamic_cast<DameoPion*>(m_spel->getBord().zoekPionOpCoordinaat(i,j));
+            if (p != nullptr){
+                if (p->getTeam() == Pion::Team::blauw){
+                    if (p->isKoning() == true){
+                        PionView *koning = new PionView{PionView::dameoKZwart, speelbord[i][j]};
+                        koning->setParentItem(speelbord[i][j]);
+                        koning->setPos(2,2);
+                    }
+                    else{
+                        PionView *pion = new PionView{PionView::dameoZwart, speelbord[i][j]};
+                        pion->setParentItem(speelbord[i][j]);
+                        pion->setPos(17,4);
+                    }
+                }
+                else{
+                    if (p->isKoning() == true){
+                        PionView *koning = new PionView{PionView::dameoKWit, speelbord[i][j]};
+                        koning->setParentItem(speelbord[i][j]);
+                        koning->setPos(2,2);
+                    }
+                    else{
+                        PionView *pion = new PionView{PionView::dameoWit, speelbord[i][j]};
+                        pion->setParentItem(speelbord[i][j]);
+                        pion->setPos(17,4);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void DameoBordView::promoveerPion(int rij, int kolom, int parameterSpeler) {
@@ -74,20 +119,35 @@ void DameoBordView::promoveerPion(int rij, int kolom, int parameterSpeler) {
 }
 
 void DameoBordView::toonWinnaar(QString winnaar) {
-    QLabel qPopup(QString::fromLatin1("Some text"));
-    QPalette qPalette = qPopup.palette();
-    //qPalette.setBrush(QPalette::Background, QColor(0xff, 0xe0, 0xc0));
-    qPopup.setPalette(qPalette);
-    qPopup.setFrameStyle(QLabel::Raised | QLabel::Panel);
-    qPopup.setAlignment(Qt::AlignCenter);
-    qPopup.setFixedSize(320, 200);
-    qPopup.show();
+    QDialog *window = new QDialog();
+    window->setWindowTitle("Er is een winnaar!");
+    window->setFixedHeight(150);
 
-    //timer werkt nog niet
-    //de popup zou normaal 10000ms=10s blijven staan
-    //QTimer::singleShot(10000, &qPopup, &QLabel::hide);
+    QLabel *label = new QLabel("");
+    if (winnaar == "wit") {
+        label->setText("Speler met de witte pionnen u heeft gewonnen. Proficiat!");
+    } else {
+        label->setText("Speler met de zwarte pionnen u heeft gewonnen. Proficiat!");
+    }
+    QFont fontLabel = label->font();
+    fontLabel.setPointSize(12);
+    label->setFont(fontLabel);
+    label->setAlignment(Qt::AlignCenter);
 
-    //qDebug() << "Spel is gedaan met als winnaar" << winnaar;
+    QPushButton *button = new QPushButton("Sluiten");
+    QFont fontButton = button->font();
+    fontButton.setPointSize(12);
+    button->setFont(fontButton);
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(label);
+    layout->addWidget(button);
+    window->setLayout(layout);
+
+    QObject::connect(button, &QPushButton::clicked, window, &QDialog::close);
+
+    window->show();
+    this->deleteLater();
 }
 
 void DameoBordView::eventSaveKnop() {
@@ -97,6 +157,7 @@ void DameoBordView::eventSaveKnop() {
 
 void DameoBordView::eventLoadKnop() {
     qDebug() << "inladen";
+    m_spel->loadSpel(m_loadName->text());
 }
 
 void DameoBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -135,3 +196,4 @@ void DameoBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         lastClicked = nullptr;
     }
 }
+

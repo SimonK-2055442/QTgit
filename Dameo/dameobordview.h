@@ -21,8 +21,10 @@ public slots:
     void toonWinnaar(QString winnaar);
     void eventSaveKnop();
     void eventLoadKnop();
+    void reloadBord();
 
 private:
+    int m_grootteBord;
     QLineEdit *m_saveName;
     QLineEdit *m_loadName;
     BordCelView *lastClicked{nullptr};

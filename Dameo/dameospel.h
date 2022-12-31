@@ -17,9 +17,9 @@ public:
     int isGedaan() const;
     void vindEnMaakZet() const;
     void vindAlleZettenVoorPion(Bord spelbord, DameoPion::Team team, DameoPion* p, bool moetPakken);
-    int loadSpel();
+    int loadSpel(QString naam);
     void saveSpel(QString naam);
-    void maakNieuwePion(char type, char xCoord, char Ycoord, char team);
+    void maakNieuwePion(char teken, char xCoord, char Ycoord, char team);
     Bord getBord();
     std::vector<int> eersteKlik(int rij,int kolom);
     bool tweedeKlik(int rij,int kolom);
@@ -31,6 +31,7 @@ signals:
     void pionVerslaan(int rij, int kolom);
     void pionPromoveren(int rij, int kolom, int parameterSpeler);
     void spelGedaan(QString winnaar);
+    void loadGame();
 
 private:
     DameoPion* m_pionDieNogEenZetMag{nullptr};

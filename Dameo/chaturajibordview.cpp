@@ -138,7 +138,7 @@ void ChaturajiBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
                m_spel->clearMogelijkeZetten();
                lastClicked = nullptr;
                m_spel->aiBeurt();
-               reloadBord();
+               //reloadBord();
             }
         }
     }

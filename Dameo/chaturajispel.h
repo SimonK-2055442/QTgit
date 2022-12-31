@@ -30,9 +30,14 @@ public:
     std::vector<int> eersteKlik(int rij,int kolom);
     bool tweedeKlik(int rij,int kolom);
     void clearMogelijkeZetten();
+    void setTegenAi();
+    bool getTegenAi();
+    bool aiBeurt();
+    void initialiseerRonde();
 
 public slots:
-    void initialiseerRonde();
+    //void initialiseerRonde();
+    void volgendeRonde();
 
 signals:
     void loadGame();
@@ -40,6 +45,7 @@ signals:
     void veranderDobbelsteen(string eerste, string tweede);
 
 private:
+    bool m_tegenAi{false};
     ChaturajiPion* m_pionDieNogEenZetMag{nullptr};
     std::vector<int> m_mogelijkeZetten;
     std::tuple<int, int> coordinatenEersteKlik;

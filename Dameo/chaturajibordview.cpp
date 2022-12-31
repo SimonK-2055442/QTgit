@@ -21,6 +21,7 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
     zetPionnen();
 
     QPushButton* saveKnop = new QPushButton("Sla dit spel op");
+    m_aiKnop = new QPushButton("druk om tegen AI te spelen");
     m_saveName = new QLineEdit();
     QLabel *saveText = new QLabel("Opslaan onder welke naam?");
     QPushButton* loadKnop = new QPushButton("Laad een spel");
@@ -31,6 +32,7 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
     m_geroldeDobbelsteen2 = new QLabel();
     saveText->setAlignment(Qt::AlignCenter);
     loadText->setAlignment(Qt::AlignCenter);
+    addWidget(m_aiKnop);
     addWidget(saveKnop);
     addWidget(saveText);
     addWidget(m_saveName);
@@ -40,22 +42,35 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
     addWidget(volgendeBeurtKnop);
     addWidget(m_geroldeDobbelsteen1);
     addWidget(m_geroldeDobbelsteen2);
-    loadText->setGeometry(810,470,200,30);
-    m_loadName->setGeometry(810,500,200,30);
-    loadKnop->setGeometry(810,530,200,60);
-    saveText->setGeometry(810,340,200,30);
-    m_saveName->setGeometry(810,370,200,30);
-    saveKnop->setGeometry(810,390,200,60);
-    volgendeBeurtKnop->setGeometry(810,220,200,100);
-    m_geroldeDobbelsteen1->setGeometry(800,100,100,100);
-    m_geroldeDobbelsteen2->setGeometry(920,100,100,100);
+    m_aiKnop->setGeometry(810,560,200,100);
+    loadText->setGeometry(810,420,200,30);
+    m_loadName->setGeometry(810,450,200,30);
+    loadKnop->setGeometry(810,480,200,60);
+    saveText->setGeometry(810,290,200,30);
+    m_saveName->setGeometry(810,320,200,30);
+    saveKnop->setGeometry(810,340,200,60);
+    volgendeBeurtKnop->setGeometry(810,170,200,100);
+    m_geroldeDobbelsteen1->setGeometry(800,50,100,100);
+    m_geroldeDobbelsteen2->setGeometry(920,50,100,100);
     connect(m_spel, &ChaturajiSpel::pionVerslaan, this, &ChaturajiBordView::verwijderPionVanBord);
     connect(m_spel, &ChaturajiSpel::veranderDobbelsteen, this, &ChaturajiBordView::veranderDobbelstenen);
-    connect(volgendeBeurtKnop, &QPushButton::pressed, m_spel, &ChaturajiSpel::initialiseerRonde);
+    connect(volgendeBeurtKnop, &QPushButton::pressed, m_spel, &ChaturajiSpel::volgendeRonde);
     connect(m_spel, &ChaturajiSpel::loadGame, this, &ChaturajiBordView::reloadBord);
     connect(saveKnop, &QPushButton::pressed, this, &ChaturajiBordView::eventSaveKnop);
     connect(loadKnop, &QPushButton::pressed, this, &ChaturajiBordView::eventLoadKnop);
+    connect(m_aiKnop, &QPushButton::pressed, this, &ChaturajiBordView::aiKnop);
     m_spel->initialiseerRonde();
+}
+
+void ChaturajiBordView::aiKnop(){
+    if (m_aiKnop->text() == "druk om tegen AI te spelen"){
+        m_aiKnop->setText("druk om 1v1 te spelen");
+        m_spel->setTegenAi();
+    }
+    else{
+        m_aiKnop->setText("druk om tegen AI te spelen");
+        m_spel->setTegenAi();
+    }
 }
 
 
@@ -122,6 +137,7 @@ void ChaturajiBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
                }
                m_spel->clearMogelijkeZetten();
                lastClicked = nullptr;
+               m_spel->aiBeurt();
             }
         }
     }

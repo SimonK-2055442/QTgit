@@ -26,12 +26,12 @@ ChaturajiSpel::ChaturajiSpel(Bord spelbord) : m_spelbord{ spelbord } {
 
 void ChaturajiSpel::vindEnMaakZet(Speler* spelerAanBeurt) {
     bool gevonden{ false };
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < m_spelbord.getPionnen().size(); i++) {
         Pion* p = m_spelbord.getPionVanLijst(i);
         if (p->getTeam() == spelerAanBeurt->getSpelerAanBeurt() && p->isVerslaan() == false) {
             Zet zet{ p->getXCoordinaat(), p->getYCoordinaat(), p->getXCoordinaat(), p->getYCoordinaat() };
-            for (int x = 1; x < 8; x++) {
-                for (int y = 1; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                for (int y = 0; y < 8; y++) {
                     zet.setEindXCoordinaat(x);
                     zet.setEindYCoordinaat(y);
                     if (gevonden == false) {
@@ -151,6 +151,7 @@ void ChaturajiSpel::saveSpel(QString naam) {
         beurt = 4;
     }
 
+
     string opgeslagenSpelstatus = to_string(beurt);
     for (int i = 0; i < 32; i++) {
         Pion* p = m_spelbord.getPionVanLijst(i);
@@ -249,13 +250,8 @@ bool ChaturajiSpel::tweedeKlik(int rij,int kolom) {
         if (rij == m_mogelijkeZetten.at(i) && kolom == m_mogelijkeZetten.at(i+1)) {
 
             Zet zet{std::get<1>(coordinatenEersteKlik), std::get<0>(coordinatenEersteKlik), kolom, rij};
-            //stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)), true);
             Pion* verslagenPion = zet.welkePionIsErVerslaanChaturaji(m_spelbord, m_speler);
-            if (m_speler != m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik))->getTeam()){
-                cout << "fouuut" << endl;
-            }
             if (verslagenPion != nullptr) {
-                //QPair<int, int> pion = zet.welkePionIsVerslaan(m_spelbord, m_speler, false);
                 emit pionVerslaan(verslagenPion->getYCoordinaat(), verslagenPion->getXCoordinaat());
                 stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)), true);
                 zet.maakZet(m_spelbord, m_speler);
@@ -277,7 +273,6 @@ void ChaturajiSpel::initialiseerRonde(){
     m_dobbelstenen.setEersteDobbelsteenGebruikt(false);
     m_dobbelstenen.setTweedeDobbelsteenGebruikt(false);
     m_dobbelstenen.rolDobbelstenen();
-    cout << m_dobbelstenen.getResultaatVanRol().first + " , " + m_dobbelstenen.getResultaatVanRol().second << endl;
     if (m_beurt == 3){
         m_beurt = 0;
     }
@@ -290,4 +285,42 @@ void ChaturajiSpel::initialiseerRonde(){
 
 void ChaturajiSpel::clearMogelijkeZetten(){
     m_mogelijkeZetten.clear();
+}
+
+void ChaturajiSpel::setTegenAi(){
+    m_tegenAi = !m_tegenAi;
+}
+
+bool ChaturajiSpel::getTegenAi(){
+    return m_tegenAi;
+}
+
+bool ChaturajiSpel::aiBeurt(){
+    if (m_speler != DameoPion::Team::blauw && m_tegenAi == true){
+        while (m_speler != DameoPion::Team::blauw && m_tegenAi == true){
+            vindEnMaakZet(&m_spelerVector[m_beurt]);
+            vindEnMaakZet(&m_spelerVector[m_beurt]);
+            initialiseerRonde();
+        }
+        emit loadGame();
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+void ChaturajiSpel::volgendeRonde(){
+    if (m_speler == DameoPion::Team::blauw && m_tegenAi == true){
+        m_beurt++;
+        m_speler = m_spelerVector[m_beurt].getSpelerAanBeurt();
+        m_dobbelstenen.setEersteDobbelsteenGebruikt(false);
+        m_dobbelstenen.setTweedeDobbelsteenGebruikt(false);
+        m_dobbelstenen.rolDobbelstenen();
+        aiBeurt();
+
+    }
+    else{
+        initialiseerRonde();
+    }
 }

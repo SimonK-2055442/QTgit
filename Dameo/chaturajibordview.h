@@ -2,6 +2,7 @@
 #define CHATURAJIBORDVIEW_H
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QPushButton>
 #include "bordcelview.h"
 #include "chaturajispel.h"
 #include "qlabel.h"
@@ -24,8 +25,10 @@ public slots:
     void eventSaveKnop();
     void eventLoadKnop();
     void reloadBord();
+    void aiKnop();
 
 private:
+    QPushButton* m_aiKnop;
     int m_grootteBord;
     QLineEdit *m_saveName;
     QLineEdit *m_loadName;

@@ -40,21 +40,26 @@ void Zet::setEindYCoordinaat(int yCoordinaat) {
     m_eindYCoordinaat = yCoordinaat;
 }
 
-Pion* Zet::maakZet(Bord bord, Pion::Team speler) const {
-    //elke zet kijken (in het geval van een dameoPion) of er een pion gepromoveerd moet worden
+void Zet::maakZet(Bord bord) const {
     Pion* teVerzettenPion = bord.zoekPionOpCoordinaat(m_startYCoordinaat, m_startXCoordinaat);
+    teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
+}
+
+bool Zet::eindeVanBordBereiktBijZet(Bord bord){
+    Pion* teVerzettenPion = bord.zoekPionOpCoordinaat(m_eindYCoordinaat, m_eindXCoordinaat);
     if (dynamic_cast<DameoPion*>(teVerzettenPion) != nullptr) {
         if (m_eindYCoordinaat == 0 || m_eindYCoordinaat == 7){
             dynamic_cast<DameoPion*>(teVerzettenPion)->maakKoning();
-            teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
-            return teVerzettenPion;
+            return true;
         } else {
-            teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
+            return false;
         }
     } else {
-        teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
+        if (m_eindYCoordinaat == 0 || m_eindYCoordinaat == 7 || m_eindXCoordinaat == 0 || m_eindXCoordinaat == 7){
+            return true;
+        }
     }
-    return nullptr;
+    return false;
 }
 
 //functie bekijkt of er in de vakjes waarover er gesprongen is, tijdens de zet, een vijandige pion staat en verwijdert deze
@@ -107,7 +112,6 @@ QPair<int, int> Zet::welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alle
 Pion* Zet::welkePionIsErVerslaanChaturaji(Bord bord, Pion::Team speler) const {
     Pion* pionOpEindeVanZet = bord.zoekPionOpCoordinaat(m_eindYCoordinaat, m_eindXCoordinaat);
     if (pionOpEindeVanZet != nullptr && pionOpEindeVanZet->getTeam() != speler) {
-        cout << "pion genomen" <<endl;
         int waarde = pionOpEindeVanZet->getWaarde();
         pionOpEindeVanZet->verslaPion();
         return pionOpEindeVanZet;

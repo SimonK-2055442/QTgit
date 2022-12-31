@@ -49,7 +49,7 @@ void DameoSpel::vindEnMaakZet(){
                 if (gevonden == false) {
                     if (p->mogelijkeZet(m_spelbord, zet, DameoPion::Team::geel)) {
                         zet.welkePionIsVerslaan(m_spelbord, DameoPion::Team::geel, false);
-                        zet.maakZet(m_spelbord, DameoPion::Team::geel);
+                        zet.maakZet(m_spelbord);
                         gevonden = true;
                     }
                     else {
@@ -143,7 +143,8 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
 
             if (pion.first != -1 && pion.second != -1) {
                 emit pionVerslaan(pion.first, pion.second);
-                if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
+                zet.maakZet(m_spelbord);
+                if (zet.eindeVanBordBereiktBijZet(m_spelbord)){
                     emit pionPromoveren(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik), parameterSpeler);
                 }
                 if (isGedaan() == 1) {
@@ -154,7 +155,8 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
                 }
             }
             else {
-                if (zet.maakZet(m_spelbord, m_speler) != nullptr) {
+                zet.maakZet(m_spelbord);
+                if (zet.eindeVanBordBereiktBijZet(m_spelbord)){
                     emit pionPromoveren(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik), parameterSpeler);
                 }
                 m_pionDieNogEenZetMag = nullptr;

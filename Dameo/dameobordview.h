@@ -4,6 +4,7 @@
 #pragma once
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QPushButton>
 #include "bordcelview.h"
 #include "dameospel.h"
 #include "pionview.h"
@@ -22,9 +23,11 @@ public slots:
     void eventSaveKnop();
     void eventLoadKnop();
     void reloadBord();
+    void aiKnop();
 
 private:
     int m_grootteBord;
+    QPushButton* m_aiKnop;
     QLineEdit *m_saveName;
     QLineEdit *m_loadName;
     BordCelView *lastClicked{nullptr};

@@ -37,13 +37,13 @@ int DameoSpel::isGedaan() const {
 
 
 //gaat over alle pionnen van speler G en probeert elke zet, een simpele AI
-void DameoSpel::vindEnMaakZet() const {
+void DameoSpel::vindEnMaakZet(){
     bool gevonden{ false };
-    for (int i = 18; i < 35; i++) {
+    for (int i = 0; i < m_spelbord.getPionnen().size(); i++) {
         Pion* p = m_spelbord.getPionVanLijst(i);
         Zet zet{ p->getXCoordinaat(), p->getYCoordinaat(), p->getXCoordinaat(), p->getYCoordinaat() };
-        for (int x = 1; x < 8; x++) {
-            for (int y = 1; y < 8; y++) {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
                 zet.setEindXCoordinaat(x);
                 zet.setEindYCoordinaat(y);
                 if (gevonden == false) {
@@ -240,3 +240,23 @@ int DameoSpel::loadSpel(QString naam) {
     emit loadGame();
     return 0;
 }
+
+void DameoSpel::setTegenAi(){
+    m_tegenAi = !m_tegenAi;
+}
+
+bool DameoSpel::getTegenAi(){
+    return m_tegenAi;
+}
+
+bool DameoSpel::aiBeurt(){
+    if (m_speler == DameoPion::Team::geel && m_tegenAi == true){
+        vindEnMaakZet();
+        veranderBeurt();
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+

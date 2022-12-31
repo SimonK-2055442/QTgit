@@ -33,19 +33,22 @@ DameoBordView::DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent) 
     }
 
     QPushButton* saveKnop = new QPushButton("Sla dit spel op");
-    m_saveName = new QLineEdit();
+    m_aiKnop = new QPushButton("druk om tegen AI te spelen");
     QLabel *saveText = new QLabel("Opslaan onder welke naam?");
     QPushButton* loadKnop = new QPushButton("Laad een spel");
-    m_loadName = new QLineEdit();
     QLabel *loadText = new QLabel("Geef de naam van het spel");
+    m_saveName = new QLineEdit();
+    m_loadName = new QLineEdit();
     saveText->setAlignment(Qt::AlignCenter);
     loadText->setAlignment(Qt::AlignCenter);
+    addWidget(m_aiKnop);
     addWidget(saveKnop);
     addWidget(saveText);
     addWidget(m_saveName);
     addWidget(loadKnop);
     addWidget(loadText);
     addWidget(m_loadName);
+    m_aiKnop->setGeometry(800,300,200,100);
     loadText->setGeometry(800,440,200,30);
     m_loadName->setGeometry(800,470,200,30);
     loadKnop->setGeometry(800,500,200,60);
@@ -60,6 +63,18 @@ DameoBordView::DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent) 
     connect(m_spel, &DameoSpel::loadGame, this, &DameoBordView::reloadBord);
     connect(saveKnop, &QPushButton::pressed, this, &DameoBordView::eventSaveKnop);
     connect(loadKnop, &QPushButton::pressed, this, &DameoBordView::eventLoadKnop);
+    connect(m_aiKnop, &QPushButton::pressed, this, &DameoBordView::aiKnop);
+}
+
+void DameoBordView::aiKnop(){
+    if (m_aiKnop->text() == "druk om tegen AI te spelen"){
+        m_aiKnop->setText("druk om 1v1 te spelen");
+        m_spel->setTegenAi();
+    }
+    else{
+        m_aiKnop->setText("druk om tegen AI te spelen");
+        m_spel->setTegenAi();
+    }
 }
 
 void DameoBordView::verwijderPionVanBord(int rij, int kolom) {
@@ -176,15 +191,16 @@ void DameoBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
         } else {
             if (m_spel->tweedeKlik(rij,kolom)){
-                //if(rij != 7 && rij != 0){
                    lastClicked->childItems()[0]->setParentItem(speelbord[rij][kolom]);
                    lastClicked->childItems().clear();
-                //}
                for (int i = 0; i < mogelijkeZetten.size(); i += 2){
                    speelbord[mogelijkeZetten.at(i)][mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
                }
                m_spel->clearMogelijkeZetten();
                lastClicked = nullptr;
+               if (m_spel->aiBeurt()){
+                   reloadBord();
+               }
             }
         }
     }
@@ -195,5 +211,6 @@ void DameoBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         }
         lastClicked = nullptr;
     }
+
 }
 

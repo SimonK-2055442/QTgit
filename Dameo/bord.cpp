@@ -201,3 +201,7 @@ void Bord::voegPionToe(bool dameo, char type, int xCoord, int yCoord, Pion::Team
     }
 }
 
+vector<Pion*> Bord::getPionnen(){
+    return pionnen;
+}
+

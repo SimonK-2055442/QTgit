@@ -25,6 +25,7 @@ public:
     bool isZetInHetBord(Zet zet) const;
     void vervangElement(Zet zet);
     void voegPionToe(bool dameo, char type, int xCoord, int yCoord, Pion::Team team);
+    vector<Pion*> getPionnen();
 
 private:
     vector<Pion*> pionnen;

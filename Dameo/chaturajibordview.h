@@ -25,10 +25,12 @@ public slots:
     void eventLoadKnop();
     void reloadBord();
     void aiKnop();
+    void beginnersModusKnop();
     void bepaalWinnaar(int ptnZwart, int ptnGroen, int ptnRood, int ptnGeel);
 
 private:
     QPushButton* m_aiKnop;
+    QPushButton* m_beginnersModusKnop;
     int m_grootteBord;
     QLineEdit *m_saveName;
     QLineEdit *m_loadName;

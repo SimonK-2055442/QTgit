@@ -259,7 +259,7 @@ bool ChaturajiSpel::tweedeKlik(int rij,int kolom) {
                 zet.maakZet(m_spelbord);
                 if (verslagenPion->getWaarde() == 5) { //koning
                     aantalVerslagenKoningen ++;
-                    if (aantalVerslagenKoningen == 1) { //terug aanpassen naar 3
+                    if (aantalVerslagenKoningen == 3) {
                         emit spelIsGedaan(m_spelerVector[0].getPunten(), m_spelerVector[1].getPunten(), m_spelerVector[2].getPunten(), m_spelerVector[3].getPunten());
                     }
                 }
@@ -319,6 +319,14 @@ bool ChaturajiSpel::aiBeurt(){
     } else {
         return false;
     }
+}
+
+void ChaturajiSpel::setBeginnersModus() {
+    m_beginnersModus = !m_beginnersModus;
+}
+
+bool ChaturajiSpel::getBeginnersModus() {
+    return m_beginnersModus;
 }
 
 void ChaturajiSpel::volgendeRonde(){

@@ -33,6 +33,8 @@ public:
     void setTegenAi();
     bool getTegenAi();
     bool aiBeurt();
+    void setBeginnersModus();
+    bool getBeginnersModus();
     void initialiseerRonde();
 
 public slots:
@@ -49,6 +51,7 @@ signals:
 private:
     int aantalVerslagenKoningen{ 0 };
     bool m_tegenAi{false};
+    bool m_beginnersModus{false};
     ChaturajiPion* m_pionDieNogEenZetMag{nullptr};
     std::vector<int> m_mogelijkeZetten;
     std::tuple<int, int> coordinatenEersteKlik;

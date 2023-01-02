@@ -7,7 +7,6 @@
 #include "chaturajispel.h"
 #include <QMainWindow>
 #include <QGraphicsView>
-#include <QMenuBar>
 #include <QPushButton>
 
 class MainWindow : public QMainWindow

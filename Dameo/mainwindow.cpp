@@ -1,14 +1,26 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-    QPushButton* dameo = new QPushButton(this);
-    QPushButton* chaturaji = new QPushButton(this);
-    dameo->setGeometry(300,300,200,50);
-    chaturaji->setGeometry(800,300,200,50);
+    QLabel *tekst = new QLabel(this);
+    tekst->setText("Maak uw keuze uit de onderstaande spellen:");
+    tekst->setGeometry(300, 100, 1000, 100);
+    QFont font("Helvetica", 30, QFont::Bold);
+    tekst->setFont(font);
+
+    QPushButton *dameo = new QPushButton(this);
     dameo->setText("Dameo");
+    dameo->setGeometry(400, 300, 200, 50);
+    QFont fontButton = dameo->font();
+    fontButton.setPointSize(11);
+    dameo->setFont(fontButton);
+
+    QPushButton *chaturaji = new QPushButton(this);
     chaturaji->setText("Chaturaji");
-    QObject::connect(dameo, SIGNAL (clicked()), this, SLOT (DameoButtonPressed()));
-    QObject::connect(chaturaji, SIGNAL (clicked()), this, SLOT (ChaturajiButtonPressed()));
+    chaturaji->setGeometry(800, 300, 200, 50);
+    chaturaji->setFont(fontButton);
+
+    QObject::connect(dameo, &QPushButton::clicked, this, &MainWindow::DameoButtonPressed);
+    QObject::connect(chaturaji, &QPushButton::clicked, this, &MainWindow::ChaturajiButtonPressed);
 }
 
 void MainWindow::DameoButtonPressed() {

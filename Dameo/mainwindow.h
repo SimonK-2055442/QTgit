@@ -16,13 +16,14 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+
 private slots:
     void DameoButtonPressed();
     void ChaturajiButtonPressed();
+
 private:
     DameoBordView *dameoBord{};
     ChaturajiBordView* chaturajiBord{};
     QGraphicsView *view{};
-    void menuToevoegen();
 };
 #endif // MAINWINDOW_H

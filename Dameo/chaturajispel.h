@@ -42,9 +42,12 @@ public slots:
 signals:
     void loadGame();
     void pionVerslaan(int rij, int kolom);
+    void puntenVeranderen(int totaal, string speler);
     void veranderDobbelsteen(string eerste, string tweede);
+    void spelIsGedaan(int ptnZwart, int ptnGroen, int ptnRood, int ptnGeel);
 
 private:
+    int aantalVerslagenKoningen{ 0 };
     bool m_tegenAi{false};
     ChaturajiPion* m_pionDieNogEenZetMag{nullptr};
     std::vector<int> m_mogelijkeZetten;

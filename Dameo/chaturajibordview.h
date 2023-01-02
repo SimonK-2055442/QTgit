@@ -14,28 +14,33 @@ class ChaturajiBordView : public QGraphicsScene
 public:
     ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObject *parent = nullptr);
     BordCelView* speelbord[8][8];
-    void zetPionnen();
+    void plaatsPionnen();
     //virtual ~ChaturajiBordView() {};
-
-
 
 public slots:
     void verwijderPionVanBord(int rij, int kolom);
+    void verhoogPunten(int totaal, string speler);
     void veranderDobbelstenen(string eerste, string tweede);
     void eventSaveKnop();
     void eventLoadKnop();
     void reloadBord();
     void aiKnop();
+    void bepaalWinnaar(int ptnZwart, int ptnGroen, int ptnRood, int ptnGeel);
 
 private:
     QPushButton* m_aiKnop;
     int m_grootteBord;
     QLineEdit *m_saveName;
     QLineEdit *m_loadName;
-    QLabel* m_geroldeDobbelsteen1;
-    QLabel* m_geroldeDobbelsteen2;
+    QLabel *m_geroldeDobbelsteen1;
+    QLabel *m_geroldeDobbelsteen2;
+    QLabel *aantalPuntenZwart;
+    QLabel *aantalPuntenGroen;
+    QLabel *aantalPuntenRood;
+    QLabel *aantalPuntenGeel;
     BordCelView *lastClicked{nullptr};
     ChaturajiSpel *m_spel;
+    void voegPuntentellingToe();
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     std::vector<int> mogelijkeZetten{};
 };

@@ -75,7 +75,7 @@ bool ChaturajiSpel::checkZet(Zet zet, Pion* p, Pion::Team teamSpeler, int spelKe
         return true;
 }
 
-void ChaturajiSpel::vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt){
+void ChaturajiSpel::vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt) {
     vector<int> mogelijkeZetten;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -253,14 +253,20 @@ bool ChaturajiSpel::tweedeKlik(int rij,int kolom) {
             Pion* verslagenPion = zet.welkePionIsErVerslaanChaturaji(m_spelbord, m_speler);
             if (verslagenPion != nullptr) {
                 m_spelerVector[m_beurt].verhoogPuntenMet(verslagenPion->getWaarde());
+                emit puntenVeranderen(m_spelerVector[m_beurt].getPunten(), m_spelerVector[m_beurt].getSpelerAanBeurtString());
                 emit pionVerslaan(verslagenPion->getYCoordinaat(), verslagenPion->getXCoordinaat());
                 stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)), true);
                 zet.maakZet(m_spelbord);
+                if (verslagenPion->getWaarde() == 5) { //koning
+                    aantalVerslagenKoningen ++;
+                    if (aantalVerslagenKoningen == 1) { //terug aanpassen naar 3
+                        emit spelIsGedaan(m_spelerVector[0].getPunten(), m_spelerVector[1].getPunten(), m_spelerVector[2].getPunten(), m_spelerVector[3].getPunten());
+                    }
+                }
                 //if (zet.eindeVanBordBereiktBijZet(m_spelbord)){
                     //emit loadGame();
                 //}
-            }
-            else{
+            } else {
                 stukMagVerplaatstWorden(m_spelbord.zoekPionOpCoordinaat(std::get<0>(coordinatenEersteKlik), std::get<1>(coordinatenEersteKlik)), true);
                 zet.maakZet(m_spelbord);
                 //if (zet.eindeVanBordBereiktBijZet(m_spelbord)){
@@ -282,8 +288,7 @@ void ChaturajiSpel::initialiseerRonde(){
     m_dobbelstenen.rolDobbelstenen();
     if (m_beurt == 3){
         m_beurt = 0;
-    }
-    else{
+    } else {
         m_beurt++;
     }
     m_speler = m_spelerVector[m_beurt].getSpelerAanBeurt();
@@ -311,8 +316,7 @@ bool ChaturajiSpel::aiBeurt(){
         }
         emit loadGame();
         return true;
-    }
-    else{
+    } else {
         return false;
     }
 }
@@ -326,8 +330,7 @@ void ChaturajiSpel::volgendeRonde(){
         m_dobbelstenen.rolDobbelstenen();
         aiBeurt();
 
-    }
-    else{
+    } else {
         initialiseerRonde();
     }
 }

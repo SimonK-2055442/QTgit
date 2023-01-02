@@ -1,6 +1,8 @@
 #include "chaturajibordview.h"
 #include "pionview.h"
-#include "qpushbutton.h"
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QPushButton>
 #include <QLabel>
 
 ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObject *parent) : QGraphicsScene{parent} {
@@ -18,47 +20,65 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
     }
 
     // voeg pionnen toe
-    zetPionnen();
+    plaatsPionnen();
 
-    QPushButton* saveKnop = new QPushButton("Sla dit spel op");
-    m_aiKnop = new QPushButton("druk om tegen AI te spelen");
-    m_saveName = new QLineEdit();
-    QLabel *saveText = new QLabel("Opslaan onder welke naam?");
-    QPushButton* loadKnop = new QPushButton("Laad een spel");
-    m_loadName = new QLineEdit();
-    QLabel *loadText = new QLabel("Geef de naam van het spel");
-    QPushButton* volgendeBeurtKnop = new QPushButton("Stop met beurt");
+
+    // voeg punten toe
+    voegPuntentellingToe();
+
+
     m_geroldeDobbelsteen1 = new QLabel();
     m_geroldeDobbelsteen2 = new QLabel();
-    saveText->setAlignment(Qt::AlignCenter);
-    loadText->setAlignment(Qt::AlignCenter);
-    addWidget(m_aiKnop);
-    addWidget(saveKnop);
-    addWidget(saveText);
-    addWidget(m_saveName);
-    addWidget(loadKnop);
-    addWidget(loadText);
-    addWidget(m_loadName);
-    addWidget(volgendeBeurtKnop);
-    addWidget(m_geroldeDobbelsteen1);
-    addWidget(m_geroldeDobbelsteen2);
-    m_aiKnop->setGeometry(810,560,200,100);
-    loadText->setGeometry(810,420,200,30);
-    m_loadName->setGeometry(810,450,200,30);
-    loadKnop->setGeometry(810,480,200,60);
-    saveText->setGeometry(810,290,200,30);
-    m_saveName->setGeometry(810,320,200,30);
-    saveKnop->setGeometry(810,340,200,60);
-    volgendeBeurtKnop->setGeometry(810,170,200,100);
     m_geroldeDobbelsteen1->setGeometry(800,50,100,100);
     m_geroldeDobbelsteen2->setGeometry(920,50,100,100);
-    connect(m_spel, &ChaturajiSpel::pionVerslaan, this, &ChaturajiBordView::verwijderPionVanBord);
-    connect(m_spel, &ChaturajiSpel::veranderDobbelsteen, this, &ChaturajiBordView::veranderDobbelstenen);
+    addWidget(m_geroldeDobbelsteen1);
+    addWidget(m_geroldeDobbelsteen2);
+
+    QPushButton* volgendeBeurtKnop = new QPushButton("Stop met beurt");
+    volgendeBeurtKnop->setGeometry(1100,170,200,100);
+    addWidget(volgendeBeurtKnop);
+
+    QLabel *saveText = new QLabel("Opslaan onder welke naam?");
+    saveText->setGeometry(1100,290,200,30);
+    saveText->setAlignment(Qt::AlignCenter);
+    addWidget(saveText);
+
+    m_saveName = new QLineEdit();
+    m_saveName->setGeometry(1100,320,200,30);
+    addWidget(m_saveName);
+
+    QPushButton* saveKnop = new QPushButton("Sla dit spel op");
+    saveKnop->setGeometry(1100,340,200,60);
+    addWidget(saveKnop);
+
+    QLabel *loadText = new QLabel("Geef de naam van het spel");
+    loadText->setGeometry(1100,420,200,30);
+    loadText->setAlignment(Qt::AlignCenter);
+    addWidget(loadText);
+
+    m_loadName = new QLineEdit();
+    m_loadName->setGeometry(1100,450,200,30);
+    addWidget(m_loadName);
+
+    QPushButton* loadKnop = new QPushButton("Laad een spel");
+    loadKnop->setGeometry(1100,480,200,60);
+    addWidget(loadKnop);
+
+    m_aiKnop = new QPushButton("Druk om tegen AI te spelen");
+    m_aiKnop->setGeometry(1100,560,200,100);
+    addWidget(m_aiKnop);
+
     connect(volgendeBeurtKnop, &QPushButton::pressed, m_spel, &ChaturajiSpel::volgendeRonde);
-    connect(m_spel, &ChaturajiSpel::loadGame, this, &ChaturajiBordView::reloadBord);
     connect(saveKnop, &QPushButton::pressed, this, &ChaturajiBordView::eventSaveKnop);
     connect(loadKnop, &QPushButton::pressed, this, &ChaturajiBordView::eventLoadKnop);
     connect(m_aiKnop, &QPushButton::pressed, this, &ChaturajiBordView::aiKnop);
+
+    connect(m_spel, &ChaturajiSpel::pionVerslaan, this, &ChaturajiBordView::verwijderPionVanBord);
+    connect(m_spel, &ChaturajiSpel::puntenVeranderen, this, &ChaturajiBordView::verhoogPunten);
+    connect(m_spel, &ChaturajiSpel::veranderDobbelsteen, this, &ChaturajiBordView::veranderDobbelstenen);
+    connect(m_spel, &ChaturajiSpel::loadGame, this, &ChaturajiBordView::reloadBord);
+    connect(m_spel, &ChaturajiSpel::spelIsGedaan, this, &ChaturajiBordView::bepaalWinnaar);
+
     m_spel->initialiseerRonde();
 }
 
@@ -76,6 +96,18 @@ void ChaturajiBordView::aiKnop(){
 
 void ChaturajiBordView::verwijderPionVanBord(int rij, int kolom) {
     removeItem(speelbord[rij][kolom]->childItems()[0]);
+}
+
+void ChaturajiBordView::verhoogPunten(int totaal, string speler) {
+    if (speler == "geel") {
+        aantalPuntenGeel->setText(QString::number(totaal));
+    } else if (speler == "groen") {
+        aantalPuntenGroen->setText(QString::number(totaal));
+    } else if (speler == "rood") {
+        aantalPuntenRood->setText(QString::number(totaal));
+    } else {
+        aantalPuntenZwart->setText(QString::number(totaal));
+    }
 }
 
 void ChaturajiBordView::eventSaveKnop() {
@@ -113,6 +145,69 @@ void ChaturajiBordView::veranderDobbelstenen(string eerste, string tweede){
     if (tweede == "Olifant"){
         m_geroldeDobbelsteen2->setPixmap(QPixmap(":/images/zwartOlifant.png").scaled(100,100));
     }
+}
+
+void ChaturajiBordView::bepaalWinnaar(int ptnZwart, int ptnGroen, int ptnRood, int ptnGeel) {
+    QPair<string, int> winnaar("zwarte", ptnZwart);
+
+    if (ptnGroen > winnaar.second) {
+        winnaar.first = "groene";
+        winnaar.second = ptnGroen;
+    }
+    if (ptnRood > winnaar.second) {
+        winnaar.first = "rode";
+        winnaar.second = ptnRood;
+    }
+    if (ptnGeel > winnaar.second) {
+        winnaar.first = "gele";
+        winnaar.second = ptnGeel;
+    }
+
+    QDialog *window = new QDialog();
+    window->setWindowTitle("Er is een winnaar!");
+
+    QLabel *winnaarLabel = new QLabel();
+    string tekst = "Speler met de " + winnaar.first + " pionnen u heeft gewonnen met " + to_string(winnaar.second) + " punten. Proficiat!";
+    winnaarLabel->setText(QString::fromStdString(tekst));
+    winnaarLabel->setAlignment(Qt::AlignLeft);
+
+    QLabel *spelerZwart = new QLabel();
+    string tekstZwart = "Zwart: " + to_string(ptnZwart) + " punten";
+    spelerZwart->setText(QString::fromStdString(tekstZwart));
+    spelerZwart->setAlignment(Qt::AlignLeft);
+
+    QLabel *spelerGroen = new QLabel();
+    string tekstGroen = "Groen: " + to_string(ptnGroen) + " punten";
+    spelerGroen->setText(QString::fromStdString(tekstGroen));
+    spelerGroen->setAlignment(Qt::AlignLeft);
+
+    QLabel *spelerRood = new QLabel();
+    string tekstRood = "Rood: " + to_string(ptnRood) + " punten";
+    spelerRood->setText(QString::fromStdString(tekstRood));
+    spelerRood->setAlignment(Qt::AlignLeft);
+
+    QLabel *spelerGeel = new QLabel();
+    string tekstGeel = "Geel: " + to_string(ptnGeel) + " punten";
+    spelerGeel->setText(QString::fromStdString(tekstGeel));
+    spelerGeel->setAlignment(Qt::AlignLeft);
+
+    QLabel *leeg = new QLabel("");
+    QPushButton *button = new QPushButton("Sluiten");
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(winnaarLabel);
+    layout->addWidget(leeg);
+    layout->addWidget(spelerZwart);
+    layout->addWidget(spelerGroen);
+    layout->addWidget(spelerRood);
+    layout->addWidget(spelerGeel);
+    layout->addWidget(button);
+    window->setLayout(layout);
+
+    QObject::connect(button, &QPushButton::clicked, window, &QDialog::close);
+
+    window->show();
+    this->deleteLater();
 }
 
 void ChaturajiBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -159,10 +254,10 @@ void ChaturajiBordView::reloadBord() {
             }
         }
     }
-    zetPionnen();
+    plaatsPionnen();
 }
 
-void ChaturajiBordView::zetPionnen(){
+void ChaturajiBordView::plaatsPionnen(){
     for (int i = 0; i < m_grootteBord; i++){
         for (int j = 0; j < m_grootteBord; j++){
             Pion* p = m_spel->getSpelbord().zoekPionOpCoordinaat(i,j);
@@ -258,5 +353,59 @@ void ChaturajiBordView::zetPionnen(){
             }
         }
     }
+}
+
+void ChaturajiBordView::voegPuntentellingToe() {
+    QLabel *puntenZwart = new QLabel("Punten zwart:");
+    puntenZwart->setGeometry(810, 290, 200, 25);
+    puntenZwart->setAlignment(Qt::AlignCenter);
+    QLabel *ptnZwart = new QLabel(" punten");
+    ptnZwart->setGeometry(900, 315, 110, 25);
+    ptnZwart->setAlignment(Qt::AlignLeft);
+    addWidget(ptnZwart);
+    addWidget(puntenZwart);
+    aantalPuntenZwart = new QLabel("0");
+    aantalPuntenZwart->setGeometry(810, 315, 90, 25);
+    aantalPuntenZwart->setAlignment(Qt::AlignRight);
+    addWidget(aantalPuntenZwart);
+
+    QLabel *puntenGroen = new QLabel("Punten groen:");
+    puntenGroen->setGeometry(810, 370, 200, 25);
+    puntenGroen->setAlignment(Qt::AlignCenter);
+    addWidget(puntenGroen);
+    QLabel *ptnGroen = new QLabel(" punten");
+    ptnGroen->setGeometry(900, 395, 110, 25);
+    ptnGroen->setAlignment(Qt::AlignLeft);
+    addWidget(ptnGroen);
+    aantalPuntenGroen = new QLabel("0");
+    aantalPuntenGroen->setGeometry(810, 395, 90, 25);
+    aantalPuntenGroen->setAlignment(Qt::AlignRight);
+    addWidget(aantalPuntenGroen);
+
+    QLabel *puntenRood = new QLabel("Punten rood:");
+    puntenRood->setGeometry(810, 450, 200, 25);
+    puntenRood->setAlignment(Qt::AlignCenter);
+    addWidget(puntenRood);
+    QLabel *ptnRood = new QLabel(" punten");
+    ptnRood->setGeometry(900, 475, 110, 25);
+    ptnRood->setAlignment(Qt::AlignLeft);
+    addWidget(ptnRood);
+    aantalPuntenRood = new QLabel("0");
+    aantalPuntenRood->setGeometry(810, 475, 90, 25);
+    aantalPuntenRood->setAlignment(Qt::AlignRight);
+    addWidget(aantalPuntenRood);
+
+    QLabel *puntenGeel = new QLabel("Punten geel:");
+    puntenGeel->setGeometry(810, 530, 200, 25);
+    puntenGeel->setAlignment(Qt::AlignCenter);
+    addWidget(puntenGeel);
+    QLabel *ptnGeel = new QLabel(" punten");
+    ptnGeel->setGeometry(900, 555, 110, 25);
+    ptnGeel->setAlignment(Qt::AlignLeft);
+    addWidget(ptnGeel);
+    aantalPuntenGeel = new QLabel("0");
+    aantalPuntenGeel->setGeometry(810, 555, 90, 25);
+    aantalPuntenGeel->setAlignment(Qt::AlignRight);
+    addWidget(aantalPuntenGeel);
 }
 

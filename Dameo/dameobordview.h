@@ -24,10 +24,12 @@ public slots:
     void eventLoadKnop();
     void reloadBord();
     void aiKnop();
+    void beginnersModusKnop();
 
 private:
     int m_grootteBord;
-    QPushButton* m_aiKnop;
+    QPushButton *m_aiKnop;
+    QPushButton *m_beginnersModusKnop;
     QLineEdit *m_saveName;
     QLineEdit *m_loadName;
     BordCelView *lastClicked{nullptr};

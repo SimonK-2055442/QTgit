@@ -24,56 +24,76 @@ DameoBordView::DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent) 
         if (spel->getBord().getPionVanLijst(i)->getTeam() == Pion::Team::blauw) {
             PionView *zwartePion = new PionView{PionView::dameoZwart, speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
             zwartePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
-            zwartePion->setPos(17,4);
+            zwartePion->setPos(17, 4);
         } else {
             PionView *wittePion = new PionView{PionView::dameoWit, speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
             wittePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
-            wittePion->setPos(17,4);
+            wittePion->setPos(17, 4);
         }
     }
 
-    QPushButton* saveKnop = new QPushButton("Sla dit spel op");
-    m_aiKnop = new QPushButton("druk om tegen AI te spelen");
     QLabel *saveText = new QLabel("Opslaan onder welke naam?");
-    QPushButton* loadKnop = new QPushButton("Laad een spel");
-    QLabel *loadText = new QLabel("Geef de naam van het spel");
-    m_saveName = new QLineEdit();
-    m_loadName = new QLineEdit();
+    saveText->setGeometry(800, 140, 250, 30);
     saveText->setAlignment(Qt::AlignCenter);
-    loadText->setAlignment(Qt::AlignCenter);
-    addWidget(m_aiKnop);
-    addWidget(saveKnop);
     addWidget(saveText);
-    addWidget(m_saveName);
-    addWidget(loadKnop);
-    addWidget(loadText);
-    addWidget(m_loadName);
-    m_aiKnop->setGeometry(800,300,200,100);
-    loadText->setGeometry(800,440,200,30);
-    m_loadName->setGeometry(800,470,200,30);
-    loadKnop->setGeometry(800,500,200,60);
-    saveText->setGeometry(800,140,200,30);
-    m_saveName->setGeometry(800,170,200,30);
-    saveKnop->setGeometry(800,200,200,60);
 
+    m_saveName = new QLineEdit();
+    m_saveName->setGeometry(800, 170, 250, 30);
+    addWidget(m_saveName);
+
+    QPushButton* saveKnop = new QPushButton("Sla dit spel op");
+    saveKnop->setGeometry(800, 200, 250, 60);
+    addWidget(saveKnop);
+
+    m_aiKnop = new QPushButton("Druk om tegen de AI te spelen");
+    m_aiKnop->setGeometry(800, 300, 250, 30);
+    addWidget(m_aiKnop);
+
+    m_beginnersModusKnop = new QPushButton("Druk om beginnersmodus aan te zetten");
+    m_beginnersModusKnop->setGeometry(800, 370, 250, 30);
+    addWidget(m_beginnersModusKnop);
+
+    QLabel *loadText = new QLabel("Geef de naam van het spel:");
+    loadText->setGeometry(800, 440, 250, 30);
+    loadText->setAlignment(Qt::AlignCenter);
+    addWidget(loadText);
+
+    m_loadName = new QLineEdit();
+    m_loadName->setGeometry(800, 470, 250, 30);
+    addWidget(m_loadName);
+
+    QPushButton* loadKnop = new QPushButton("Laad een spel");
+    loadKnop->setGeometry(800, 500, 250, 60);
+    addWidget(loadKnop);
 
     connect(m_spel, &DameoSpel::pionVerslaan, this, &DameoBordView::verwijderPionVanBord);
     connect(m_spel, &DameoSpel::pionPromoveren, this, &DameoBordView::promoveerPion);
     connect(m_spel, &DameoSpel::spelGedaan, this, &DameoBordView::toonWinnaar);
     connect(m_spel, &DameoSpel::loadGame, this, &DameoBordView::reloadBord);
+
+    connect(m_aiKnop, &QPushButton::pressed, this, &DameoBordView::aiKnop);
+    connect(m_beginnersModusKnop, &QPushButton::clicked, this, &DameoBordView::beginnersModusKnop);
     connect(saveKnop, &QPushButton::pressed, this, &DameoBordView::eventSaveKnop);
     connect(loadKnop, &QPushButton::pressed, this, &DameoBordView::eventLoadKnop);
-    connect(m_aiKnop, &QPushButton::pressed, this, &DameoBordView::aiKnop);
 }
 
-void DameoBordView::aiKnop(){
-    if (m_aiKnop->text() == "druk om tegen AI te spelen"){
-        m_aiKnop->setText("druk om 1v1 te spelen");
+void DameoBordView::aiKnop() {
+    if (m_aiKnop->text() == "Druk om tegen de AI te spelen"){
+        m_aiKnop->setText("Druk om 1 vs 1 te spelen");
+        m_spel->setTegenAi();
+    } else {
+        m_aiKnop->setText("Druk om tegen de AI te spelen");
         m_spel->setTegenAi();
     }
-    else{
-        m_aiKnop->setText("druk om tegen AI te spelen");
-        m_spel->setTegenAi();
+}
+
+void DameoBordView::beginnersModusKnop() {
+    if (m_beginnersModusKnop->text() == "Druk om beginnersmodus aan te zetten"){
+        m_beginnersModusKnop->setText("Druk om beginnersmodus uit te zetten");
+        m_spel->setBeginnersModus();
+    } else {
+        m_beginnersModusKnop->setText("Druk om beginnersmodus aan te zetten");
+        m_spel->setBeginnersModus();
     }
 }
 
@@ -182,25 +202,27 @@ void DameoBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         if (lastClicked == nullptr) {
             mogelijkeZetten.clear();
             mogelijkeZetten = m_spel->eersteKlik(rij, kolom);
-            for (int i = 0; i < mogelijkeZetten.size(); i += 2) {
-                speelbord[mogelijkeZetten.at(i)][mogelijkeZetten.at(i+1)]->setBrush(Qt::red);
+            if (m_spel->getBeginnersModus()) {
+                for (int i = 0; i < mogelijkeZetten.size(); i += 2) {
+                    speelbord[mogelijkeZetten.at(i)][mogelijkeZetten.at(i+1)]->setBrush(Qt::red);
+                }
             }
             if (mogelijkeZetten.size() > 0) {
                 lastClicked = speelbord[rij][kolom];
             }
 
         } else {
-            if (m_spel->tweedeKlik(rij,kolom)){
+            if (m_spel->tweedeKlik(rij,kolom)) {
                    lastClicked->childItems()[0]->setParentItem(speelbord[rij][kolom]);
                    lastClicked->childItems().clear();
-               for (int i = 0; i < mogelijkeZetten.size(); i += 2){
+                for (int i = 0; i < mogelijkeZetten.size(); i += 2){
                    speelbord[mogelijkeZetten.at(i)][mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
-               }
-               m_spel->clearMogelijkeZetten();
-               lastClicked = nullptr;
-               if (m_spel->aiBeurt()){
+                }
+                m_spel->clearMogelijkeZetten();
+                lastClicked = nullptr;
+                if (m_spel->aiBeurt()){
                    reloadBord();
-               }
+                }
             }
         }
     }

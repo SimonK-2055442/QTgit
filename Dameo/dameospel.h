@@ -29,6 +29,8 @@ public:
     void setTegenAi();
     bool getTegenAi();
     bool aiBeurt();
+    void setBeginnersModus();
+    bool getBeginnersModus();
 
 signals:
     void pionVerslaan(int rij, int kolom);
@@ -38,6 +40,7 @@ signals:
 
 private:
     bool m_tegenAi{false};
+    bool m_beginnersModus{false};
     DameoPion* m_pionDieNogEenZetMag{nullptr};
     std::vector<int> m_mogelijkeZetten;
     std::tuple<int, int> coordinatenEersteKlik;

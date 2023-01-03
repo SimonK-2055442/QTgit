@@ -22,83 +22,89 @@ PionView::PionView(TypePion type, QGraphicsItem *parent) : QGraphicsPixmapItem()
         setPixmap(pixmap.scaled(90,90));
     }
     else if (type == TypePion::groenPion) {
-        QPixmap pixmap(":/images/groenPion.png");
+        QPixmap pixmap(":/images/groenPion.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::groenPaard) {
-        QPixmap pixmap(":/images/groenPaard.png");
+        QPixmap pixmap(":/images/groenPaard.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::groenKoning) {
-        QPixmap pixmap(":/images/groenKoning.png");
+        QPixmap pixmap(":/images/groenKoning.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::groenOlifant) {
-        QPixmap pixmap(":/images/groenOlifant.png");
+        QPixmap pixmap(":/images/groenOlifant.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::groenBoot) {
-        QPixmap pixmap(":/images/groenBoot.png");
+        QPixmap pixmap(":/images/groenBoot.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::geelPion) {
-        QPixmap pixmap(":/images/geelPion.png");
+        QPixmap pixmap(":/images/geelPion.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::geelPaard) {
-        QPixmap pixmap(":/images/geelPaard.png");
+        QPixmap pixmap(":/images/geelPaard.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::geelKoning) {
-        QPixmap pixmap(":/images/geelKoning.png");
+        QPixmap pixmap(":/images/geelKoning.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::geelOlifant) {
-        QPixmap pixmap(":/images/geelOlifant.png");
+        QPixmap pixmap(":/images/geelOlifant.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::geelBoot) {
-        QPixmap pixmap(":/images/geelBoot.png");
+        QPixmap pixmap(":/images/geelBoot.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::roodPion) {
-        QPixmap pixmap(":/images/roodPion.png");
+        QPixmap pixmap(":/images/roodPion.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::roodPaard) {
-        QPixmap pixmap(":/images/roodPaard.png");
+        QPixmap pixmap(":/images/roodPaard.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::roodKoning) {
-        QPixmap pixmap(":/images/roodKoning.png");
+        QPixmap pixmap(":/images/roodKoning.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::roodOlifant) {
-        QPixmap pixmap(":/images/roodOlifant.png");
+        QPixmap pixmap(":/images/roodOlifant.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::roodBoot) {
-        QPixmap pixmap(":/images/roodBoot.png");
+        QPixmap pixmap(":/images/roodBoot.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::zwartPion) {
-        QPixmap pixmap(":/images/zwartPion.png");
+        QPixmap pixmap(":/images/zwartPion.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::zwartPaard) {
-        QPixmap pixmap(":/images/zwartPaard.png");
+        QPixmap pixmap(":/images/zwartPaard.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::zwartKoning) {
-        QPixmap pixmap(":/images/zwartKoning.png");
+        QPixmap pixmap(":/images/zwartKoning.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::zwartOlifant) {
-        QPixmap pixmap(":/images/zwartOlifant.png");
+        QPixmap pixmap(":/images/zwartOlifant.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
     else if (type == TypePion::zwartBoot) {
-        QPixmap pixmap(":/images/zwartBoot.png");
+        QPixmap pixmap(":/images/zwartBoot.png"); //[1]
         setPixmap(pixmap.scaled(95,95));
     }
 }
+
+/* Bronvermelding afbeeldingen:
+ *
+ * [1] Wikipedia contributors. (2022, 24 september).
+ * Chaturaji. Wikipedia. https://en.wikipedia.org/wiki/Chaturaji
+ */

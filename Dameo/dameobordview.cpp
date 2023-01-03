@@ -99,14 +99,15 @@ void DameoBordView::beginnersModusKnop() {
 }
 
 void DameoBordView::verwijderPionVanBord(int rij, int kolom) {
-    //removeItem(speelbord[rij][kolom]->childItems()[0]);
     QPointF positie(1100 + m_rijVerslagenPionnen*95, m_kolomVerslagenPionnen*95);
-    QPointF omgezettePositie = speelbord[rij][kolom]->childItems()[0]->mapFromScene(positie);
-    speelbord[rij][kolom]->childItems()[0]->setPos(omgezettePositie);
+    speelbord[rij][kolom]->childItems()[0]->setPos(positie);
+    speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);
 
     m_kolomVerslagenPionnen++;
-    if (m_kolomVerslagenPionnen == 8)
+    if (m_kolomVerslagenPionnen == 8) {
+        m_kolomVerslagenPionnen = 0;
         m_rijVerslagenPionnen ++;
+    }
 }
 
 void DameoBordView::reloadBord() {

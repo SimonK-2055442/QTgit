@@ -36,41 +36,41 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
     addWidget(m_geroldeDobbelsteen2);
 
     QPushButton* volgendeBeurtKnop = new QPushButton("Stop met beurt");
-    volgendeBeurtKnop->setGeometry(1100, 200, 250, 50);
+    volgendeBeurtKnop->setGeometry(1060, 200, 250, 50);
     addWidget(volgendeBeurtKnop);
 
     QLabel *saveText = new QLabel("Opslaan onder welke naam?");
-    saveText->setGeometry(1100, 290, 250, 30);
+    saveText->setGeometry(1060, 290, 250, 30);
     saveText->setAlignment(Qt::AlignCenter);
     addWidget(saveText);
 
     m_saveName = new QLineEdit();
-    m_saveName->setGeometry(1100, 320, 250, 30);
+    m_saveName->setGeometry(1060, 320, 250, 30);
     addWidget(m_saveName);
 
     QPushButton* saveKnop = new QPushButton("Sla dit spel op");
-    saveKnop->setGeometry(1100, 340, 250, 60);
+    saveKnop->setGeometry(1060, 340, 250, 60);
     addWidget(saveKnop);
 
     QLabel *loadText = new QLabel("Geef de naam van het spel:");
-    loadText->setGeometry(1100, 420, 250, 30);
+    loadText->setGeometry(1060, 420, 250, 30);
     loadText->setAlignment(Qt::AlignCenter);
     addWidget(loadText);
 
     m_loadName = new QLineEdit();
-    m_loadName->setGeometry(1100, 450, 250, 30);
+    m_loadName->setGeometry(1060, 450, 250, 30);
     addWidget(m_loadName);
 
     QPushButton* loadKnop = new QPushButton("Laad een spel");
-    loadKnop->setGeometry(1100, 480, 250, 60);
+    loadKnop->setGeometry(1060, 480, 250, 60);
     addWidget(loadKnop);
 
     m_aiKnop = new QPushButton("Druk om tegen de AI te spelen");
-    m_aiKnop->setGeometry(1100, 585, 250, 30);
+    m_aiKnop->setGeometry(1060, 585, 250, 30);
     addWidget(m_aiKnop);
 
     m_beginnersModusKnop = new QPushButton("Druk om beginnersmodus aan te zetten");
-    m_beginnersModusKnop->setGeometry(1100, 630, 250, 30);
+    m_beginnersModusKnop->setGeometry(1060, 630, 250, 30);
     addWidget(m_beginnersModusKnop);
 
     connect(volgendeBeurtKnop, &QPushButton::pressed, m_spel, &ChaturajiSpel::volgendeRonde);
@@ -110,7 +110,15 @@ void ChaturajiBordView::beginnersModusKnop() {
 }
 
 void ChaturajiBordView::verwijderPionVanBord(int rij, int kolom) {
-    removeItem(speelbord[rij][kolom]->childItems()[0]);
+    QPointF positie(1350 + m_rijVerslagenPionnen*97, m_kolomVerslagenPionnen*97);
+    speelbord[rij][kolom]->childItems()[0]->setPos(positie);
+    speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);
+
+    m_kolomVerslagenPionnen++;
+    if (m_kolomVerslagenPionnen == 8) {
+        m_kolomVerslagenPionnen = 0;
+        m_rijVerslagenPionnen ++;
+    }
 }
 
 void ChaturajiBordView::verhoogPunten(int totaal, string speler) {

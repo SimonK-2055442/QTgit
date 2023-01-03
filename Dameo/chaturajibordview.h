@@ -32,6 +32,8 @@ private:
     QPushButton* m_aiKnop;
     QPushButton* m_beginnersModusKnop;
     int m_grootteBord;
+    int m_rijVerslagenPionnen{ 0 };
+    int m_kolomVerslagenPionnen{ 0 };
     QLineEdit *m_saveName;
     QLineEdit *m_loadName;
     QLabel *m_geroldeDobbelsteen1;

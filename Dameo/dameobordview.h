@@ -28,6 +28,8 @@ public slots:
 
 private:
     int m_grootteBord;
+    int m_rijVerslagenPionnen{ 0 };
+    int m_kolomVerslagenPionnen{ 0 };
     QPushButton *m_aiKnop;
     QPushButton *m_beginnersModusKnop;
     QLineEdit *m_saveName;

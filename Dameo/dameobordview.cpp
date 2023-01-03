@@ -1,4 +1,5 @@
 #include "dameobordview.h"
+#include "mainwindow.h"
 #include "pion.h"
 #include <QPushButton>
 #include <QLineEdit>
@@ -98,7 +99,14 @@ void DameoBordView::beginnersModusKnop() {
 }
 
 void DameoBordView::verwijderPionVanBord(int rij, int kolom) {
-    removeItem(speelbord[rij][kolom]->childItems()[0]);
+    //removeItem(speelbord[rij][kolom]->childItems()[0]);
+    QPointF positie(1100 + m_rijVerslagenPionnen*95, m_kolomVerslagenPionnen*95);
+    QPointF omgezettePositie = speelbord[rij][kolom]->childItems()[0]->mapFromScene(positie);
+    speelbord[rij][kolom]->childItems()[0]->setPos(omgezettePositie);
+
+    m_kolomVerslagenPionnen++;
+    if (m_kolomVerslagenPionnen == 8)
+        m_rijVerslagenPionnen ++;
 }
 
 void DameoBordView::reloadBord() {
@@ -154,6 +162,10 @@ void DameoBordView::promoveerPion(int rij, int kolom, int parameterSpeler) {
 }
 
 void DameoBordView::toonWinnaar(QString winnaar) {
+    MainWindow *nieuwSpel = new MainWindow();
+    nieuwSpel->setWindowState(Qt::WindowMaximized);
+    nieuwSpel->show();
+
     QDialog *window = new QDialog();
     window->setWindowTitle("Er is een winnaar!");
     window->setFixedHeight(150);

@@ -38,7 +38,14 @@ void ChaturajiSpel::vindEnMaakZet(Speler* spelerAanBeurt) {
                         if (checkZet(zet, p, spelerAanBeurt->getSpelerAanBeurt(), 1, true)) {
                             Pion* verslagenPion = zet.welkePionIsErVerslaanChaturaji(m_spelbord, p->getTeam());
                             if (verslagenPion != nullptr){
+                                if (verslagenPion->getWaarde() == 5) { //koning
+                                    aantalVerslagenKoningen ++;
+                                    if (aantalVerslagenKoningen == 3) {
+                                        emit spelIsGedaan(m_spelerVector[0].getPunten(), m_spelerVector[1].getPunten(), m_spelerVector[2].getPunten(), m_spelerVector[3].getPunten());
+                                    }
+                                }
                                 spelerAanBeurt->verhoogPuntenMet(verslagenPion->getWaarde());
+                                emit puntenVeranderen(spelerAanBeurt->getPunten(), spelerAanBeurt->getSpelerAanBeurtString());
                             }
                             //spelerAanBeurt->verhoogPuntenMet(zet.kijkOfPionnenVerslaanZijnChaturaji(m_spelbord, p->getTeam()));
                             zet.maakZet(m_spelbord);
@@ -103,13 +110,13 @@ bool ChaturajiSpel::isGedaan() const {
 
 //checkt of het geselecteerde stuk wel gegooid was met de dobbelstenen
 bool ChaturajiSpel::stukMagVerplaatstWorden(Pion* p, bool echt) {
-    if (!m_dobbelstenen.getEersteDobbelsteenGebruikt() && (p->print() == m_dobbelstenen.getResultaatVanRol().first || p->print() == "Koning" && m_dobbelstenen.getResultaatVanRol().first == "KoningOfPion" || p->print() == "Pion" && m_dobbelstenen.getResultaatVanRol().first == "KoningOfPion")) {
+    if (!m_dobbelstenen.getEersteDobbelsteenGebruikt() && (p->print() == m_dobbelstenen.getResultaatVanRol().first || (p->print() == "Koning" && m_dobbelstenen.getResultaatVanRol().first == "KoningOfPion") || (p->print() == "Pion" && m_dobbelstenen.getResultaatVanRol().first == "KoningOfPion"))) {
         if (echt == true) {
             m_dobbelstenen.setEersteDobbelsteenGebruikt(true);
         }
         return true;
     }
-    else if (!m_dobbelstenen.getTweedeDobbelsteenGebruikt() && (p->print() == m_dobbelstenen.getResultaatVanRol().second || p->print() == "Koning" && m_dobbelstenen.getResultaatVanRol().second == "KoningOfPion" || p->print() == "Pion" && m_dobbelstenen.getResultaatVanRol().second == "KoningOfPion")) {
+    else if (!m_dobbelstenen.getTweedeDobbelsteenGebruikt() && (p->print() == m_dobbelstenen.getResultaatVanRol().second || (p->print() == "Koning" && m_dobbelstenen.getResultaatVanRol().second == "KoningOfPion") || (p->print() == "Pion" && m_dobbelstenen.getResultaatVanRol().second == "KoningOfPion"))) {
         if (echt == true) {
             m_dobbelstenen.setTweedeDobbelsteenGebruikt(true);
         }
@@ -299,15 +306,15 @@ void ChaturajiSpel::clearMogelijkeZetten(){
     m_mogelijkeZetten.clear();
 }
 
-void ChaturajiSpel::setTegenAi(){
+void ChaturajiSpel::setTegenAi() {
     m_tegenAi = !m_tegenAi;
 }
 
-bool ChaturajiSpel::getTegenAi(){
+bool ChaturajiSpel::getTegenAi() {
     return m_tegenAi;
 }
 
-bool ChaturajiSpel::aiBeurt(){
+bool ChaturajiSpel::aiBeurt() {
     if (m_speler != DameoPion::Team::blauw && m_tegenAi == true){
         while (m_speler != DameoPion::Team::blauw && m_tegenAi == true){
             vindEnMaakZet(&m_spelerVector[m_beurt]);

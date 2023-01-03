@@ -1,4 +1,5 @@
 #include "chaturajibordview.h"
+#include "mainwindow.h"
 #include "pionview.h"
 #include <QDialog>
 #include <QVBoxLayout>
@@ -162,8 +163,11 @@ void ChaturajiBordView::veranderDobbelstenen(string eerste, string tweede){
 }
 
 void ChaturajiBordView::bepaalWinnaar(int ptnZwart, int ptnGroen, int ptnRood, int ptnGeel) {
-    QPair<string, int> winnaar("zwarte", ptnZwart);
+    MainWindow *nieuwSpel = new MainWindow();
+    nieuwSpel->setWindowState(Qt::WindowMaximized);
+    nieuwSpel->show();
 
+    QPair<string, int> winnaar("zwarte", ptnZwart);
     if (ptnGroen > winnaar.second) {
         winnaar.first = "groene";
         winnaar.second = ptnGroen;

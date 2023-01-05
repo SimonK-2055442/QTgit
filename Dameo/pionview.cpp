@@ -1,12 +1,6 @@
 #include "pionview.h"
 
-PionView::PionView(TypePion type, QGraphicsItem *parent) : QGraphicsPixmapItem()
-{
-    //QPointF positie = parent->pos();
-    //setPos(positie.x() + 17, positie.y() + 5);
-
-    //setFlag(QGraphicsItem::ItemIsSelectable);
-
+PionView::PionView(TypePion type, QGraphicsItem *parent) : QGraphicsPixmapItem() {
     if (type == TypePion::dameoWit) {
         setPixmap(QPixmap(":/images/pion_wit.png"));
     }

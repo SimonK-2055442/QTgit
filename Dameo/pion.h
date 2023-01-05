@@ -24,6 +24,7 @@ public:
     virtual bool mogelijkeZet(Bord bord, Zet zet, Team team) = 0;
     virtual int getWaarde() = 0;
     virtual string print() = 0;
+    virtual ~Pion() = default;
 
 protected:
     Pion(int yCoordinaat, int xCoordinaat, char teken, Team team);

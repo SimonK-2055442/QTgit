@@ -1,4 +1,4 @@
-//Auteur: Simon Knuts
+//Auteur: Simon Knuts en Yara Mijnendonckx
 
 #include <iostream>
 #include <fstream>
@@ -7,7 +7,6 @@
 #include <QTextStream>
 #include <QDir>
 #include <QDebug>
-//#include "bordview.h"
 
 
 DameoSpel::DameoSpel(Bord spelbord) : m_spelbord{spelbord} {
@@ -47,10 +46,12 @@ void DameoSpel::vindEnMaakZet(){
                 if (gevonden == false) {
                     if (p->mogelijkeZet(m_spelbord, zet, DameoPion::Team::geel)) {
                         zet.welkePionIsVerslaan(m_spelbord, DameoPion::Team::geel, false);
+                        if (zet.getEindYCoordinaat() == 0 || zet.getEindYCoordinaat() == 7) {
+                            dynamic_cast<DameoPion*>(p)->maakKoning();
+                        }
                         zet.maakZet(m_spelbord);
                         gevonden = true;
-                    }
-                    else {
+                    } else {
                         zet.setEindXCoordinaat(p->getXCoordinaat());
                         zet.setEindYCoordinaat(p->getYCoordinaat());
                     }

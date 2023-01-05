@@ -1,12 +1,11 @@
 #ifndef DAMEOSPEL_H
 #define DAMEOSPEL_H
 
-//#include "bordview.h"
 #pragma once
 
+#include <QObject>
 #include "bord.h"
 #include "zet.h"
-#include <QObject>
 
 
 class DameoSpel : public QObject

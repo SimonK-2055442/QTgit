@@ -3,28 +3,23 @@
 
 #pragma once
 
-#include "windows.h"
 #include <vector>
-#include <iostream>
-#include <string>
 #include "zet.h"
-#include "qgraphicssceneevent.h"
 #include "pion.h"
 
 class BordCelView;
-using namespace std;
+
 
 class Bord {
 public:
-    void laatZien() const;
-    Pion* zoekPionOpCoordinaat(int yCoord, int xCoord) const;
-    Pion* getPionVanLijst(int index) const;
-    void verwijderPointers();
     enum class KeuzeSpel { chaturaji, dameo };
     void initialiseerBord(KeuzeSpel spel);
     bool isZetInHetBord(Zet zet) const;
-    void vervangElement(Zet zet);
+    Pion* zoekPionOpCoordinaat(int yCoord, int xCoord) const;
+    Pion* getPionVanLijst(int index) const;
     void voegPionToe(bool dameo, char type, int xCoord, int yCoord, Pion::Team team);
+    void vervangElement(Zet zet);
+    void verwijderPointers();
     vector<Pion*> getPionnen();
 
 private:

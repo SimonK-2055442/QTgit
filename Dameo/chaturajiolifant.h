@@ -1,12 +1,10 @@
 #ifndef CHATURAJIOLIFANT_H
 #define CHATURAJIOLIFANT_H
 
-
 #pragma once
 
-#include "Zet.h"
+#include "zet.h"
 
-using namespace std;
 
 class ChaturajiOlifant : public Pion {
 public:
@@ -16,6 +14,7 @@ public:
     string print() override;
     bool mogelijkeZetHorizontaal(Bord bord, Zet zet, Team team);
     bool mogelijkeZetVerticaal(Bord bord, Zet zet, Team team);
+
 private:
     int m_waarde{ 4 };
 };

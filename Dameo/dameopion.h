@@ -6,6 +6,7 @@
 #include "zet.h"
 #include "pion.h"
 
+
 class DameoPion : public Pion {
 public:
     DameoPion(int yCoordinaat, int xCoordinaat, Team team, char teken);

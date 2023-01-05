@@ -1,12 +1,10 @@
 #ifndef CHATURAJIPION_H
 #define CHATURAJIPION_H
 
-
 #pragma once
 
-#include "Zet.h"
+#include "zet.h"
 
-using namespace std;
 
 class ChaturajiPion : public Pion {
 public:
@@ -18,6 +16,7 @@ public:
     bool magPromoveren(Bord bord, Zet zet);
     bool isGepromoveerd() const;
     string getPromoverenNaar() const;
+
 private:
     int m_waarde{ 1 };
     bool m_isGepromoveerd{ false };

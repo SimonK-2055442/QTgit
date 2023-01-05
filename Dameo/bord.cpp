@@ -1,75 +1,12 @@
-#include "bord.h"
-
 //Auteur: Simon Knuts en Yara Mijnendonckx
 
-#include "ChaturajiPion.h"
-#include "ChaturajiKoning.h"
-#include "ChaturajiOlifant.h"
-#include "ChaturajiPaard.h"
-#include "ChaturajiBoot.h"
-#include "bordcelview.h"
+#include "bord.h"
+#include "chaturajipion.h"
+#include "chaturajikoning.h"
+#include "chaturajiolifant.h"
+#include "chaturajipaard.h"
+#include "chaturajiboot.h"
 
-void Bord::laatZien() const {
-    HANDLE h;
-    h = GetStdHandle(STD_OUTPUT_HANDLE);
-    for (int i = 0; i < grootteBord; i++) {
-
-        cout << "  +---+---+---+---+---+---+---+---+" << endl;
-        cout << to_string(i + 1);
-        cout << " | ";
-        for (int j = 0; j < grootteBord; j++) {
-
-            if (zoekPionOpCoordinaat(i, j) != nullptr) {
-                if (zoekPionOpCoordinaat(i, j)->getTeam() == Pion::Team::blauw) {
-                    SetConsoleTextAttribute(h, FOREGROUND_BLUE);
-                    cout << zoekPionOpCoordinaat(i, j)->getTeken();
-                }
-                else if (zoekPionOpCoordinaat(i, j)->getTeam() == Pion::Team::geel) {
-                    SetConsoleTextAttribute(h, 14);
-                    cout << zoekPionOpCoordinaat(i, j)->getTeken();
-                }
-                else if (zoekPionOpCoordinaat(i, j)->getTeam() == Pion::Team::groen) {
-                    SetConsoleTextAttribute(h, FOREGROUND_GREEN);
-                    cout << zoekPionOpCoordinaat(i, j)->getTeken();
-                }
-                else {
-                    SetConsoleTextAttribute(h, FOREGROUND_RED);
-                    cout << zoekPionOpCoordinaat(i, j)->getTeken();
-                }
-                SetConsoleTextAttribute(h, 15);
-                cout << " | ";
-            }
-            else
-                cout << "  | ";
-        }
-        cout << endl;
-
-    }
-    cout << "  +---+---+---+---+---+---+---+---+" << endl;
-    cout << "    A   B   C   D   E   F   G   H  " << endl;
-}
-
-//loopt over alle pionen totdat het een pion vindt met de gegeven coordinaten en geeft deze dan terug
-Pion* Bord::zoekPionOpCoordinaat(int yCoord, int xCoord) const {
-    for (Pion* p : pionnen) {
-        if (p->getXCoordinaat() == xCoord && p->getYCoordinaat() == yCoord && !p->isVerslaan())
-            return p;
-    }
-    return nullptr;
-}
-
-Pion* Bord::getPionVanLijst(int index) const {
-    return pionnen[index];
-}
-
-// wanneer een spel is uitgespeeld, kan al het gealloceerde geheugen weer vrijgegeven worden
-void Bord::verwijderPointers(){
-    for (Pion* p : pionnen) {
-        delete p;
-        p = NULL;
-    }
-    pionnen.clear();
-}
 
 void Bord::initialiseerBord(KeuzeSpel spel) {
     if (spel == KeuzeSpel::chaturaji) {
@@ -142,6 +79,46 @@ bool Bord::isZetInHetBord(Zet zet) const {
         return true;
 }
 
+//loopt over alle pionen totdat het een pion vindt met de gegeven coordinaten en geeft deze dan terug
+Pion* Bord::zoekPionOpCoordinaat(int yCoord, int xCoord) const {
+    for (Pion* p : pionnen) {
+        if (p->getXCoordinaat() == xCoord && p->getYCoordinaat() == yCoord && !p->isVerslaan())
+            return p;
+    }
+    return nullptr;
+}
+
+Pion* Bord::getPionVanLijst(int index) const {
+    return pionnen[index];
+}
+
+void Bord::voegPionToe(bool dameo, char type, int xCoord, int yCoord, Pion::Team team) {
+    if (dameo == false) {
+        if (type == 'p') {
+            pionnen.push_back(new ChaturajiPion{ yCoord, xCoord, team, type, "koning" });
+        }
+        else if (type == 'b') {
+            pionnen.push_back(new ChaturajiBoot{ yCoord, xCoord, team, type });
+        }
+        else if (type == 'h') {
+            pionnen.push_back(new ChaturajiPaard{ yCoord, xCoord, team, type });
+        }
+        else if (type == 'k') {
+            pionnen.push_back(new ChaturajiKoning{ yCoord, xCoord, team, type });
+        }
+        else if (type == 'o') {
+            pionnen.push_back(new ChaturajiOlifant{ yCoord, xCoord, team, type });
+        }
+    }
+    else {
+        DameoPion* p = new DameoPion{ yCoord, xCoord, team, type};
+        if (type == 'B' || type == 'G'){
+            p->maakKoning();
+        }
+        pionnen.push_back(p);
+    }
+}
+
 //wanneer een pion de overkant van het bord bereikt zal deze promoveren en moet deze dus vervangen worden door een ander stuk
 void Bord::vervangElement(Zet zet) {
     for (int i = 0; i < pionnen.size(); i++) {
@@ -174,34 +151,15 @@ void Bord::vervangElement(Zet zet) {
     }
 }
 
-void Bord::voegPionToe(bool dameo, char type, int xCoord, int yCoord, Pion::Team team) {
-    if (dameo == false) {
-        if (type == 'p') {
-            pionnen.push_back(new ChaturajiPion{ yCoord, xCoord, team, type, "koning" });
-        }
-        else if (type == 'b') {
-            pionnen.push_back(new ChaturajiBoot{ yCoord, xCoord, team, type });
-        }
-        else if (type == 'h') {
-            pionnen.push_back(new ChaturajiPaard{ yCoord, xCoord, team, type });
-        }
-        else if (type == 'k') {
-            pionnen.push_back(new ChaturajiKoning{ yCoord, xCoord, team, type });
-        }
-        else if (type == 'o') {
-            pionnen.push_back(new ChaturajiOlifant{ yCoord, xCoord, team, type });
-        }
+// wanneer een spel is uitgespeeld, kan al het gealloceerde geheugen weer vrijgegeven worden
+void Bord::verwijderPointers() {
+    for (Pion* p : pionnen) {
+        delete p;
+        p = NULL;
     }
-    else {
-        DameoPion* p = new DameoPion{ yCoord, xCoord, team, type};
-        if (type == 'B' || type == 'G'){
-            p->maakKoning();
-        }
-        pionnen.push_back(p);
-    }
+    pionnen.clear();
 }
 
 vector<Pion*> Bord::getPionnen(){
     return pionnen;
 }
-

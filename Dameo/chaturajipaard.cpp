@@ -1,6 +1,6 @@
 //Auteur: Simon Knuts en Yara Mijnendonckx
 
-#include "ChaturajiPaard.h"
+#include "chaturajipaard.h"
 
 ChaturajiPaard::ChaturajiPaard(int yCoordinaat, int xCoordinaat, Team team, char teken) : Pion{ yCoordinaat, xCoordinaat, teken, team } {
 

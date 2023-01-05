@@ -1,64 +1,60 @@
 #ifndef CHATURAJISPEL_H
 #define CHATURAJISPEL_H
 
-
 #pragma once
 
-#include <string>
-#include "ChaturajiPion.h"
-#include "ChaturajiKoning.h"
-#include "Dobbelstenen.h"
-#include "Speler.h"
 #include <QObject>
-#include <QString>
+#include "chaturajipion.h"
+#include "dobbelstenen.h"
+#include "speler.h"
+
 
 class ChaturajiSpel: public QObject {
     Q_OBJECT
+
 public:
     ChaturajiSpel(Bord spelbord);
     void vindEnMaakZet(Speler* speler);
-    bool isGedaan() const;
     bool checkZet(Zet zet, Pion* p, Pion::Team teamSpeler, int spelKeuze, bool echt);
+    void vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt);
+    bool isGedaan() const;
     bool stukMagVerplaatstWorden(Pion* p, bool echt);
     void saveSpel(QString naam);
     int loadSpel(QString naam);
-    void eindeSpel();
-    void maakNieuwePion(char type, char xCoord, char Ycoord, char team);
-    void setSpelbord(Bord bord);
+    void maakNieuwePion(char type, char xCoord, char yCoord, char team);
     Bord getSpelbord();
-    void vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt);
     std::vector<int> eersteKlik(int rij,int kolom);
     bool tweedeKlik(int rij,int kolom);
+    void initialiseerRonde();
     void clearMogelijkeZetten();
+    bool aiBeurt();
     void setTegenAi();
     bool getTegenAi();
-    bool aiBeurt();
     void setBeginnersModus();
     bool getBeginnersModus();
-    void initialiseerRonde();
 
 public slots:
-    //void initialiseerRonde();
     void volgendeRonde();
 
 signals:
-    void loadGame();
+    void veranderDobbelsteen(std::string eerste, std::string tweede);
     void pionVerslaan(int rij, int kolom);
-    void puntenVeranderen(int totaal, string speler);
-    void veranderDobbelsteen(string eerste, string tweede);
+    void puntenVeranderen(int totaal, std::string speler);
     void spelIsGedaan(int ptnZwart, int ptnGroen, int ptnRood, int ptnGeel);
+    void loadGame();
 
 private:
-    int aantalVerslagenKoningen{ 0 };
-    bool m_tegenAi{false};
-    bool m_beginnersModus{false};
-    ChaturajiPion* m_pionDieNogEenZetMag{nullptr};
-    std::vector<int> m_mogelijkeZetten;
-    std::tuple<int, int> coordinatenEersteKlik;
     Bord m_spelbord;
-    int m_beurt{ -1 };
     Dobbelstenen m_dobbelstenen;
     ChaturajiPion::Team m_speler;
     vector<Speler> m_spelerVector;
+    ChaturajiPion* m_pionDieNogEenZetMag{nullptr};
+    std::vector<int> m_mogelijkeZetten;
+    std::tuple<int, int> m_coordinatenEersteKlik;
+    int m_beurt{ -1 };
+    int m_aantalVerslagenKoningen{ 0 };
+    bool m_tegenAi{false};
+    bool m_beginnersModus{false};
 };
+
 #endif // CHATURAJISPEL_H

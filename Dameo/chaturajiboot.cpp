@@ -1,6 +1,6 @@
 //Auteur: Simon Knuts en Yara Mijnendonckx
 
-#include "ChaturajiBoot.h"
+#include "chaturajiboot.h"
 
 ChaturajiBoot::ChaturajiBoot(int yCoordinaat, int xCoordinaat, Team team, char teken) : Pion{ yCoordinaat, xCoordinaat, teken, team }  {
 

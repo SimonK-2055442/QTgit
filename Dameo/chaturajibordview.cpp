@@ -1,15 +1,12 @@
+//Auteur: Yara Mijnendonckx en Simon Knuts
+
 #include "chaturajibordview.h"
 #include "mainwindow.h"
 #include "pionview.h"
-#include <QDialog>
-#include <QVBoxLayout>
-#include <QPushButton>
-#include <QLabel>
 
 ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObject *parent) : QGraphicsScene{parent} {
     m_spel = spel;
     m_grootteBord = grootteBord;
-    //setSceneRect(0, 0, 1200, 800);
     setBackgroundBrush(QBrush(Qt::gray));
 
     // maak het bord
@@ -20,13 +17,9 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
         }
     }
 
-    // voeg pionnen toe
-    plaatsPionnen();
-
-
-    // voeg punten toe
+    // voeg pionnen en punten toe
+    voegPionnenToe();
     voegPuntentellingToe();
-
 
     m_geroldeDobbelsteen1 = new QLabel();
     m_geroldeDobbelsteen2 = new QLabel();
@@ -78,7 +71,6 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
     connect(loadKnop, &QPushButton::pressed, this, &ChaturajiBordView::eventLoadKnop);
     connect(m_aiKnop, &QPushButton::pressed, this, &ChaturajiBordView::aiKnop);
     connect(m_beginnersModusKnop, &QPushButton::clicked, this, &ChaturajiBordView::beginnersModusKnop);
-
     connect(m_spel, &ChaturajiSpel::pionVerslaan, this, &ChaturajiBordView::verwijderPionVanBord);
     connect(m_spel, &ChaturajiSpel::puntenVeranderen, this, &ChaturajiBordView::verhoogPunten);
     connect(m_spel, &ChaturajiSpel::veranderDobbelsteen, this, &ChaturajiBordView::veranderDobbelstenen);
@@ -86,61 +78,6 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
     connect(m_spel, &ChaturajiSpel::spelIsGedaan, this, &ChaturajiBordView::bepaalWinnaar);
 
     m_spel->initialiseerRonde();
-}
-
-void ChaturajiBordView::aiKnop(){
-    if (m_aiKnop->text() == "Druk om tegen de AI te spelen"){
-        m_aiKnop->setText("Druk om 1 vs 1 vs 1 vs 1 te spelen");
-        m_spel->setTegenAi();
-    }
-    else{
-        m_aiKnop->setText("Druk om tegen de AI te spelen");
-        m_spel->setTegenAi();
-    }
-}
-
-void ChaturajiBordView::beginnersModusKnop() {
-    if (m_beginnersModusKnop->text() == "Druk om beginnersmodus aan te zetten"){
-        m_beginnersModusKnop->setText("Druk om beginnersmodus uit te zetten");
-        m_spel->setBeginnersModus();
-    } else {
-        m_beginnersModusKnop->setText("Druk om beginnersmodus aan te zetten");
-        m_spel->setBeginnersModus();
-    }
-}
-
-void ChaturajiBordView::verwijderPionVanBord(int rij, int kolom) {
-    QPointF positie(1350 + m_rijVerslagenPionnen*97, m_kolomVerslagenPionnen*97);
-    speelbord[rij][kolom]->childItems()[0]->setPos(positie);
-    speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);
-
-    m_kolomVerslagenPionnen++;
-    if (m_kolomVerslagenPionnen == 8) {
-        m_kolomVerslagenPionnen = 0;
-        m_rijVerslagenPionnen ++;
-    }
-}
-
-void ChaturajiBordView::verhoogPunten(int totaal, string speler) {
-    if (speler == "geel") {
-        aantalPuntenGeel->setText(QString::number(totaal));
-    } else if (speler == "groen") {
-        aantalPuntenGroen->setText(QString::number(totaal));
-    } else if (speler == "rood") {
-        aantalPuntenRood->setText(QString::number(totaal));
-    } else {
-        aantalPuntenZwart->setText(QString::number(totaal));
-    }
-}
-
-void ChaturajiBordView::eventSaveKnop() {
-    qDebug() << m_saveName->text();
-    m_spel->saveSpel(m_saveName->text());
-}
-
-void ChaturajiBordView::eventLoadKnop() {
-    qDebug() << "inladen";
-    m_spel->loadSpel(m_loadName->text());
 }
 
 void ChaturajiBordView::veranderDobbelstenen(string eerste, string tweede){
@@ -167,6 +104,30 @@ void ChaturajiBordView::veranderDobbelstenen(string eerste, string tweede){
     }
     if (tweede == "Olifant"){
         m_geroldeDobbelsteen2->setPixmap(QPixmap(":/images/zwartOlifant.png").scaled(100,100));
+    }
+}
+
+void ChaturajiBordView::verhoogPunten(int totaal, string speler) {
+    if (speler == "geel") {
+        aantalPuntenGeel->setText(QString::number(totaal));
+    } else if (speler == "groen") {
+        aantalPuntenGroen->setText(QString::number(totaal));
+    } else if (speler == "rood") {
+        aantalPuntenRood->setText(QString::number(totaal));
+    } else {
+        aantalPuntenZwart->setText(QString::number(totaal));
+    }
+}
+
+void ChaturajiBordView::verwijderPionVanBord(int rij, int kolom) {
+    QPointF positie(1350 + m_rijVerslagenPionnen*97, m_kolomVerslagenPionnen*97);
+    speelbord[rij][kolom]->childItems()[0]->setPos(positie);
+    speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);
+
+    m_kolomVerslagenPionnen++;
+    if (m_kolomVerslagenPionnen == 8) {
+        m_kolomVerslagenPionnen = 0;
+        m_rijVerslagenPionnen ++;
     }
 }
 
@@ -236,6 +197,48 @@ void ChaturajiBordView::bepaalWinnaar(int ptnZwart, int ptnGroen, int ptnRood, i
     this->deleteLater();
 }
 
+void ChaturajiBordView::eventSaveKnop() {
+    qDebug() << m_saveName->text();
+    m_spel->saveSpel(m_saveName->text());
+}
+
+void ChaturajiBordView::eventLoadKnop() {
+    qDebug() << "inladen";
+    m_spel->loadSpel(m_loadName->text());
+}
+
+void ChaturajiBordView::aiKnop(){
+    if (m_aiKnop->text() == "Druk om tegen de AI te spelen"){
+        m_aiKnop->setText("Druk om 1 vs 1 vs 1 vs 1 te spelen");
+        m_spel->setTegenAi();
+    }
+    else{
+        m_aiKnop->setText("Druk om tegen de AI te spelen");
+        m_spel->setTegenAi();
+    }
+}
+
+void ChaturajiBordView::beginnersModusKnop() {
+    if (m_beginnersModusKnop->text() == "Druk om beginnersmodus aan te zetten"){
+        m_beginnersModusKnop->setText("Druk om beginnersmodus uit te zetten");
+        m_spel->setBeginnersModus();
+    } else {
+        m_beginnersModusKnop->setText("Druk om beginnersmodus aan te zetten");
+        m_spel->setBeginnersModus();
+    }
+}
+
+void ChaturajiBordView::reloadBord() {
+    for (int i = 0; i < m_grootteBord; i++){
+        for (int j = 0; j < m_grootteBord; j++){
+            if (!speelbord[i][j]->childItems().empty()){
+                removeItem(speelbord[i][j]->childItems()[0]);
+            }
+        }
+    }
+    voegPionnenToe();
+}
+
 void ChaturajiBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if(event->button() == Qt::LeftButton) {
         int kolom = event->scenePos().x()/96;
@@ -274,18 +277,9 @@ void ChaturajiBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     }
 }
 
-void ChaturajiBordView::reloadBord() {
-    for (int i = 0; i < m_grootteBord; i++){
-        for (int j = 0; j < m_grootteBord; j++){
-            if (!speelbord[i][j]->childItems().empty()){
-                removeItem(speelbord[i][j]->childItems()[0]);
-            }
-        }
-    }
-    plaatsPionnen();
-}
 
-void ChaturajiBordView::plaatsPionnen(){
+
+void ChaturajiBordView::voegPionnenToe(){
     for (int i = 0; i < m_grootteBord; i++){
         for (int j = 0; j < m_grootteBord; j++){
             Pion* p = m_spel->getSpelbord().zoekPionOpCoordinaat(i,j);

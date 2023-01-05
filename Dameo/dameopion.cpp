@@ -1,6 +1,5 @@
 //Auteur: Yara Mijnendonckx en Simon Knuts
 
-#include <stdlib.h>
 #include "dameopion.h"
 
 DameoPion::DameoPion(int yCoordinaat, int xCoordinaat, Team team, char teken) : Pion{ yCoordinaat, xCoordinaat, teken, team } {

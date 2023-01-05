@@ -1,12 +1,10 @@
 #ifndef CHATURAJIKONING_H
 #define CHATURAJIKONING_H
 
-
 #pragma once
 
-#include "Zet.h"
+#include "zet.h"
 
-using namespace std;
 
 class ChaturajiKoning : public Pion {
 public:
@@ -14,6 +12,7 @@ public:
     bool mogelijkeZet(Bord bord, Zet zet, Team team) override;
     int getWaarde() override;
     string print() override;
+
 private:
     int m_waarde{ 5 };
 };

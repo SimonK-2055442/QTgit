@@ -1,6 +1,6 @@
 //Auteur: Simon Knuts en Yara Mijnendonckx
 
-#include "ChaturajiKoning.h"
+#include "chaturajikoning.h"
 
 ChaturajiKoning::ChaturajiKoning(int yCoordinaat, int xCoordinaat, Team team, char teken) : Pion{ yCoordinaat, xCoordinaat, teken, team } {
 

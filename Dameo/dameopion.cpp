@@ -8,12 +8,11 @@ DameoPion::DameoPion(int yCoordinaat, int xCoordinaat, Team team, char teken) : 
 
 void DameoPion::maakKoning() {
     m_isKoning = true;
-    if (m_teken == 'b') {
+    if (m_teken == 'b')
         m_teken = 'B';
-    }
-    if (m_teken == 'g') {
+
+    if (m_teken == 'g')
         m_teken = 'G';
-    }
 }
 
 bool DameoPion::isKoning() const {
@@ -58,7 +57,7 @@ bool DameoPion::mogelijkeZet(Bord bord, Zet zet, DameoPion::Team speler) {
     else
         //diagonale beweging van de koning
         if (abs(zet.getEindXCoordinaat() - zet.getStartXCoordinaat()) == abs(zet.getEindYCoordinaat() - zet.getStartYCoordinaat()))
-            return diagonaleBewegingVanKoning(bord, zet, speler);
+            return diagonaleBewegingVanKoning(bord, zet);
         //'rechte' (= horizontaal en verticaal) beweging van de koning of slaan
         else
             return rechteBewegingVanKoning(bord, zet, speler);
@@ -123,7 +122,7 @@ bool DameoPion::mogelijkeBewegingVanPion(Bord bord, Zet zet, int parameterSpeler
     return false;
 }
 
-bool DameoPion::diagonaleBewegingVanKoning(Bord bord, Zet zet, DameoPion::Team speler) const {
+bool DameoPion::diagonaleBewegingVanKoning(Bord bord, Zet zet) const {
     if ((zet.getEindXCoordinaat() - zet.getStartXCoordinaat() < 0) && (zet.getEindYCoordinaat() - zet.getStartYCoordinaat() < 0)) {
         for (int i = 1; i < abs(zet.getStartXCoordinaat() - zet.getEindXCoordinaat()); i++) {
             if ((bord.zoekPionOpCoordinaat(zet.getStartYCoordinaat() - i, zet.getStartXCoordinaat() - i)) != nullptr)

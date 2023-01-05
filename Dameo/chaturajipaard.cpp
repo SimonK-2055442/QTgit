@@ -2,6 +2,7 @@
 
 #include "chaturajipaard.h"
 
+
 ChaturajiPaard::ChaturajiPaard(int yCoordinaat, int xCoordinaat, Team team, char teken) : Pion{ yCoordinaat, xCoordinaat, teken, team } {
 
 }

@@ -20,7 +20,7 @@ public:
     bool isGedaan() const;
     bool stukMagVerplaatstWorden(Pion* p, bool echt);
     void saveSpel(QString naam);
-    int loadSpel(QString naam);
+    bool loadSpel(QString naam);
     void maakNieuwePion(char type, char xCoord, char yCoord, char team);
     Bord getSpelbord();
     std::vector<int> eersteKlik(int rij,int kolom);

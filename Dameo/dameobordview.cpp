@@ -141,7 +141,7 @@ void DameoBordView::eventSaveKnop() {
 }
 
 void DameoBordView::eventLoadKnop() {
-    qDebug() << "inladen";
+    qDebug() << "Spel inladen";
     m_spel->loadSpel(m_loadName->text());
 }
 
@@ -214,34 +214,29 @@ void DameoBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
             m_mogelijkeZetten.clear();
             m_mogelijkeZetten = m_spel->eersteKlik(rij, kolom);
             if (m_spel->getBeginnersModus()) {
-                for (int i = 0; i < m_mogelijkeZetten.size(); i += 2) {
+                for (int i = 0; i < m_mogelijkeZetten.size(); i += 2)
                     speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::red);
-                }
             }
-            if (m_mogelijkeZetten.size() > 0) {
+            if (m_mogelijkeZetten.size() > 0)
                 m_lastClicked = speelbord[rij][kolom];
-            }
 
         } else {
             if (m_spel->tweedeKlik(rij,kolom)) {
                    m_lastClicked->childItems()[0]->setParentItem(speelbord[rij][kolom]);
                    m_lastClicked->childItems().clear();
-                for (int i = 0; i < m_mogelijkeZetten.size(); i += 2){
+                for (int i = 0; i < m_mogelijkeZetten.size(); i += 2)
                    speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
-                }
                 m_spel->clearMogelijkeZetten();
                 m_lastClicked = nullptr;
-                if (m_spel->aiBeurt()){
+                if (m_spel->aiBeurt())
                    reloadBord();
-                }
             }
         }
     }
 
     if(event->button() == Qt::RightButton) {
-        for (int i = 0; i < m_mogelijkeZetten.size(); i += 2){
+        for (int i = 0; i < m_mogelijkeZetten.size(); i += 2)
             speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
-        }
         m_lastClicked = nullptr;
     }
 }

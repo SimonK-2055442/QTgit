@@ -24,12 +24,10 @@ Pion::Team Speler::getSpelerAanBeurt() const {
 string Speler::getSpelerAanBeurtString() const {
     if (m_spelerAanBeurt == Pion::Team::blauw)
         return "blauw";
-    if (m_spelerAanBeurt == Pion::Team::rood)
+    else if (m_spelerAanBeurt == Pion::Team::rood)
         return "rood";
-    if (m_spelerAanBeurt == Pion::Team::groen)
+    else if (m_spelerAanBeurt == Pion::Team::groen)
         return "groen";
-    if (m_spelerAanBeurt == Pion::Team::geel)
-        return "geel";
     else
-        return "Mag niet!";
+        return "geel";
 }

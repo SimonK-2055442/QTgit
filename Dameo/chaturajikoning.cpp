@@ -2,6 +2,7 @@
 
 #include "chaturajikoning.h"
 
+
 ChaturajiKoning::ChaturajiKoning(int yCoordinaat, int xCoordinaat, Team team, char teken) : Pion{ yCoordinaat, xCoordinaat, teken, team } {
 
 }

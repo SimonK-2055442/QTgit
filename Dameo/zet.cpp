@@ -43,16 +43,15 @@ void Zet::setEindYCoordinaat(int yCoordinaat) {
 bool Zet::eindeVanBordBereiktBijZet(Bord bord){
     Pion* teVerzettenPion = bord.zoekPionOpCoordinaat(m_eindYCoordinaat, m_eindXCoordinaat);
     if (dynamic_cast<DameoPion*>(teVerzettenPion) != nullptr) {
-        if (m_eindYCoordinaat == 0 || m_eindYCoordinaat == 7){
+        if (m_eindYCoordinaat == 0 || m_eindYCoordinaat == 7) {
             dynamic_cast<DameoPion*>(teVerzettenPion)->maakKoning();
             return true;
         } else {
             return false;
         }
     } else {
-        if (m_eindYCoordinaat == 0 || m_eindYCoordinaat == 7 || m_eindXCoordinaat == 0 || m_eindXCoordinaat == 7){
+        if (m_eindYCoordinaat == 0 || m_eindYCoordinaat == 7 || m_eindXCoordinaat == 0 || m_eindXCoordinaat == 7)
             return true;
-        }
     }
     return false;
 }
@@ -77,9 +76,8 @@ QPair<int, int> Zet::welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alle
         }
         for (int i = begin; i < einde; i++) {
             if (bord.zoekPionOpCoordinaat(i, m_startXCoordinaat) != nullptr && bord.zoekPionOpCoordinaat(i, m_startXCoordinaat)->getTeam() != speler) {
-                if (alleenChecken == false) {
+                if (alleenChecken == false)
                     bord.zoekPionOpCoordinaat(i, m_startXCoordinaat)->verslaPion();
-                }
                 coordinaatPionVerslaan.first = i;
                 coordinaatPionVerslaan.second = m_startXCoordinaat;
                 return coordinaatPionVerslaan;
@@ -96,9 +94,8 @@ QPair<int, int> Zet::welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alle
         }
         for (int i = begin; i < einde; i++) {
             if (bord.zoekPionOpCoordinaat(m_startYCoordinaat, i) != nullptr && bord.zoekPionOpCoordinaat(m_startYCoordinaat, i)->getTeam() != speler) {
-                if (alleenChecken == false) {
+                if (alleenChecken == false)
                     bord.zoekPionOpCoordinaat(m_startYCoordinaat, i)->verslaPion();
-                }
                 coordinaatPionVerslaan.first = m_startYCoordinaat;
                 coordinaatPionVerslaan.second = i;
                 return coordinaatPionVerslaan;

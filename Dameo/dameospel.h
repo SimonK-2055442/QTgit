@@ -16,7 +16,7 @@ public:
     void vindAlleZettenVoorPion(Bord spelbord, DameoPion::Team team, DameoPion* p, bool moetPakken);
     int isGedaan() const;
     void saveSpel(QString naam);
-    int loadSpel(QString naam);
+    bool loadSpel(QString naam);
     void maakNieuwePion(char teken, char xCoord, char Ycoord, char team);
     Bord getBord();
     std::vector<int> eersteKlik(int rij,int kolom);

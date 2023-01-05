@@ -2,6 +2,7 @@
 
 #include "chaturajiolifant.h"
 
+
 ChaturajiOlifant::ChaturajiOlifant(int yCoordinaat, int xCoordinaat, Team team, char teken) : Pion{ yCoordinaat, xCoordinaat, teken, team } {
 
 }

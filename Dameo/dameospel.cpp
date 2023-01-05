@@ -12,7 +12,7 @@ DameoSpel::DameoSpel(Bord spelbord) : m_spelbord{spelbord} {
 };
 
 //gaat over alle pionnen van speler G en probeert elke zet, een simpele AI
-void DameoSpel::vindEnMaakZet(){
+void DameoSpel::vindEnMaakZet() {
     bool gevonden{ false };
     for (int i = 0; i < m_spelbord.getPionnen().size(); i++) {
         Pion* p = m_spelbord.getPionVanLijst(i);
@@ -24,9 +24,8 @@ void DameoSpel::vindEnMaakZet(){
                 if (gevonden == false) {
                     if (p->mogelijkeZet(m_spelbord, zet, DameoPion::Team::geel)) {
                         zet.welkePionIsVerslaan(m_spelbord, DameoPion::Team::geel, false);
-                        if (zet.getEindYCoordinaat() == 0 || zet.getEindYCoordinaat() == 7) {
+                        if (zet.getEindYCoordinaat() == 0 || zet.getEindYCoordinaat() == 7)
                             dynamic_cast<DameoPion*>(p)->maakKoning();
-                        }
                         zet.maakZet(m_spelbord);
                         gevonden = true;
                     } else {
@@ -83,11 +82,11 @@ int DameoSpel::isGedaan() const {
 void DameoSpel::saveSpel(QString naam) {
     string naamOpgeslagenSpel;
     int beurt;
-    if (m_speler == DameoPion::Team::geel) {
+    if (m_speler == DameoPion::Team::geel)
         beurt = 1;
-    } else {
+    else
         beurt = 2;
-    }
+
     string opgeslagenSpelstatus = to_string(beurt);
     for (int i = 0; i < 36; i++) {
         Pion* p = m_spelbord.getPionVanLijst(i);
@@ -95,12 +94,10 @@ void DameoSpel::saveSpel(QString naam) {
             opgeslagenSpelstatus.push_back(p->getTeken());
             opgeslagenSpelstatus.append(to_string(p->getXCoordinaat()));
             opgeslagenSpelstatus.append(to_string(p->getYCoordinaat()));
-            if (p->getTeam() == DameoPion::Team::blauw) {
+            if (p->getTeam() == DameoPion::Team::blauw)
                 opgeslagenSpelstatus.push_back('b');
-            }
-            else if (p->getTeam() == DameoPion::Team::geel) {
+            else if (p->getTeam() == DameoPion::Team::geel)
                 opgeslagenSpelstatus.push_back('y');
-            }
         }
     }
     qDebug() << QDir::currentPath();
@@ -114,26 +111,25 @@ void DameoSpel::saveSpel(QString naam) {
     file.close();
 }
 
-int DameoSpel::loadSpel(QString naam) {
+bool DameoSpel::loadSpel(QString naam) {
     QFile file(naam + ".txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return -1;
+        return false;
 
     QTextStream stream(&file);
     QString contents = stream.readAll();
     std::string saveStatus = contents.toStdString();
     file.close();
     m_spelbord.verwijderPointers();
-    for (int i = 1; i < saveStatus.length(); i += 4) {
+    for (int i = 1; i < saveStatus.length(); i += 4)
         maakNieuwePion(saveStatus[i], saveStatus[i + 1], saveStatus[i + 2], saveStatus[i + 3]);
-    }
-    if (saveStatus[0] - '0' == 1){
+
+    if (saveStatus[0] - '0' == 1)
         m_speler = DameoPion::Team::geel;
-    } else {
+    else
         m_speler = DameoPion::Team::blauw;
-    }
     emit loadGame();
-    return 0;
+    return true;
 }
 
 void DameoSpel::maakNieuwePion(char teken, char xCoord, char yCoord, char team) {
@@ -141,18 +137,14 @@ void DameoSpel::maakNieuwePion(char teken, char xCoord, char yCoord, char team) 
     int xCoordPion, yCoordPion;
     xCoordPion = xCoord - '0';
     yCoordPion = yCoord - '0';
-    if (team == 'g') {
+    if (team == 'g')
         teamPion = Pion::Team::groen;
-    }
-    else if (team == 'r') {
+    else if (team == 'r')
         teamPion = Pion::Team::rood;
-    }
-    else if (team == 'y') {
+    else if (team == 'y')
         teamPion = Pion::Team::geel;
-    }
-    else {
+    else
         teamPion = Pion::Team::blauw;
-    }
     m_spelbord.voegPionToe(true, teken, xCoordPion, yCoordPion, teamPion);
 }
 
@@ -167,11 +159,10 @@ std::vector<int> DameoSpel::eersteKlik(int rij,int kolom) {
     } else {
         m_coordinatenEersteKlik = make_tuple(rij , kolom);
         DameoPion* pion = dynamic_cast<DameoPion*>(m_spelbord.zoekPionOpCoordinaat(rij, kolom));
-        if (m_pionDieNogEenZetMag != nullptr){
+        if (m_pionDieNogEenZetMag != nullptr)
             vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), pion, true);
-        } else {
+        else
             vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), pion, false);
-        }
         return m_mogelijkeZetten;
     }
 }
@@ -193,25 +184,21 @@ bool DameoSpel::tweedeKlik(int rij,int kolom) {
             if (pion.first != -1 && pion.second != -1) {
                 emit pionVerslaan(pion.first, pion.second);
                 zet.maakZet(m_spelbord);
-                if (zet.eindeVanBordBereiktBijZet(m_spelbord)){
+                if (zet.eindeVanBordBereiktBijZet(m_spelbord))
                     emit pionPromoveren(std::get<0>(m_coordinatenEersteKlik), std::get<1>(m_coordinatenEersteKlik), parameterSpeler);
-                }
-                if (isGedaan() == 1) {
+                if (isGedaan() == 1)
                     emit spelIsGedaan("zwart");
-                }
-                if (isGedaan() == 2) {
+                if (isGedaan() == 2)
                     emit spelIsGedaan("wit");
-                }
             }
             else {
                 zet.maakZet(m_spelbord);
-                if (zet.eindeVanBordBereiktBijZet(m_spelbord)){
+                if (zet.eindeVanBordBereiktBijZet(m_spelbord))
                     emit pionPromoveren(std::get<0>(m_coordinatenEersteKlik), std::get<1>(m_coordinatenEersteKlik), parameterSpeler);
-                }
                 m_pionDieNogEenZetMag = nullptr;
             }
             vindAlleZettenVoorPion(m_spelbord,m_spelbord.zoekPionOpCoordinaat(rij, kolom)->getTeam(), m_pionDieNogEenZetMag, true);
-            if (m_mogelijkeZetten.size() == 0){
+            if (m_mogelijkeZetten.size() == 0) {
                 m_pionDieNogEenZetMag = nullptr;
                 veranderBeurt();
             }
@@ -226,11 +213,10 @@ void DameoSpel::clearMogelijkeZetten() {
 }
 
 void DameoSpel::veranderBeurt() {
-    if (m_speler == DameoPion::Team::geel) {
+    if (m_speler == DameoPion::Team::geel)
         m_speler = DameoPion::Team::blauw;
-    } else {
+    else
         m_speler = DameoPion::Team::geel;
-    }
 }
 
 bool DameoSpel::aiBeurt(){

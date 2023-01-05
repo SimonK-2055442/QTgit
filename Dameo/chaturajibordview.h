@@ -34,8 +34,8 @@ public slots:
 
 private:
     ChaturajiSpel *m_spel;
-    std::vector<int> mogelijkeZetten{};
-    BordCelView *lastClicked{nullptr};
+    std::vector<int> m_mogelijkeZetten{};
+    BordCelView *m_lastClicked{nullptr};
     int m_grootteBord;
     int m_rijVerslagenPionnen{ 0 };
     int m_kolomVerslagenPionnen{ 0 };
@@ -48,10 +48,10 @@ private:
     QLineEdit *m_loadName;
     QPushButton* m_aiKnop;
     QPushButton* m_beginnersModusKnop;
-    QLabel *aantalPuntenZwart;
-    QLabel *aantalPuntenGroen;
-    QLabel *aantalPuntenRood;
-    QLabel *aantalPuntenGeel;
+    QLabel *m_puntenZwart;
+    QLabel *m_puntenGroen;
+    QLabel *m_puntenRood;
+    QLabel *m_puntenGeel;
 };
 
 #endif // CHATURAJIBORDVIEW_H

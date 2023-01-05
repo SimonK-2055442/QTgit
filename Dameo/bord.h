@@ -23,8 +23,8 @@ public:
     vector<Pion*> getPionnen();
 
 private:
-    vector<Pion*> pionnen;
-    int grootteBord = 8;
+    vector<Pion*> m_pionnen;
+    int m_grootteBord = 8;
 };
 
 #endif // BORD_H

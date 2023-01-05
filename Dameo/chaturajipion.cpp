@@ -2,6 +2,7 @@
 
 #include "chaturajipion.h"
 
+
 ChaturajiPion::ChaturajiPion(int yCoordinaat, int xCoordinaat, Team team, char teken, string promoverenNaar) : Pion{ yCoordinaat, xCoordinaat, teken,team }, m_promoverenNaar{promoverenNaar} {
 
 }

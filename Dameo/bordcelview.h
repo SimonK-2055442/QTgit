@@ -4,6 +4,7 @@
 #include <QBrush>
 #include <QGraphicsRectItem>
 
+
 class BordCelView : public QGraphicsRectItem {
 public:
     BordCelView(int rij, int kolom);

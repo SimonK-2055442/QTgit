@@ -14,7 +14,7 @@ public:
     bool isKoning() const;
     bool mogelijkeZet(Bord bord, Zet zet, DameoPion::Team speler) override;
     bool mogelijkeBewegingVanPion(Bord bord, Zet zet, int parameterSpeler, DameoPion::Team speler) const;
-    bool diagonaleBewegingVanKoning(Bord bord, Zet zet, DameoPion::Team speler) const;
+    bool diagonaleBewegingVanKoning(Bord bord, Zet zet) const;
     bool rechteBewegingVanKoning(Bord bord, Zet zet, DameoPion::Team speler) const;
     string print() override;
     int getWaarde() override;

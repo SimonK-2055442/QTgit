@@ -1,3 +1,5 @@
+//Auteur: Yara Mijnendonckx en Simon Knuts
+
 #include "pionview.h"
 
 PionView::PionView(TypePion type, QGraphicsItem *parent) : QGraphicsPixmapItem() {
@@ -97,7 +99,8 @@ PionView::PionView(TypePion type, QGraphicsItem *parent) : QGraphicsPixmapItem()
     }
 }
 
-/* Bronvermelding afbeeldingen:
+/*
+ * Bronvermelding afbeeldingen:
  *
  * [1] Wikipedia contributors. (2022, 24 september).
  * Chaturaji. Wikipedia. https://en.wikipedia.org/wiki/Chaturaji

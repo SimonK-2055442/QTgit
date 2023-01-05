@@ -1,4 +1,8 @@
+//Auteur: Yara Mijnendonckx en Simon Knuts
+
 #include "mainwindow.h"
+#include "dameospel.h"
+#include "chaturajispel.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QLabel *tekst = new QLabel(this);
@@ -28,8 +32,8 @@ void MainWindow::DameoButtonPressed() {
     spelbord.initialiseerBord(Bord::KeuzeSpel::dameo);
     DameoSpel *spel = new DameoSpel(spelbord);
     dameoBord = new DameoBordView(8, spel);
-    view = new QGraphicsView{dameoBord};
-    setCentralWidget(view);
+    m_view = new QGraphicsView{dameoBord};
+    setCentralWidget(m_view);
 }
 
 void MainWindow::ChaturajiButtonPressed() {
@@ -37,6 +41,6 @@ void MainWindow::ChaturajiButtonPressed() {
     spelbord.initialiseerBord(Bord::KeuzeSpel::chaturaji);
     ChaturajiSpel *spel = new ChaturajiSpel(spelbord);
     chaturajiBord = new ChaturajiBordView(8, spel);
-    view = new QGraphicsView{chaturajiBord};
-    setCentralWidget(view);
+    m_view = new QGraphicsView{chaturajiBord};
+    setCentralWidget(m_view);
 }

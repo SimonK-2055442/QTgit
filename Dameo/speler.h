@@ -6,6 +6,7 @@
 #include <string>
 #include "pion.h"
 
+
 class Speler {
 public:
     Speler(Pion::Team spelerAanBeurt);
@@ -13,7 +14,6 @@ public:
     void verhoogPuntenMet(int aantal);
     Pion::Team getSpelerAanBeurt() const;
     string getSpelerAanBeurtString() const;
-    bool wiltBeurtStoppen() const;
 
 private:
     Pion::Team m_spelerAanBeurt;

@@ -33,7 +33,7 @@ void ChaturajiSpel::vindEnMaakZet(Speler* spelerAanBeurt) {
                     zet.setEindXCoordinaat(x);
                     zet.setEindYCoordinaat(y);
                     if (gevonden == false) {
-                        if (checkZet(zet, p, spelerAanBeurt->getSpelerAanBeurt(), 1, true)) {
+                        if (checkZet(zet, p, spelerAanBeurt->getSpelerAanBeurt(), true)) {
                             Pion* verslagenPion = zet.welkePionIsErVerslaanChaturaji(m_spelbord, p->getTeam());
                             if (verslagenPion != nullptr){
                                 if (verslagenPion->getWaarde() == 5) { //koning
@@ -59,7 +59,7 @@ void ChaturajiSpel::vindEnMaakZet(Speler* spelerAanBeurt) {
     }
 }
 
-bool ChaturajiSpel::checkZet(Zet zet, Pion* p, Pion::Team teamSpeler, int spelKeuze, bool echt) {
+bool ChaturajiSpel::checkZet(Zet zet, Pion* p, Pion::Team teamSpeler, bool echt) {
     if (!m_spelbord.isZetInHetBord(zet))
         return false;
     else if (!p->mogelijkeZet(m_spelbord, zet, teamSpeler))
@@ -76,7 +76,7 @@ void ChaturajiSpel::vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt) {
         for (int j = 0; j < 8; j++) {
             if (p->getXCoordinaat() != i || p->getYCoordinaat() != j) {
                 Zet zet{ p->getXCoordinaat(), p->getYCoordinaat(), i,j };
-                if (checkZet(zet, p, spelerAanBeurt->getSpelerAanBeurt(), 1, false) == true) {
+                if (checkZet(zet, p, spelerAanBeurt->getSpelerAanBeurt(), false) == true) {
                     mogelijkeZetten.push_back(j);
                     mogelijkeZetten.push_back(i);
                 }

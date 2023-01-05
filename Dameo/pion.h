@@ -11,11 +11,11 @@ using namespace std;
 
 class Pion {
 public:
+    enum class Team { blauw, geel, rood, groen};
     int getXCoordinaat() const;
     int getYCoordinaat() const;
     void setXCoordinaat(int xCoordinaat);
     void setYCoordinaat(int yCoordinaat);
-    enum class Team { blauw, geel, rood, groen};
     Team getTeam() const;
     void verslaPion();
     bool isVerslaan() const;

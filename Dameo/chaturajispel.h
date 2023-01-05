@@ -15,7 +15,7 @@ class ChaturajiSpel: public QObject {
 public:
     ChaturajiSpel(Bord spelbord);
     void vindEnMaakZet(Speler* speler);
-    bool checkZet(Zet zet, Pion* p, Pion::Team teamSpeler, int spelKeuze, bool echt);
+    bool checkZet(Zet zet, Pion* p, Pion::Team teamSpeler, bool echt);
     void vindAlleZettenVoorPion(Pion* p, Speler* spelerAanBeurt);
     bool isGedaan() const;
     bool stukMagVerplaatstWorden(Pion* p, bool echt);
@@ -48,13 +48,13 @@ private:
     Dobbelstenen m_dobbelstenen;
     ChaturajiPion::Team m_speler;
     vector<Speler> m_spelerVector;
-    ChaturajiPion* m_pionDieNogEenZetMag{nullptr};
+    ChaturajiPion* m_pionDieNogEenZetMag{ nullptr };
     std::vector<int> m_mogelijkeZetten;
     std::tuple<int, int> m_coordinatenEersteKlik;
     int m_beurt{ -1 };
     int m_aantalVerslagenKoningen{ 0 };
-    bool m_tegenAi{false};
-    bool m_beginnersModus{false};
+    bool m_tegenAi{ false };
+    bool m_beginnersModus{ false };
 };
 
 #endif // CHATURAJISPEL_H

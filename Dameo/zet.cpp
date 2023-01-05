@@ -40,11 +40,6 @@ void Zet::setEindYCoordinaat(int yCoordinaat) {
     m_eindYCoordinaat = yCoordinaat;
 }
 
-void Zet::maakZet(Bord bord) const {
-    Pion* teVerzettenPion = bord.zoekPionOpCoordinaat(m_startYCoordinaat, m_startXCoordinaat);
-    teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
-}
-
 bool Zet::eindeVanBordBereiktBijZet(Bord bord){
     Pion* teVerzettenPion = bord.zoekPionOpCoordinaat(m_eindYCoordinaat, m_eindXCoordinaat);
     if (dynamic_cast<DameoPion*>(teVerzettenPion) != nullptr) {
@@ -60,6 +55,11 @@ bool Zet::eindeVanBordBereiktBijZet(Bord bord){
         }
     }
     return false;
+}
+
+void Zet::maakZet(Bord bord) const {
+    Pion* teVerzettenPion = bord.zoekPionOpCoordinaat(m_startYCoordinaat, m_startXCoordinaat);
+    teVerzettenPion->verzetPion(m_eindYCoordinaat, m_eindXCoordinaat);
 }
 
 //functie bekijkt of er in de vakjes waarover er gesprongen is, tijdens de zet, een vijandige pion staat en verwijdert deze
@@ -112,7 +112,7 @@ QPair<int, int> Zet::welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alle
 Pion* Zet::welkePionIsErVerslaanChaturaji(Bord bord, Pion::Team speler) const {
     Pion* pionOpEindeVanZet = bord.zoekPionOpCoordinaat(m_eindYCoordinaat, m_eindXCoordinaat);
     if (pionOpEindeVanZet != nullptr && pionOpEindeVanZet->getTeam() != speler) {
-        int waarde = pionOpEindeVanZet->getWaarde();
+        pionOpEindeVanZet->getWaarde();
         pionOpEindeVanZet->verslaPion();
         return pionOpEindeVanZet;
     }

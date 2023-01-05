@@ -3,9 +3,9 @@
 
 #pragma once
 
+#include <QPair>
 #include "bord.h"
 #include "dameopion.h"
-#include <QPair>
 
 class Zet {
 public:

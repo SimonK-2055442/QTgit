@@ -2,7 +2,7 @@
 
 #define stringify( name ) #name
 #include <time.h>
-#include "Dobbelstenen.h"
+#include "dobbelstenen.h"
 
 using namespace std;
 

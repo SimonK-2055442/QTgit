@@ -1,16 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "dameobordview.h"
-#include "dameospel.h"
-#include "chaturajibordview.h"
-#include "chaturajispel.h"
 #include <QMainWindow>
 #include <QGraphicsView>
 #include <QPushButton>
+#include "dameobordview.h"
+#include "chaturajibordview.h"
 
-class MainWindow : public QMainWindow
-{
+
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -23,6 +21,7 @@ private slots:
 private:
     DameoBordView *dameoBord{};
     ChaturajiBordView* chaturajiBord{};
-    QGraphicsView *view{};
+    QGraphicsView *m_view{};
 };
+
 #endif // MAINWINDOW_H

@@ -25,6 +25,7 @@ void Pion::setYCoordinaat(int yCoordinaat) {
 Pion::Team Pion::getTeam() const {
     return m_team;
 }
+
 void Pion::verslaPion() {
     m_isVerslaan = true;
 }

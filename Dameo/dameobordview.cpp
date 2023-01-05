@@ -67,7 +67,7 @@ DameoBordView::DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent) 
 
     connect(m_spel, &DameoSpel::pionVerslaan, this, &DameoBordView::verwijderPionVanBord);
     connect(m_spel, &DameoSpel::pionPromoveren, this, &DameoBordView::promoveerPion);
-    connect(m_spel, &DameoSpel::spelGedaan, this, &DameoBordView::toonWinnaar);
+    connect(m_spel, &DameoSpel::spelIsGedaan, this, &DameoBordView::toonWinnaar);
     connect(m_spel, &DameoSpel::loadGame, this, &DameoBordView::reloadBord);
 
     connect(m_aiKnop, &QPushButton::pressed, this, &DameoBordView::aiKnop);

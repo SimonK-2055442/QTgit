@@ -17,6 +17,10 @@ void Speler::verhoogPuntenMet(int aantal) {
     m_punten += aantal;
 }
 
+void Speler::setPunten(int aantal) {
+    m_punten = aantal;
+}
+
 Pion::Team Speler::getSpelerAanBeurt() const {
     return m_spelerAanBeurt;
 }

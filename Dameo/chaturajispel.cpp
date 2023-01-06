@@ -137,6 +137,12 @@ void ChaturajiSpel::saveSpel(QString naam) {
         beurt = 4;
 
     string opgeslagenSpelstatus = to_string(beurt);
+    //opgeslagenSpelstatus.push_back(',');
+    for (int i = 0; i < 4; i++){
+        opgeslagenSpelstatus.append(to_string(m_spelerVector[i].getPunten()));
+        opgeslagenSpelstatus.push_back(',');
+    }
+
     for (int i = 0; i < 32; i++) {
         Pion* p = m_spelbord.getPionVanLijst(i);
         if (!p->isVerslaan()){
@@ -166,6 +172,7 @@ void ChaturajiSpel::saveSpel(QString naam) {
 
 //spel inladen
 bool ChaturajiSpel::loadSpel(QString naam) {
+    int puntenSpeler{0}, teller{1}, spelerNummer{0};
     QFile file(naam + "Chaturaji.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
@@ -175,7 +182,20 @@ bool ChaturajiSpel::loadSpel(QString naam) {
     std::string saveStatus = contents.toStdString();
     file.close();
     m_spelbord.verwijderPointers();
-    for (int i = 1; i < saveStatus.length(); i += 4)
+    while (spelerNummer != 4){
+        if (saveStatus[teller] != ','){
+            puntenSpeler = puntenSpeler * 10;
+            puntenSpeler += saveStatus[teller] - '0';
+        }
+        else{
+            m_spelerVector[spelerNummer].setPunten(puntenSpeler);
+            emit puntenVeranderen(m_spelerVector[spelerNummer].getPunten(), m_spelerVector[spelerNummer].getSpelerAanBeurtString());
+            puntenSpeler = 0;
+            spelerNummer++;
+        }
+        teller++;
+    }
+    for (int i = teller; i < saveStatus.length(); i += 4)
         maakNieuwePion(saveStatus[i], saveStatus[i + 1], saveStatus[i + 2], saveStatus[i + 3]);
     m_beurt = saveStatus[0] - '0';
     emit loadGame();

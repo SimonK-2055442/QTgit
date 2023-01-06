@@ -14,6 +14,7 @@ public:
     void verhoogPuntenMet(int aantal);
     Pion::Team getSpelerAanBeurt() const;
     string getSpelerAanBeurtString() const;
+    void setPunten(int aantal);
 
 private:
     Pion::Team m_spelerAanBeurt;

@@ -116,15 +116,6 @@ bool ChaturajiSpel::stukMagVerplaatstWorden(Pion* p, bool echt) {
 
 //spel opslaan
 void ChaturajiSpel::saveSpel(QString naam) {
-    /* hier efkes om u al wa te helpen:
-     *
-     * int punten = m_spelerVector[i].getPunten();
-     * hiermee kunt ge de punten van een spel oproepen, best efkes met for loop
-     *
-     * emit puntenVeranderen(m_spelerVector[m_beurt].getPunten(), m_spelerVector[m_beurt].getSpelerAanBeurtString());
-     * hiermee kunt ge achteraf de punten terug inladen, door deze emit voor elke speler dus 4 keren te doen
-     */
-
     string naamOpgeslagenSpel;
     int beurt;
     if (m_speler == Pion::Team::blauw)
@@ -137,15 +128,14 @@ void ChaturajiSpel::saveSpel(QString naam) {
         beurt = 4;
 
     string opgeslagenSpelstatus = to_string(beurt);
-    //opgeslagenSpelstatus.push_back(',');
-    for (int i = 0; i < 4; i++){
+    for (int i = 0; i < 4; i++) {
         opgeslagenSpelstatus.append(to_string(m_spelerVector[i].getPunten()));
         opgeslagenSpelstatus.push_back(',');
     }
 
     for (int i = 0; i < 32; i++) {
         Pion* p = m_spelbord.getPionVanLijst(i);
-        if (!p->isVerslaan()){
+        if (!p->isVerslaan()) {
             opgeslagenSpelstatus.push_back(p->getTeken());
             opgeslagenSpelstatus.append(to_string(p->getXCoordinaat()));
             opgeslagenSpelstatus.append(to_string(p->getYCoordinaat()));
@@ -183,11 +173,10 @@ bool ChaturajiSpel::loadSpel(QString naam) {
     file.close();
     m_spelbord.verwijderPointers();
     while (spelerNummer != 4){
-        if (saveStatus[teller] != ','){
+        if (saveStatus[teller] != ',') {
             puntenSpeler = puntenSpeler * 10;
             puntenSpeler += saveStatus[teller] - '0';
-        }
-        else{
+        } else {
             m_spelerVector[spelerNummer].setPunten(puntenSpeler);
             emit puntenVeranderen(m_spelerVector[spelerNummer].getPunten(), m_spelerVector[spelerNummer].getSpelerAanBeurtString());
             puntenSpeler = 0;

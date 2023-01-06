@@ -2,7 +2,6 @@
 
 #include "dameobordview.h"
 #include "mainwindow.h"
-#include "pion.h"
 #include "pionview.h"
 
 

@@ -1,4 +1,4 @@
-//Auteur: Yara Mijnendonckx en Simon Knuts
+//Auteur: Simon Knuts en Yara Mijnendonckx
 
 #include "chaturajibordview.h"
 #include "mainwindow.h"
@@ -13,8 +13,8 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
     // maak het bord
     for (int i = 0; i < m_grootteBord; ++i) {
         for (int j = 0; j < m_grootteBord; ++j) {
-            speelbord[i][j] = new BordCelView{i, j};
-            addItem(speelbord[i][j]);
+            m_speelbord[i][j] = new BordCelView{i, j};
+            addItem(m_speelbord[i][j]);
         }
     }
 
@@ -81,49 +81,42 @@ ChaturajiBordView::ChaturajiBordView(int grootteBord, ChaturajiSpel *spel, QObje
     m_spel->initialiseerRonde();
 }
 
-void ChaturajiBordView::veranderDobbelstenen(string eerste, string tweede){
-    if (eerste == "KoningOfPion"){
+//na elke beurt worden de dobbelstenen opnieuw 'gerold'
+void ChaturajiBordView::veranderDobbelstenen(string eerste, string tweede) {
+    if (eerste == "KoningOfPion")
         m_geroldeDobbelsteen1->setPixmap(QPixmap(":/images/zwartKoning.png").scaled(100,100));
-    }
-    if (eerste == "Boot"){
+    if (eerste == "Boot")
         m_geroldeDobbelsteen1->setPixmap(QPixmap(":/images/zwartBoot.png").scaled(100,100));
-    }
-    if (eerste == "Paard"){
+    if (eerste == "Paard")
         m_geroldeDobbelsteen1->setPixmap(QPixmap(":/images/zwartPaard.png").scaled(100,100));
-    }
-    if (eerste == "Olifant"){
+    if (eerste == "Olifant")
         m_geroldeDobbelsteen1->setPixmap(QPixmap(":/images/zwartOlifant.png").scaled(100,100));
-    }
-    if (tweede == "KoningOfPion"){
+    if (tweede == "KoningOfPion")
         m_geroldeDobbelsteen2->setPixmap(QPixmap(":/images/zwartKoning.png").scaled(100,100));
-    }
-    if (tweede == "Boot"){
+    if (tweede == "Boot")
         m_geroldeDobbelsteen2->setPixmap(QPixmap(":/images/zwartBoot.png").scaled(100,100));
-    }
-    if (tweede == "Paard"){
+    if (tweede == "Paard")
         m_geroldeDobbelsteen2->setPixmap(QPixmap(":/images/zwartPaard.png").scaled(100,100));
-    }
-    if (tweede == "Olifant"){
+    if (tweede == "Olifant")
         m_geroldeDobbelsteen2->setPixmap(QPixmap(":/images/zwartOlifant.png").scaled(100,100));
-    }
 }
 
+//in de view de punten aanpassen nadat er een pion is gepakt
 void ChaturajiBordView::verhoogPunten(int totaal, string speler) {
-    if (speler == "geel") {
+    if (speler == "geel")
         m_puntenGeel->setText(QString::number(totaal));
-    } else if (speler == "groen") {
+    else if (speler == "groen")
         m_puntenGroen->setText(QString::number(totaal));
-    } else if (speler == "rood") {
+    else if (speler == "rood")
         m_puntenRood->setText(QString::number(totaal));
-    } else {
+    else
         m_puntenZwart->setText(QString::number(totaal));
-    }
 }
 
 void ChaturajiBordView::verwijderPionVanBord(int rij, int kolom) {
     QPointF positie(1350 + m_rijVerslagenPionnen*97, m_kolomVerslagenPionnen*97);
-    speelbord[rij][kolom]->childItems()[0]->setPos(positie);
-    speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);
+    m_speelbord[rij][kolom]->childItems()[0]->setPos(positie);
+    m_speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);
 
     m_kolomVerslagenPionnen++;
     if (m_kolomVerslagenPionnen == 8) {
@@ -198,17 +191,17 @@ void ChaturajiBordView::bepaalWinnaar(int ptnZwart, int ptnGroen, int ptnRood, i
     this->deleteLater();
 }
 
-void ChaturajiBordView::eventSaveKnop() {
+void ChaturajiBordView::eventSaveKnop() const {
     qDebug() << m_saveName->text();
     m_spel->saveSpel(m_saveName->text());
 }
 
-void ChaturajiBordView::eventLoadKnop() {
+void ChaturajiBordView::eventLoadKnop() const {
     qDebug() << "Spel inladen";
     m_spel->loadSpel(m_loadName->text());
 }
 
-void ChaturajiBordView::aiKnop() {
+void ChaturajiBordView::aiKnop() const {
     if (m_aiKnop->text() == "Druk om tegen de AI te spelen"){
         m_aiKnop->setText("Druk om 1 vs 1 vs 1 vs 1 te spelen");
         m_spel->setTegenAi();
@@ -218,7 +211,7 @@ void ChaturajiBordView::aiKnop() {
     }
 }
 
-void ChaturajiBordView::beginnersModusKnop() {
+void ChaturajiBordView::beginnersModusKnop() const {
     if (m_beginnersModusKnop->text() == "Druk om beginnersmodus aan te zetten"){
         m_beginnersModusKnop->setText("Druk om beginnersmodus uit te zetten");
         m_spel->setBeginnersModus();
@@ -228,11 +221,12 @@ void ChaturajiBordView::beginnersModusKnop() {
     }
 }
 
+//laad het bord opnieuw na een zet van de AI
 void ChaturajiBordView::reloadBord() {
     for (int i = 0; i < m_grootteBord; i++){
         for (int j = 0; j < m_grootteBord; j++){
-            if (!speelbord[i][j]->childItems().empty()){
-                removeItem(speelbord[i][j]->childItems()[0]);
+            if (!m_speelbord[i][j]->childItems().empty()){
+                removeItem(m_speelbord[i][j]->childItems()[0]);
             }
         }
     }
@@ -248,15 +242,15 @@ void ChaturajiBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
             m_mogelijkeZetten = m_spel->eersteKlik(rij, kolom);
             if (m_spel->getBeginnersModus()) {
                 for (int i = 0; i < m_mogelijkeZetten.size(); i += 2)
-                    speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::red);
+                    m_speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::red);
             }
             if (m_mogelijkeZetten.size() > 0)
-                m_lastClicked = speelbord[rij][kolom];
+                m_lastClicked = m_speelbord[rij][kolom];
         } else {
             if (m_spel->tweedeKlik(rij, kolom)){
-                m_lastClicked->childItems()[0]->setParentItem(speelbord[rij][kolom]);
+                m_lastClicked->childItems()[0]->setParentItem(m_speelbord[rij][kolom]);
                 for (int i = 0; i < m_mogelijkeZetten.size(); i += 2)
-                   speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
+                   m_speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
                 m_spel->clearMogelijkeZetten();
                 m_lastClicked = nullptr;
                 m_spel->aiBeurt();
@@ -266,102 +260,102 @@ void ChaturajiBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
     if(event->button() == Qt::RightButton) {
         for (int i = 0; i < m_mogelijkeZetten.size(); i += 2)
-            speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
+            m_speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
         m_lastClicked = nullptr;
     }
 }
 
-void ChaturajiBordView::voegPionnenToe(){
-    for (int i = 0; i < m_grootteBord; i++){
-        for (int j = 0; j < m_grootteBord; j++){
+void ChaturajiBordView::voegPionnenToe() const {
+    for (int i = 0; i < m_grootteBord; i++) {
+        for (int j = 0; j < m_grootteBord; j++) {
             Pion* p = m_spel->getSpelbord().zoekPionOpCoordinaat(i,j);
-            if (p != nullptr){
-                if (p->getTeam() == Pion::Team::blauw){
-                    if (p->getTeken() == 'k'){
-                        PionView *koning = new PionView{PionView::zwartKoning, speelbord[i][j]};
-                        koning->setParentItem(speelbord[i][j]);
+            if (p != nullptr) {
+                if (p->getTeam() == Pion::Team::blauw) {
+                    if (p->getTeken() == 'k') {
+                        PionView *koning = new PionView{PionView::zwartKoning, m_speelbord[i][j]};
+                        koning->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'h'){
-                        PionView *paard = new PionView{PionView::zwartPaard, speelbord[i][j]};
-                        paard->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'h') {
+                        PionView *paard = new PionView{PionView::zwartPaard, m_speelbord[i][j]};
+                        paard->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'b'){
-                        PionView *boot = new PionView{PionView::zwartBoot, speelbord[i][j]};
-                        boot->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'b') {
+                        PionView *boot = new PionView{PionView::zwartBoot, m_speelbord[i][j]};
+                        boot->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'o'){
-                        PionView *olifant = new PionView{PionView::zwartOlifant, speelbord[i][j]};
-                        olifant->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'o') {
+                        PionView *olifant = new PionView{PionView::zwartOlifant, m_speelbord[i][j]};
+                        olifant->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'p'){
-                        PionView *pion = new PionView{PionView::zwartPion, speelbord[i][j]};
-                        pion->setParentItem(speelbord[i][j]);
-                    }
-                }
-                if (p->getTeam() == Pion::Team::groen){
-                    if (p->getTeken() == 'k'){
-                        PionView *koning = new PionView{PionView::groenKoning, speelbord[i][j]};
-                        koning->setParentItem(speelbord[i][j]);
-                    }
-                    else if (p->getTeken() == 'h'){
-                        PionView *paard = new PionView{PionView::groenPaard, speelbord[i][j]};
-                        paard->setParentItem(speelbord[i][j]);
-                    }
-                    else if (p->getTeken() == 'b'){
-                        PionView *boot = new PionView{PionView::groenBoot, speelbord[i][j]};
-                        boot->setParentItem(speelbord[i][j]);
-                    }
-                    else if (p->getTeken() == 'o'){
-                        PionView *olifant = new PionView{PionView::groenOlifant, speelbord[i][j]};
-                        olifant->setParentItem(speelbord[i][j]);
-                    }
-                    else if (p->getTeken() == 'p'){
-                        PionView *pion = new PionView{PionView::groenPion, speelbord[i][j]};
-                        pion->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'p') {
+                        PionView *pion = new PionView{PionView::zwartPion, m_speelbord[i][j]};
+                        pion->setParentItem(m_speelbord[i][j]);
                     }
                 }
-                if (p->getTeam() == Pion::Team::rood){
-                    if (p->getTeken() == 'k'){
-                        PionView *koning = new PionView{PionView::roodKoning, speelbord[i][j]};
-                        koning->setParentItem(speelbord[i][j]);
+                if (p->getTeam() == Pion::Team::groen) {
+                    if (p->getTeken() == 'k') {
+                        PionView *koning = new PionView{PionView::groenKoning, m_speelbord[i][j]};
+                        koning->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'h'){
-                        PionView *paard = new PionView{PionView::roodPaard, speelbord[i][j]};
-                        paard->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'h') {
+                        PionView *paard = new PionView{PionView::groenPaard, m_speelbord[i][j]};
+                        paard->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'b'){
-                        PionView *boot = new PionView{PionView::roodBoot, speelbord[i][j]};
-                        boot->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'b') {
+                        PionView *boot = new PionView{PionView::groenBoot, m_speelbord[i][j]};
+                        boot->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'o'){
-                        PionView *olifant = new PionView{PionView::roodOlifant, speelbord[i][j]};
-                        olifant->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'o') {
+                        PionView *olifant = new PionView{PionView::groenOlifant, m_speelbord[i][j]};
+                        olifant->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'p'){
-                        PionView *pion = new PionView{PionView::roodPion, speelbord[i][j]};
-                        pion->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'p') {
+                        PionView *pion = new PionView{PionView::groenPion, m_speelbord[i][j]};
+                        pion->setParentItem(m_speelbord[i][j]);
                     }
                 }
-                if (p->getTeam() == Pion::Team::geel){
-                    if (p->getTeken() == 'k'){
-                        PionView *koning = new PionView{PionView::geelKoning, speelbord[i][j]};
-                        koning->setParentItem(speelbord[i][j]);
+                if (p->getTeam() == Pion::Team::rood) {
+                    if (p->getTeken() == 'k') {
+                        PionView *koning = new PionView{PionView::roodKoning, m_speelbord[i][j]};
+                        koning->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'h'){
-                        PionView *paard = new PionView{PionView::geelPaard, speelbord[i][j]};
-                        paard->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'h') {
+                        PionView *paard = new PionView{PionView::roodPaard, m_speelbord[i][j]};
+                        paard->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'b'){
-                        PionView *boot = new PionView{PionView::geelBoot, speelbord[i][j]};
-                        boot->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'b') {
+                        PionView *boot = new PionView{PionView::roodBoot, m_speelbord[i][j]};
+                        boot->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'o'){
-                        PionView *olifant = new PionView{PionView::geelOlifant, speelbord[i][j]};
-                        olifant->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'o') {
+                        PionView *olifant = new PionView{PionView::roodOlifant, m_speelbord[i][j]};
+                        olifant->setParentItem(m_speelbord[i][j]);
                     }
-                    else if (p->getTeken() == 'p'){
-                        PionView *pion = new PionView{PionView::geelPion, speelbord[i][j]};
-                        pion->setParentItem(speelbord[i][j]);
+                    else if (p->getTeken() == 'p') {
+                        PionView *pion = new PionView{PionView::roodPion, m_speelbord[i][j]};
+                        pion->setParentItem(m_speelbord[i][j]);
+                    }
+                }
+                if (p->getTeam() == Pion::Team::geel) {
+                    if (p->getTeken() == 'k') {
+                        PionView *koning = new PionView{PionView::geelKoning, m_speelbord[i][j]};
+                        koning->setParentItem(m_speelbord[i][j]);
+                    }
+                    else if (p->getTeken() == 'h') {
+                        PionView *paard = new PionView{PionView::geelPaard, m_speelbord[i][j]};
+                        paard->setParentItem(m_speelbord[i][j]);
+                    }
+                    else if (p->getTeken() == 'b') {
+                        PionView *boot = new PionView{PionView::geelBoot, m_speelbord[i][j]};
+                        boot->setParentItem(m_speelbord[i][j]);
+                    }
+                    else if (p->getTeken() == 'o') {
+                        PionView *olifant = new PionView{PionView::geelOlifant, m_speelbord[i][j]};
+                        olifant->setParentItem(m_speelbord[i][j]);
+                    }
+                    else if (p->getTeken() == 'p') {
+                        PionView *pion = new PionView{PionView::geelPion, m_speelbord[i][j]};
+                        pion->setParentItem(m_speelbord[i][j]);
                     }
                 }
             }

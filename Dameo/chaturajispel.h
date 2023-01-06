@@ -22,16 +22,16 @@ public:
     void saveSpel(QString naam);
     bool loadSpel(QString naam);
     void maakNieuwePion(char type, char xCoord, char yCoord, char team);
-    Bord getSpelbord();
+    Bord getSpelbord() const;
     std::vector<int> eersteKlik(int rij,int kolom);
     bool tweedeKlik(int rij,int kolom);
     void initialiseerRonde();
     void clearMogelijkeZetten();
     bool aiBeurt();
     void setTegenAi();
-    bool getTegenAi();
+    bool getTegenAi() const;
     void setBeginnersModus();
-    bool getBeginnersModus();
+    bool getBeginnersModus() const;
 
 public slots:
     void volgendeRonde();

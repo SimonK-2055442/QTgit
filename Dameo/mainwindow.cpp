@@ -4,6 +4,7 @@
 #include "dameospel.h"
 #include "chaturajispel.h"
 
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QLabel *tekst = new QLabel(this);
     tekst->setText("Maak uw keuze uit de onderstaande spellen:");
@@ -27,20 +28,22 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QObject::connect(chaturaji, &QPushButton::clicked, this, &MainWindow::ChaturajiButtonPressed);
 }
 
+//een dameospel opstarten
 void MainWindow::DameoButtonPressed() {
     Bord spelbord;
     spelbord.initialiseerBord(Bord::KeuzeSpel::dameo);
     DameoSpel *spel = new DameoSpel(spelbord);
-    dameoBord = new DameoBordView(8, spel);
-    m_view = new QGraphicsView{dameoBord};
+    m_dameoBord = new DameoBordView(8, spel);
+    m_view = new QGraphicsView{ m_dameoBord };
     setCentralWidget(m_view);
 }
 
+//een chaturajispel opstarten
 void MainWindow::ChaturajiButtonPressed() {
     Bord spelbord;
     spelbord.initialiseerBord(Bord::KeuzeSpel::chaturaji);
     ChaturajiSpel *spel = new ChaturajiSpel(spelbord);
-    chaturajiBord = new ChaturajiBordView(8, spel);
-    m_view = new QGraphicsView{chaturajiBord};
+    m_chaturajiBord = new ChaturajiBordView(8, spel);
+    m_view = new QGraphicsView{ m_chaturajiBord };
     setCentralWidget(m_view);
 }

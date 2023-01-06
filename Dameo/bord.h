@@ -20,7 +20,7 @@ public:
     void voegPionToe(bool dameo, char type, int xCoord, int yCoord, Pion::Team team);
     void vervangElement(Zet zet);
     void verwijderPointers();
-    vector<Pion*> getPionnen();
+    vector<Pion*> getPionnen() const;
 
 private:
     vector<Pion*> m_pionnen;

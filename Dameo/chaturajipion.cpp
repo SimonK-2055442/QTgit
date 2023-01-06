@@ -74,7 +74,7 @@ void ChaturajiPion::promoveer(Bord bord, Zet zet) {
     bord.vervangElement(zet);
 }
 
-bool ChaturajiPion::magPromoveren(Bord bord, Zet zet) {
+bool ChaturajiPion::magPromoveren(Bord bord, Zet zet) const {
     if (bord.zoekPionOpCoordinaat(zet.getStartYCoordinaat(), zet.getStartXCoordinaat())->getTeam() == Team::geel
         && zet.getEindXCoordinaat() == 7)
         return true;

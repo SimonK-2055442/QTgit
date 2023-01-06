@@ -2,6 +2,7 @@
 
 #include "pion.h"
 
+
 Pion::Pion(int yCoordinaat, int xCoordinaat, char teken, Team team) :m_xCoordinaat{ xCoordinaat }, m_yCoordinaat{ yCoordinaat }, m_team{ team }, m_teken{ teken } {
 
 }

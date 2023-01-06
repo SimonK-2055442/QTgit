@@ -8,6 +8,7 @@
 #include "chaturajiboot.h"
 
 
+//voegt bij de start van een spel alle pionnen toe aan het bord
 void Bord::initialiseerBord(KeuzeSpel spel) {
     if (spel == KeuzeSpel::chaturaji) {
         m_pionnen.push_back(new ChaturajiPion{ 0,1,Pion::Team::geel,'p',"boot" });
@@ -159,6 +160,6 @@ void Bord::verwijderPointers() {
     m_pionnen.clear();
 }
 
-vector<Pion*> Bord::getPionnen(){
+vector<Pion*> Bord::getPionnen() const {
     return m_pionnen;
 }

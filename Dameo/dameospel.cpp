@@ -7,12 +7,13 @@
 #include <QDebug>
 #include "dameospel.h"
 
+
 DameoSpel::DameoSpel(Bord spelbord) : m_spelbord{spelbord} {
     m_speler = DameoPion::Team::blauw;
 };
 
 //gaat over alle pionnen van speler G en probeert elke zet, een simpele AI
-void DameoSpel::vindEnMaakZet() {
+void DameoSpel::vindEnMaakZet() const {
     bool gevonden{ false };
     for (int i = 0; i < m_spelbord.getPionnen().size(); i++) {
         Pion* p = m_spelbord.getPionVanLijst(i);
@@ -59,27 +60,32 @@ void DameoSpel::vindAlleZettenVoorPion(Bord spelbord,DameoPion::Team speler, Dam
     m_mogelijkeZetten = mogelijkeZetten;
 }
 
-// als een speler geen pionnen meer heeft, is het spel gedaan
+//als een speler geen pionnen meer heeft, is het spel gedaan
 int DameoSpel::isGedaan() const {
-    int verslagenPionnenSpelerZ = 0;
-    int verslagenPionnenSpelerW = 0;
-    for (int i = 0; i < 36; i++) {
-        if (m_spelbord.getPionVanLijst(i)->isVerslaan()) {
-            if (m_spelbord.getPionVanLijst(i)->getTeam() == DameoPion::Team::blauw)
+    int verslagenPionnenSpelerZ{ 0 }, aantalPionnenZ{ 0 };
+    int verslagenPionnenSpelerW{ 0 }, aantalPionnenW{ 0 };
+    for (int i = 0; i < m_spelbord.getPionnen().size(); i++) {
+        if (m_spelbord.getPionVanLijst(i)->getTeam() == DameoPion::Team::blauw) {
+            aantalPionnenZ++;
+            if (m_spelbord.getPionVanLijst(i)->isVerslaan())
                 verslagenPionnenSpelerZ++;
-            else
+        } else {
+            aantalPionnenW++;
+            if (m_spelbord.getPionVanLijst(i)->isVerslaan())
                 verslagenPionnenSpelerW++;
         }
     }
-    if (verslagenPionnenSpelerZ == 18)
+
+    if (verslagenPionnenSpelerZ == aantalPionnenZ)
         return 2;
-    if (verslagenPionnenSpelerW == 18)
+    if (verslagenPionnenSpelerW == aantalPionnenW)
         return 1;
     else
         return 0;
 }
 
-void DameoSpel::saveSpel(QString naam) {
+//spel opslaan
+void DameoSpel::saveSpel(QString naam) const {
     string naamOpgeslagenSpel;
     int beurt;
     if (m_speler == DameoPion::Team::geel)
@@ -101,7 +107,7 @@ void DameoSpel::saveSpel(QString naam) {
         }
     }
     qDebug() << QDir::currentPath();
-    QString filename = naam + ".txt";
+    QString filename = naam + "Dameo.txt";
     QFile file( filename );
     if (file.open(QIODevice::ReadWrite)) {
         QTextStream stream( &file );
@@ -111,8 +117,9 @@ void DameoSpel::saveSpel(QString naam) {
     file.close();
 }
 
+//spel inladen
 bool DameoSpel::loadSpel(QString naam) {
-    QFile file(naam + ".txt");
+    QFile file(naam + "Dameo.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
 
@@ -148,10 +155,11 @@ void DameoSpel::maakNieuwePion(char teken, char xCoord, char yCoord, char team) 
     m_spelbord.voegPionToe(true, teken, xCoordPion, yCoordPion, teamPion);
 }
 
-Bord DameoSpel::getBord() {
+Bord DameoSpel::getBord() const {
     return m_spelbord;
 }
 
+//het selecteren van een pion (opvangen van mousePressEvent)
 std::vector<int> DameoSpel::eersteKlik(int rij,int kolom) {
     if (m_spelbord.zoekPionOpCoordinaat(rij,kolom) == nullptr || rij < 0 || rij > 7 || kolom < 0 || kolom > 7 || m_spelbord.zoekPionOpCoordinaat(rij,kolom)->getTeam() != m_speler) {
         m_mogelijkeZetten.clear();
@@ -167,6 +175,7 @@ std::vector<int> DameoSpel::eersteKlik(int rij,int kolom) {
     }
 }
 
+//het verplaatsen van een pion (opvangen van mousePressEvent)
 bool DameoSpel::tweedeKlik(int rij,int kolom) {
     int parameterSpeler;
     if (m_speler == Pion::Team::blauw)
@@ -219,7 +228,8 @@ void DameoSpel::veranderBeurt() {
         m_speler = DameoPion::Team::geel;
 }
 
-bool DameoSpel::aiBeurt(){
+//zet van AI uitvoeren
+bool DameoSpel::aiBeurt() {
     if (m_speler == DameoPion::Team::geel && m_tegenAi == true){
         vindEnMaakZet();
         veranderBeurt();
@@ -233,7 +243,7 @@ void DameoSpel::setTegenAi() {
     m_tegenAi = !m_tegenAi;
 }
 
-bool DameoSpel::getTegenAi() {
+bool DameoSpel::getTegenAi() const {
     return m_tegenAi;
 }
 
@@ -241,6 +251,6 @@ void DameoSpel::setBeginnersModus() {
     m_beginnersModus = !m_beginnersModus;
 }
 
-bool DameoSpel::getBeginnersModus() {
+bool DameoSpel::getBeginnersModus() const {
     return m_beginnersModus;
 }

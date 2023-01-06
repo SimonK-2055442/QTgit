@@ -13,7 +13,7 @@ public:
     int getWaarde() override;
     string print() override;
     void promoveer(Bord bord, Zet zet);
-    bool magPromoveren(Bord bord, Zet zet);
+    bool magPromoveren(Bord bord, Zet zet) const;
     bool isGepromoveerd() const;
     string getPromoverenNaar() const;
 

@@ -1,9 +1,10 @@
-//Auteur: Simon Knuts en Yara Mijnendonckx
+//Auteur: Yara Mijnendonckx en Simon Knuts
 
 #include "dameobordview.h"
 #include "mainwindow.h"
 #include "pion.h"
 #include "pionview.h"
+
 
 DameoBordView::DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent) : QGraphicsScene{parent} {
     m_spel = spel;
@@ -13,20 +14,20 @@ DameoBordView::DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent) 
     // maak het bord
     for (int i = 0; i < m_grootteBord; ++i) {
         for (int j = 0; j < m_grootteBord; ++j) {
-            speelbord[i][j] = new BordCelView{i, j};
-            addItem(speelbord[i][j]);
+            m_speelbord[i][j] = new BordCelView{i, j};
+            addItem(m_speelbord[i][j]);
         }
     }
 
     // voeg pionnen toe
     for (int i = 0; i < 36; i++) {
         if (spel->getBord().getPionVanLijst(i)->getTeam() == Pion::Team::blauw) {
-            PionView *zwartePion = new PionView{PionView::dameoZwart, speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
-            zwartePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
+            PionView *zwartePion = new PionView{PionView::dameoZwart, m_speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
+            zwartePion->setParentItem(m_speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
             zwartePion->setPos(17, 4);
         } else {
-            PionView *wittePion = new PionView{PionView::dameoWit, speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
-            wittePion->setParentItem(speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
+            PionView *wittePion = new PionView{PionView::dameoWit, m_speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]};
+            wittePion->setParentItem(m_speelbord[spel->getBord().getPionVanLijst(i)->getYCoordinaat()][spel->getBord().getPionVanLijst(i)->getXCoordinaat()]);
             wittePion->setPos(17, 4);
         }
     }
@@ -78,8 +79,8 @@ DameoBordView::DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent) 
 
 void DameoBordView::verwijderPionVanBord(int rij, int kolom) {
     QPointF positie(1100 + m_rijVerslagenPionnen*95, m_kolomVerslagenPionnen*95);
-    speelbord[rij][kolom]->childItems()[0]->setPos(positie);
-    speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);
+    m_speelbord[rij][kolom]->childItems()[0]->setPos(positie);
+    m_speelbord[rij][kolom]->childItems()[0]->setParentItem(nullptr);
 
     m_kolomVerslagenPionnen++;
     if (m_kolomVerslagenPionnen == 8) {
@@ -89,13 +90,13 @@ void DameoBordView::verwijderPionVanBord(int rij, int kolom) {
 }
 
 void DameoBordView::promoveerPion(int rij, int kolom, int parameterSpeler) {
-    removeItem(speelbord[rij][kolom]->childItems()[0]);
+    removeItem(m_speelbord[rij][kolom]->childItems()[0]);
     if (parameterSpeler == -1) {
-        PionView *koning = new PionView{PionView::dameoKZwart, speelbord[rij][kolom]};
-        koning->setParentItem(speelbord[rij][kolom]);
+        PionView *koning = new PionView{PionView::dameoKZwart, m_speelbord[rij][kolom]};
+        koning->setParentItem(m_speelbord[rij][kolom]);
     } else {
-        PionView *koning = new PionView{PionView::dameoKWit, speelbord[rij][kolom]};
-        koning->setParentItem(speelbord[rij][kolom]);
+        PionView *koning = new PionView{PionView::dameoKWit, m_speelbord[rij][kolom]};
+        koning->setParentItem(m_speelbord[rij][kolom]);
     }
 }
 
@@ -135,17 +136,17 @@ void DameoBordView::toonWinnaar(QString winnaar) {
     this->deleteLater();
 }
 
-void DameoBordView::eventSaveKnop() {
+void DameoBordView::eventSaveKnop() const {
     qDebug() << m_saveName->text();
     m_spel->saveSpel(m_saveName->text());
 }
 
-void DameoBordView::eventLoadKnop() {
+void DameoBordView::eventLoadKnop() const {
     qDebug() << "Spel inladen";
     m_spel->loadSpel(m_loadName->text());
 }
 
-void DameoBordView::aiKnop() {
+void DameoBordView::aiKnop() const {
     if (m_aiKnop->text() == "Druk om tegen de AI te spelen"){
         m_aiKnop->setText("Druk om 1 vs 1 te spelen");
         m_spel->setTegenAi();
@@ -155,7 +156,7 @@ void DameoBordView::aiKnop() {
     }
 }
 
-void DameoBordView::beginnersModusKnop() {
+void DameoBordView::beginnersModusKnop() const {
     if (m_beginnersModusKnop->text() == "Druk om beginnersmodus aan te zetten"){
         m_beginnersModusKnop->setText("Druk om beginnersmodus uit te zetten");
         m_spel->setBeginnersModus();
@@ -165,11 +166,12 @@ void DameoBordView::beginnersModusKnop() {
     }
 }
 
+//laad het bord opnieuw na een zet van de AI
 void DameoBordView::reloadBord() {
     for (int i = 0; i < m_grootteBord; i++){
         for (int j = 0; j < m_grootteBord; j++){
-            if (!speelbord[i][j]->childItems().empty()){
-                removeItem(speelbord[i][j]->childItems()[0]);
+            if (!m_speelbord[i][j]->childItems().empty()){
+                removeItem(m_speelbord[i][j]->childItems()[0]);
             }
         }
     }
@@ -179,25 +181,25 @@ void DameoBordView::reloadBord() {
             if (p != nullptr){
                 if (p->getTeam() == Pion::Team::blauw){
                     if (p->isKoning() == true){
-                        PionView *koning = new PionView{PionView::dameoKZwart, speelbord[i][j]};
-                        koning->setParentItem(speelbord[i][j]);
+                        PionView *koning = new PionView{PionView::dameoKZwart, m_speelbord[i][j]};
+                        koning->setParentItem(m_speelbord[i][j]);
                         koning->setPos(2,2);
                     }
                     else{
-                        PionView *pion = new PionView{PionView::dameoZwart, speelbord[i][j]};
-                        pion->setParentItem(speelbord[i][j]);
+                        PionView *pion = new PionView{PionView::dameoZwart, m_speelbord[i][j]};
+                        pion->setParentItem(m_speelbord[i][j]);
                         pion->setPos(17,4);
                     }
                 }
                 else{
                     if (p->isKoning() == true){
-                        PionView *koning = new PionView{PionView::dameoKWit, speelbord[i][j]};
-                        koning->setParentItem(speelbord[i][j]);
+                        PionView *koning = new PionView{PionView::dameoKWit, m_speelbord[i][j]};
+                        koning->setParentItem(m_speelbord[i][j]);
                         koning->setPos(2,2);
                     }
                     else{
-                        PionView *pion = new PionView{PionView::dameoWit, speelbord[i][j]};
-                        pion->setParentItem(speelbord[i][j]);
+                        PionView *pion = new PionView{PionView::dameoWit, m_speelbord[i][j]};
+                        pion->setParentItem(m_speelbord[i][j]);
                         pion->setPos(17,4);
                     }
                 }
@@ -215,17 +217,17 @@ void DameoBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
             m_mogelijkeZetten = m_spel->eersteKlik(rij, kolom);
             if (m_spel->getBeginnersModus()) {
                 for (int i = 0; i < m_mogelijkeZetten.size(); i += 2)
-                    speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::red);
+                    m_speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::red);
             }
             if (m_mogelijkeZetten.size() > 0)
-                m_lastClicked = speelbord[rij][kolom];
+                m_lastClicked = m_speelbord[rij][kolom];
 
         } else {
             if (m_spel->tweedeKlik(rij,kolom)) {
-                   m_lastClicked->childItems()[0]->setParentItem(speelbord[rij][kolom]);
+                   m_lastClicked->childItems()[0]->setParentItem(m_speelbord[rij][kolom]);
                    m_lastClicked->childItems().clear();
                 for (int i = 0; i < m_mogelijkeZetten.size(); i += 2)
-                   speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
+                   m_speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
                 m_spel->clearMogelijkeZetten();
                 m_lastClicked = nullptr;
                 if (m_spel->aiBeurt())
@@ -236,7 +238,7 @@ void DameoBordView::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
     if(event->button() == Qt::RightButton) {
         for (int i = 0; i < m_mogelijkeZetten.size(); i += 2)
-            speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
+            m_speelbord[m_mogelijkeZetten.at(i)][m_mogelijkeZetten.at(i+1)]->setBrush(Qt::white);
         m_lastClicked = nullptr;
     }
 }

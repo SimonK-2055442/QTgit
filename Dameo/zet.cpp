@@ -4,6 +4,7 @@
 #include <string>
 #include "zet.h"
 
+
 Zet::Zet(int startXCoordinaat, int startYCoordinaat, int eindXCoordinaat, int eindYCoordinaat) : m_startXCoordinaat{ startXCoordinaat }, m_startYCoordinaat{ startYCoordinaat }, m_eindXCoordinaat{ eindXCoordinaat },m_eindYCoordinaat{eindYCoordinaat} {
 
 }
@@ -40,7 +41,7 @@ void Zet::setEindYCoordinaat(int yCoordinaat) {
     m_eindYCoordinaat = yCoordinaat;
 }
 
-bool Zet::eindeVanBordBereiktBijZet(Bord bord){
+bool Zet::eindeVanBordBereiktBijZet(Bord bord) const {
     Pion* teVerzettenPion = bord.zoekPionOpCoordinaat(m_eindYCoordinaat, m_eindXCoordinaat);
     if (dynamic_cast<DameoPion*>(teVerzettenPion) != nullptr) {
         if (m_eindYCoordinaat == 0 || m_eindYCoordinaat == 7) {
@@ -62,7 +63,7 @@ void Zet::maakZet(Bord bord) const {
 }
 
 //functie bekijkt of er in de vakjes waarover er gesprongen is, tijdens de zet, een vijandige pion staat en verwijdert deze
-QPair<int, int> Zet::welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) {
+QPair<int, int> Zet::welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) const {
     int begin;
     int einde;
     QPair<int, int> coordinaatPionVerslaan{-1, -1};

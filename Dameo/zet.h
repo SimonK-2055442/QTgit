@@ -7,6 +7,7 @@
 #include "bord.h"
 #include "dameopion.h"
 
+
 class Zet {
 public:
     Zet(int startXCoordinaat, int startYCoordinaat, int eindXCoordinaat, int eindYCoordinaat);
@@ -18,9 +19,9 @@ public:
     void setStartYCoordinaat(int startYCoordinaat);
     void setEindXCoordinaat(int eindXCoordinaat);
     void setEindYCoordinaat(int eindYCoordinaat);
-    bool eindeVanBordBereiktBijZet(Bord speelbord);
+    bool eindeVanBordBereiktBijZet(Bord speelbord) const;
     void maakZet(Bord speelbord) const;
-    QPair<int, int> welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alleenChecken);
+    QPair<int, int> welkePionIsVerslaan(Bord bord, Pion::Team speler, bool alleenChecken) const;
     Pion* welkePionIsErVerslaanChaturaji(Bord bord, Pion::Team speler) const;
 
 private:

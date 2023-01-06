@@ -2,6 +2,7 @@
 
 #include "dameopion.h"
 
+
 DameoPion::DameoPion(int yCoordinaat, int xCoordinaat, Team team, char teken) : Pion{ yCoordinaat, xCoordinaat, teken, team } {
 
 }
@@ -216,7 +217,7 @@ string DameoPion::print() {
     return "dameoPion";
 }
 
-//overbodig voor Dameo, wel nodig om het concept bij Chaturaji toe te passen
+//overbodig voor Dameo, wel nodig om het concept polymorfisme bij Chaturaji toe te passen
 int DameoPion::getWaarde() {
     return -1;
 }

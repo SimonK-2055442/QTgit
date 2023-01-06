@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 // de twee dobbelstenen krijgen dankzij deze functie telkens 2 random gegenereerde waarden mee
 void Dobbelstenen::rolDobbelstenen() {
     int eersteInt, tweedeInt;

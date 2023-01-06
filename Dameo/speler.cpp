@@ -1,8 +1,8 @@
 //Auteur: Simon Knuts en Yara Mijnendonckx
 
 #include <iostream>
-//#include <limits>
 #include "speler.h"
+
 
 Speler::Speler(Pion::Team spelerAanBeurt) : m_spelerAanBeurt{ spelerAanBeurt } {
 

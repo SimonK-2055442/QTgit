@@ -12,22 +12,22 @@ class DameoSpel : public QObject
     Q_OBJECT
 public:
     DameoSpel(Bord spelbord);
-    void vindEnMaakZet();
+    void vindEnMaakZet() const;
     void vindAlleZettenVoorPion(Bord spelbord, DameoPion::Team team, DameoPion* p, bool moetPakken);
     int isGedaan() const;
-    void saveSpel(QString naam);
+    void saveSpel(QString naam) const;
     bool loadSpel(QString naam);
     void maakNieuwePion(char teken, char xCoord, char Ycoord, char team);
-    Bord getBord();
+    Bord getBord() const;
     std::vector<int> eersteKlik(int rij,int kolom);
     bool tweedeKlik(int rij,int kolom);
     void clearMogelijkeZetten();
     void veranderBeurt();
     bool aiBeurt();
     void setTegenAi();
-    bool getTegenAi();
+    bool getTegenAi() const;
     void setBeginnersModus();
-    bool getBeginnersModus();
+    bool getBeginnersModus() const;
 
 signals:
     void pionPromoveren(int rij, int kolom, int parameterSpeler);

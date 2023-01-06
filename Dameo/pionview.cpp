@@ -2,6 +2,7 @@
 
 #include "pionview.h"
 
+
 PionView::PionView(TypePion type, QGraphicsItem *parent) : QGraphicsPixmapItem() {
     if (type == TypePion::dameoWit) {
         setPixmap(QPixmap(":/images/pion_wit.png"));

@@ -28,7 +28,7 @@ string ChaturajiOlifant::print() {
     return "Olifant";
 }
 
-bool ChaturajiOlifant::mogelijkeZetHorizontaal(Bord bord, Zet zet, Team team) {
+bool ChaturajiOlifant::mogelijkeZetHorizontaal(Bord bord, Zet zet, Team team) const {
     if (zet.getEindXCoordinaat() > zet.getStartXCoordinaat()) {
         for (int i = zet.getStartXCoordinaat() + 1; i <= zet.getEindXCoordinaat() - 1; i++) {
             if (bord.zoekPionOpCoordinaat(zet.getStartYCoordinaat(), i) != nullptr)
@@ -52,7 +52,7 @@ bool ChaturajiOlifant::mogelijkeZetHorizontaal(Bord bord, Zet zet, Team team) {
     return false;
 }
 
-bool ChaturajiOlifant::mogelijkeZetVerticaal(Bord bord, Zet zet, Team team) {
+bool ChaturajiOlifant::mogelijkeZetVerticaal(Bord bord, Zet zet, Team team) const {
     if (zet.getEindYCoordinaat() > zet.getStartYCoordinaat()) {
         for (int i = zet.getStartYCoordinaat() + 1; i <= zet.getEindYCoordinaat() - 1; i++) {
             if (bord.zoekPionOpCoordinaat(i, zet.getStartXCoordinaat()) != nullptr)

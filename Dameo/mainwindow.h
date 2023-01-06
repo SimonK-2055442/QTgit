@@ -19,8 +19,8 @@ private slots:
     void ChaturajiButtonPressed();
 
 private:
-    DameoBordView *dameoBord{};
-    ChaturajiBordView* chaturajiBord{};
+    DameoBordView *m_dameoBord{};
+    ChaturajiBordView *m_chaturajiBord{};
     QGraphicsView *m_view{};
 };
 

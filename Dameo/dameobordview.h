@@ -19,20 +19,20 @@ class DameoBordView : public QGraphicsScene {
 
 public:
     DameoBordView(int grootteBord, DameoSpel *spel, QObject *parent = nullptr);
-    BordCelView* speelbord[8][8];
 
 public slots:
     void verwijderPionVanBord(int rij, int kolom);
     void promoveerPion(int rij, int kolom, int parameterSpeler);
     void toonWinnaar(QString winnaar);
-    void eventSaveKnop();
-    void eventLoadKnop();
-    void aiKnop();
-    void beginnersModusKnop();
+    void eventSaveKnop() const;
+    void eventLoadKnop() const;
+    void aiKnop() const;
+    void beginnersModusKnop() const;
     void reloadBord();
 
 private:
     DameoSpel *m_spel;
+    BordCelView *m_speelbord[8][8];
     std::vector<int> m_mogelijkeZetten{};
     BordCelView *m_lastClicked{nullptr};
     int m_grootteBord;

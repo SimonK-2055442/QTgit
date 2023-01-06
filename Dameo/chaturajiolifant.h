@@ -12,8 +12,8 @@ public:
     bool mogelijkeZet(Bord bord, Zet zet, Team team) override;
     int getWaarde() override;
     string print() override;
-    bool mogelijkeZetHorizontaal(Bord bord, Zet zet, Team team);
-    bool mogelijkeZetVerticaal(Bord bord, Zet zet, Team team);
+    bool mogelijkeZetHorizontaal(Bord bord, Zet zet, Team team) const;
+    bool mogelijkeZetVerticaal(Bord bord, Zet zet, Team team) const;
 
 private:
     int m_waarde{ 4 };
